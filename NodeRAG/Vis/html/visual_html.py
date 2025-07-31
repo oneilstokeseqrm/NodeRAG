@@ -3,7 +3,6 @@ import pickle
 from NodeRAG.storage.graph_mapping import Mapper
 from NodeRAG.utils.PPR import sparse_PPR
 import os
-import math
 from tqdm import tqdm
 from rich.console import Console
 from rich.text import Text
@@ -26,7 +25,7 @@ def filter_nodes(graph,nodes_num=2000):
     nodes = [node for node,score in page_rank[:nodes_num]]
     subgraph = graph.subgraph(nodes).copy()
     if not nx.is_connected(subgraph):
-        console.print(f"subgraph is not connected")
+        console.print("subgraph is not connected")
         additional_nodes = set()
         for i in range(len(nodes)):
             for j in range(i+1,len(nodes)):
