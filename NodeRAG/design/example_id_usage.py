@@ -1,21 +1,10 @@
 """
 Example usage of ID generation in NodeRAG pipeline
 """
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
 from NodeRAG.utils.id_generation import NodeIDGenerator, MetadataTracker
+from NodeRAG.standards.eq_metadata import EQMetadata
 
-class MockEQMetadata:
-    def __init__(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-    
-    def to_dict(self):
-        return {k: v for k, v in self.__dict__.items() if v is not None}
-
-metadata = MockEQMetadata(
+metadata = EQMetadata(
     tenant_id="tenant_acme",
     interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
     interaction_type="email",

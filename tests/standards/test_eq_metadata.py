@@ -1,10 +1,6 @@
 import pytest
-import sys
 import os
 from datetime import datetime, timezone
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
-
 from NodeRAG.standards.eq_metadata import EQMetadata
 from NodeRAG.standards.metadata_propagation import MetadataPropagationRules
 

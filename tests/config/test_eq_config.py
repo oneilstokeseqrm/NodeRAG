@@ -2,11 +2,6 @@ import pytest
 import os
 import tempfile
 import yaml
-from pathlib import Path
-
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
 from NodeRAG.config.eq_config import EQConfig
 from NodeRAG.standards.eq_metadata import EQMetadata
 
