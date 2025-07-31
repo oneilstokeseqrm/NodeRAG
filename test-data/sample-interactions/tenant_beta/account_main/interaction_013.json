@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_beta",
+  "interaction_id": "int_3f2a564f-8423-48a2-bff4-3f8c31ea6750",
+  "interaction_type": "chat",
+  "text": "Live Chat Session - Implementation Support\n\n[10:15] Customer: Hi, I'm following up on our Salesforce integration project. We received the technical docs but have some questions.\n\n[10:16] Agent Kevin: Hello Rachel! I'm Kevin from the implementation team. I'd be happy to help clarify anything in the documentation.\n\n[10:16] Customer: Thanks! First question - for the custom field mapping, do we need to modify our existing Salesforce fields or can your system adapt?\n\n[10:17] Agent Kevin: Our system is quite flexible. We can map to your existing fields without requiring changes to your Salesforce schema. We just need to know which fields you want to sync and in which direction.\n\n[10:18] Customer: Perfect. Second question - what happens if there's a sync conflict, like if the same record is updated in both systems simultaneously?\n\n[10:19] Agent Kevin: Great question! We use timestamp-based conflict resolution with configurable rules. You can set priorities (Salesforce wins, our system wins, or manual review required). Most clients choose Salesforce as the master for contact info and our system for interaction data.\n\n[10:20] Customer: That makes sense. Last question - can we do a pilot with a subset of data before full deployment?\n\n[10:21] Agent Kevin: Absolutely! We always recommend starting with a test environment and a small data set. We can set up a sandbox sync with maybe 100 records to validate the mapping and workflows.\n\n[10:22] Customer: Excellent. When can we start the pilot?\n\n[10:22] Agent Kevin: I can schedule the kickoff meeting for next Tuesday. I'll send you a calendar invite with the implementation checklist.\n\n[10:23] Customer: Perfect, thanks for all the help!",
+  "account_id": "acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8",
+  "timestamp": "2024-01-27T10:15:00Z",
+  "user_id": "usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5",
+  "source_system": "internal"
+}

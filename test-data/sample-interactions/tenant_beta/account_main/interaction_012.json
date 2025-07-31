@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_beta",
+  "interaction_id": "int_697e769f-deef-4348-b178-68d499c839fe",
+  "interaction_type": "call",
+  "text": "Call transcript - Technical Discovery Call\n\nAgent: Good afternoon, this is Marcus from our integration team. I understand you're interested in Salesforce integration?\n\nCustomer: Yes, hi Marcus. This is Rachel Thompson from Beta Corp. We need to integrate your platform with our Salesforce instance for seamless data flow.\n\nAgent: Excellent. We do have a robust Salesforce connector that handles bi-directional sync. Can you tell me more about your current Salesforce setup and data volume?\n\nCustomer: We're on Salesforce Enterprise with about 50,000 customer records and roughly 500 new interactions per day. We need real-time sync for customer touchpoints and lead scoring.\n\nAgent: That's well within our capabilities. Our connector supports real-time webhooks and can handle much higher volumes. For the custom field mapping, we'll need to do a field analysis during implementation.\n\nCustomer: What about API rate limits and costs?\n\nAgent: The integration is included in your Enterprise plan at no additional cost. We handle rate limiting automatically and provide monitoring dashboards. Implementation typically takes 2-3 weeks including testing.\n\nCustomer: That sounds perfect for our Q1 timeline. What are the next steps?\n\nAgent: I'll send you our technical requirements document and schedule a follow-up with our implementation team. We can start the field mapping analysis next week.\n\nCustomer: Great, looking forward to it!\n\nCall duration: 12 minutes 45 seconds",
+  "account_id": "acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8",
+  "timestamp": "2024-01-26T14:30:00Z",
+  "user_id": "usr_7029a564-87b0-47ec-833f-cb025544f720",
+  "source_system": "internal"
+}

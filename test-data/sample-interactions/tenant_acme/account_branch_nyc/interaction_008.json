@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_b6dfe3f5-eb47-41ac-8a47-c6e9a58e4802",
+  "interaction_type": "chat",
+  "text": "Live Chat Session - Feature Request\n\n[09:45] Customer: Hi, I'm wondering if there's a way to set up automated reports for our branch?\n\n[09:46] Agent Lisa: Hello! Yes, we do have automated reporting features. What type of reports are you looking to automate?\n\n[09:46] Customer: We need weekly sales summaries and monthly performance dashboards sent to our branch manager automatically.\n\n[09:47] Agent Lisa: That's definitely possible with our premium reporting add-on. It allows you to schedule reports and set up email distribution lists. Would you like me to check if this is included in your current plan?\n\n[09:48] Customer: Yes, please check. We're on the enterprise plan.\n\n[09:49] Agent Lisa: I see you have the standard enterprise plan. The automated reporting feature is available as an add-on for $200/month. It includes unlimited scheduled reports and up to 20 email recipients per report.\n\n[09:50] Customer: That sounds reasonable. Can you send me more details about the setup process?\n\n[09:50] Agent Lisa: Absolutely! I'll email you a feature overview and setup guide. Would you like me to schedule a demo call to walk through the configuration?\n\n[09:51] Customer: Yes, that would be helpful. How about next Tuesday afternoon?\n\n[09:51] Agent Lisa: Perfect! I'll send you a calendar invite for Tuesday at 2 PM. Is there anything else I can help you with today?\n\n[09:52] Customer: No, that covers everything. Thanks for your help!",
+  "account_id": "acc_c02b9aa6-8704-4bfd-b861-864817134521",
+  "timestamp": "2024-01-22T09:45:00Z",
+  "user_id": "usr_01fc9d7c-7ed1-45b1-a054-15598367fd45",
+  "source_system": "internal"
+}

@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_33e2cf28-27f8-4f48-bddf-cb2231c91df7",
+  "interaction_type": "email",
+  "text": "Subject: New User Onboarding Request - NYC Branch\n\nHello Support Team,\n\nWe need to onboard 5 new users for our NYC branch office. These employees will need access to the standard user package with the following permissions:\n\n1. Dashboard viewing rights\n2. Report generation capabilities\n3. Data export functionality (limited to branch-specific data)\n\nNew user details:\n- Michael Chen - Data Analyst\n- Lisa Rodriguez - Operations Manager\n- David Kim - Financial Analyst\n- Sarah Johnson - Marketing Coordinator\n- Robert Wilson - Sales Representative\n\nPlease let me know what information you need from each user to set up their accounts. Also, can you confirm if there are any additional licensing fees for these new users under our current enterprise plan?\n\nWe'd like to have these accounts active by February 1st if possible.\n\nThanks,\nTom Anderson\nIT Administrator\nACME NYC Branch",
+  "account_id": "acc_c02b9aa6-8704-4bfd-b861-864817134521",
+  "timestamp": "2024-01-20T11:30:00Z",
+  "user_id": "usr_01fc9d7c-7ed1-45b1-a054-15598367fd45",
+  "source_system": "gmail"
+}

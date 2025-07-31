@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_a1b3eade-7ab5-48b8-b1b1-84e954723147",
+  "interaction_type": "email",
+  "text": "Subject: Invoice Discrepancy - Account #12345\n\nDear Support Team,\n\nI noticed a discrepancy in our latest invoice dated January 10, 2024. The amount charged for our premium service package appears to be $150 higher than our agreed contract rate of $2,500 per month. Could you please review this and provide clarification?\n\nOur account manager mentioned there might have been a billing system update that affected some accounts. I'd appreciate a prompt resolution as this impacts our monthly budget reconciliation.\n\nBest regards,\nJohn Smith\nFinance Director\nACME Corporation",
+  "account_id": "acc_6997f38c-1d49-4255-8fb6-a4424abf3bde",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "user_id": "usr_13753caa-8c95-45b5-b53a-100a6361cdd8",
+  "source_system": "outlook"
+}

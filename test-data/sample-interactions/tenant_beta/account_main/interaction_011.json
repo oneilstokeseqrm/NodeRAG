@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_beta",
+  "interaction_id": "int_f0eeee83-edf6-4424-960f-f3c8a120fcb2",
+  "interaction_type": "email",
+  "text": "Subject: System Integration Requirements - Beta Corp\n\nDear Technical Team,\n\nWe are planning to integrate your platform with our existing CRM system (Salesforce) and need to understand the technical requirements and capabilities.\n\nSpecific integration needs:\n1. Bi-directional data sync between your platform and Salesforce\n2. Real-time customer interaction logging\n3. Automated lead scoring based on interaction data\n4. Custom field mapping for our unique business processes\n\nQuestions:\n- Do you have pre-built Salesforce connectors?\n- What is the typical implementation timeline?\n- Are there any additional licensing costs for API access?\n- Can you provide technical documentation for the integration?\n\nWe're looking to complete this integration by the end of Q1 2024. Our development team is ready to start the technical review process.\n\nPlease let me know when we can schedule a technical discovery call.\n\nBest regards,\nRachel Thompson\nCTO\nBeta Corporation",
+  "account_id": "acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8",
+  "timestamp": "2024-01-25T08:45:00Z",
+  "user_id": "usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5",
+  "source_system": "outlook"
+}

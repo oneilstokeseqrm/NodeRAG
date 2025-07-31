@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_c19228bf-1629-4943-895f-3bbb74d751ac",
+  "interaction_type": "call",
+  "text": "Call transcript - Account Setup Support\n\nAgent: Good morning, this is Alex from technical support. How can I assist you today?\n\nCustomer: Hi Alex, I'm Tom Anderson from ACME's NYC branch. I submitted a request yesterday for setting up 5 new user accounts, and I wanted to follow up on the timeline.\n\nAgent: Let me pull up your request. Yes, I see the ticket here. For the 5 new users under your enterprise plan, there are no additional licensing fees since you're still within your 50-user limit. I can start the setup process today.\n\nCustomer: That's great news! What information do you need from each user?\n\nAgent: I'll need their full names, email addresses, and preferred usernames. Also, you mentioned they need branch-specific data access - can you clarify which data sets they should have access to?\n\nCustomer: They should only see data related to our NYC operations - sales figures, customer interactions, and performance metrics for our region. No access to headquarters or other branch data.\n\nAgent: Perfect. I'll configure the role-based permissions accordingly. Can you email me the user details? I'll have the accounts ready by January 30th, ahead of your February 1st deadline.\n\nCustomer: Excellent, I'll send that information over within the hour. Thanks for the quick turnaround!\n\nCall duration: 6 minutes 18 seconds",
+  "account_id": "acc_c02b9aa6-8704-4bfd-b861-864817134521",
+  "timestamp": "2024-01-21T10:15:00Z",
+  "user_id": "usr_51686f0a-0eea-4eea-8c76-2fc52f7f7326",
+  "source_system": "internal"
+}

@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_31c34265-d1e7-4406-9a85-02d9adecc4ea",
+  "interaction_type": "chat",
+  "text": "Live Chat Session - Technical Support\n\n[14:30] Customer: Hi, I'm having trouble accessing our dashboard. It keeps showing a 'connection timeout' error.\n\n[14:31] Agent Mike: Hello! I'm sorry to hear about the connection issues. Let me help you troubleshoot this. Can you tell me which browser you're using?\n\n[14:31] Customer: I'm using Chrome, version 120.0.6099.109\n\n[14:32] Agent Mike: Thanks. Can you try clearing your browser cache and cookies for our domain? Also, please check if you can access the dashboard from an incognito window.\n\n[14:35] Customer: I tried incognito and it works! The dashboard loads fine there.\n\n[14:35] Agent Mike: Great! That confirms it's a cache issue. After clearing your cache in the regular browser, you should be able to access it normally. Is there anything else I can help you with today?\n\n[14:36] Customer: No, that fixed it. Thank you for the quick help!\n\n[14:36] Agent Mike: You're welcome! Have a great day!",
+  "account_id": "acc_6997f38c-1d49-4255-8fb6-a4424abf3bde",
+  "timestamp": "2024-01-17T14:30:00Z",
+  "user_id": "usr_4fe204d9-f75c-4bb4-b987-f8fb830edd6f",
+  "source_system": "internal"
+}

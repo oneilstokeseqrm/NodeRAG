@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Test Data Validation Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header { text-align: center; color: #333; border-bottom: 2px solid #007acc; padding-bottom: 10px; margin-bottom: 20px; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .summary-card { background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #007acc; }
+        .summary-card h3 { margin: 0 0 10px 0; color: #333; }
+        .summary-card .value { font-size: 24px; font-weight: bold; color: #007acc; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+        .section { margin-bottom: 30px; }
+        .section h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .error-list { background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 15px; }
+        .error-list ul { margin: 0; padding-left: 20px; }
+        .error-list li { margin-bottom: 5px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .stats-table th, .stats-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        .stats-table th { background-color: #f8f9fa; font-weight: bold; }
+        .no-errors { background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; padding: 15px; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EQ Test Data Validation Report</h1>
+            <p>Generated on 2025-07-31 15:06:40 UTC</p>
+        </div>
+        
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Files</h3>
+                <div class="value">16</div>
+            </div>
+            <div class="summary-card">
+                <h3>Valid Files</h3>
+                <div class="value success">16</div>
+            </div>
+            <div class="summary-card">
+                <h3>Validation Status</h3>
+                <div class="value success">PASS</div>
+            </div>
+            <div class="summary-card">
+                <h3>Error Count</h3>
+                <div class="value success">0</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Validation Results</h2>
+            
+        <div class="no-errors">
+            <h3>✅ All validation checks passed!</h3>
+            <p>All test data files contain the required fields with valid formats and values.</p>
+        </div>
+        
+        </div>
+        
+        <div class="section">
+            <h2>Data Statistics</h2>
+            <div class="stats-grid">
+                
+            <div>
+                <h3>By Tenant</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr><th>Category</th><th>Count</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>tenant_acme</td><td>10</td></tr><tr><td>tenant_beta</td><td>6</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div>
+                <h3>By Interaction Type</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr><th>Category</th><th>Count</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>voice_memo</td><td>3</td></tr><tr><td>call</td><td>3</td></tr><tr><td>email</td><td>4</td></tr><tr><td>chat</td><td>3</td></tr><tr><td>custom_notes</td><td>3</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div>
+                <h3>By Source System</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr><th>Category</th><th>Count</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>voice_memo</td><td>3</td></tr><tr><td>internal</td><td>6</td></tr><tr><td>gmail</td><td>2</td></tr><tr><td>custom</td><td>3</td></tr><tr><td>outlook</td><td>2</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div>
+                <h3>By Account</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr><th>Category</th><th>Count</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>acc_c02b9aa6-8704-4bfd-b861-864817134521</td><td>5</td></tr><tr><td>acc_6997f38c-1d49-4255-8fb6-a4424abf3bde</td><td>5</td></tr><tr><td>acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8</td><td>6</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    
