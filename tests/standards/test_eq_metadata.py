@@ -19,9 +19,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="This is a test email content about invoice questions",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -40,9 +40,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -57,9 +57,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="   ",  # Whitespace only
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -74,9 +74,9 @@ class TestEQMetadata:
             interaction_id="int_invalid-uuid-format",  # Invalid UUID
             interaction_type="email",
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -91,9 +91,9 @@ class TestEQMetadata:
             interaction_id="550e8400-e29b-41d4-a716-446655440000",  # Missing int_ prefix
             interaction_type="email",
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -108,9 +108,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15 10:30:00",  # Invalid format (no Z, wrong format)
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -125,9 +125,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="invalid_type",  # Invalid enum value
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -142,9 +142,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="invalid_system"  # Invalid enum value
         )
         
@@ -162,9 +162,9 @@ class TestEQMetadata:
                 interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
                 interaction_type=interaction_type,
                 text="Test content",
-                account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+                account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
                 timestamp="2024-01-15T10:30:00Z",
-                user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+                user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
                 source_system="outlook"
             )
             
@@ -182,9 +182,9 @@ class TestEQMetadata:
                 interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
                 interaction_type="email",
                 text="Test content",
-                account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+                account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
                 timestamp="2024-01-15T10:30:00Z",
-                user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+                user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
                 source_system=source_system
             )
             
@@ -199,9 +199,9 @@ class TestEQMetadata:
             'interaction_id': "int_550e8400-e29b-41d4-a716-446655440000",
             'interaction_type': "email",
             'text': "Test content",
-            'account_id': "acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            'account_id': "acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             'timestamp': "2024-01-15T10:30:00Z",
-            'user_id': "usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            'user_id': "usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             'source_system': "outlook"
         }
         
@@ -219,9 +219,9 @@ class TestEQMetadata:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="Test content",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
         
@@ -245,9 +245,9 @@ class TestMetadataPropagation:
             interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
             interaction_type="email",
             text="This is test email content about customer support",
-            account_id="acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             timestamp="2024-01-15T10:30:00Z",
-            user_id="usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+            user_id="usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8",
             source_system="outlook"
         )
     
@@ -285,7 +285,7 @@ class TestMetadataPropagation:
         
         assert result['tenant_id'] == "tenant_acme"
         assert result['interaction_id'] == "int_550e8400-e29b-41d4-a716-446655440000"
-        assert result['user_id'] == "usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8"
+        assert result['user_id'] == "usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8"
     
     def test_attribute_propagation_multiple_entities(self):
         """Test metadata propagation to attributes from multiple entities"""
@@ -294,7 +294,7 @@ class TestMetadataPropagation:
         
         entity2_metadata = entity1_metadata.copy()
         entity2_metadata['interaction_id'] = "int_550e8400-e29b-41d4-a716-446655440001"
-        entity2_metadata['user_id'] = "usr_6ba7b812-9dad-11d1-80b4-00c04fd430c9"
+        entity2_metadata['user_id'] = "usr_6ba7b812-9dad-41d4-80b4-00c04fd430c9"
         entity2_metadata['timestamp'] = "2024-01-16T10:30:00Z"  # Later timestamp
         
         result = MetadataPropagationRules.propagate_to_attribute([entity1_metadata, entity2_metadata])
@@ -310,22 +310,22 @@ class TestMetadataPropagation:
         """Test metadata propagation to communities"""
         member1 = {
             'tenant_id': "tenant_acme",
-            'account_id': "acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            'account_id': "acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             'interaction_id': "int_550e8400-e29b-41d4-a716-446655440000",
-            'user_id': "usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8"
+            'user_id': "usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8"
         }
         
         member2 = {
             'tenant_id': "tenant_acme",
-            'account_id': "acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+            'account_id': "acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
             'interaction_ids': ["int_550e8400-e29b-41d4-a716-446655440001", "int_550e8400-e29b-41d4-a716-446655440002"],
-            'user_ids': ["usr_6ba7b812-9dad-11d1-80b4-00c04fd430c9", "usr_6ba7b812-9dad-11d1-80b4-00c04fd430ca"]
+            'user_ids': ["usr_6ba7b812-9dad-11d1-80b4-00c04fd430c9", "usr_6ba7b812-9dad-41d4-80b4-00c04fd430ca"]
         }
         
         result = MetadataPropagationRules.propagate_to_community([member1, member2])
         
         assert result['tenant_id'] == "tenant_acme"
-        assert result['account_id'] == "acc_6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+        assert result['account_id'] == "acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8"
         
         assert 'interaction_ids' in result
         assert len(result['interaction_ids']) == 3  # 1 from member1 + 2 from member2
@@ -371,7 +371,7 @@ class TestMetadataPropagation:
         metadata = {
             'tenant_id': "tenant_acme",
             'interaction_ids': ["int_550e8400-e29b-41d4-a716-446655440000"],
-            'user_ids': ["usr_6ba7b812-9dad-11d1-80b4-00c04fd430c8"]
+            'user_ids': ["usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8"]
         }
         
         errors = MetadataPropagationRules.validate_propagation_rules(metadata, 'community')

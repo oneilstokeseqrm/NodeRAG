@@ -1,4 +1,4 @@
-import hnswlib_noderag
+import hnswlib
 import networkx as nx
 import numpy as np
 from typing import Tuple,List
@@ -90,7 +90,7 @@ class HNSW:
             
     def load_HNSW(self):
     
-        self.hnsw = hnswlib_noderag.Index(space=self.config.space, dim=self.config.dim)
+        self.hnsw = hnswlib.Index(space=self.config.space, dim=self.config.dim)
         if os.path.exists(self.config.HNSW_path):
             self.hnsw.load_index(self.config.HNSW_path)
         

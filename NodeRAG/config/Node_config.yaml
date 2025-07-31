@@ -56,3 +56,27 @@ config:
   accuracy_weight: 1                # Weight for accuracy in personalized PageRank
   ppr_alpha: 0.5                    # Damping factor for personalized PageRank
   ppr_max_iter: 2                   # Maximum iterations for personalized PageRank
+
+#==============================================================================
+# EQ-specific configuration
+#==============================================================================
+eq_config:
+  metadata:
+    validate_on_set: true
+    strict_validation: true
+  
+  storage:
+    neo4j_uri: "bolt://localhost:7687"
+    neo4j_user: "neo4j"
+    neo4j_database: "neo4j"
+    
+    pinecone_environment: "us-east-1"
+    pinecone_index: "eq-noderag"
+    pinecone_dimension: 1536  # OpenAI embedding dimension
+  
+  multi_tenant:
+    # Multi-tenant configuration
+    require_tenant_id: true
+    require_account_id: false  # Can be null for tenant-level operations
+    enable_cross_account_search: false
+    default_tenant_id: null  # No default - must be explicitly set

@@ -75,7 +75,7 @@ gitpython==3.1.44
     # via streamlit
 h11==0.14.0
     # via httpcore
-#hnswlib-noderag==0.8.2
+hnswlib==0.8.0
     # via -r requirements.in
 httpcore==1.0.7
     # via httpx
