@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neo4j Connection Test Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Neo4j Connection Test Report</h1>
+    <p>Generated: 2025-07-31T19:38:07.083973</p>
+    
+    <h2>Connection Tests</h2>
+    <table>
+        <tr><th>Test</th><th>Status</th><th>Details</th></tr>
+<tr><td>Database Connection</td><td class="success">PASS</td><td>Successfully connected to Neo4j</td></tr>
+<tr><td>Health Check</td><td class="success">PASS</td><td>Response time: 0.056s</td></tr>
+<tr><td>Constraints & Indexes</td><td class="success">PASS</td><td>Successfully created constraints and indexes</td></tr>
+<tr><td>Node Creation</td><td class="error">FAIL</td><td>Failed to create test node</td></tr>
+<tr><td>Node Retrieval</td><td class="error">FAIL</td><td>No nodes retrieved</td></tr>
+<tr><td>Statistics Collection</td><td class="success">PASS</td><td>Total nodes: 0</td></tr>
+<tr><td>Data Cleanup</td><td class="success">PASS</td><td>Test data cleaned up</td></tr>
+
+    </table>
+    
+    <h2>Configuration</h2>
+    <table>
+        <tr><th>Setting</th><th>Value</th></tr>
+        <tr><td>URI</td><td>neo4j+s://b875880c.databases.neo4j.io</td></tr>
+        <tr><td>Database</td><td>neo4j</td></tr>
+        <tr><td>User</td><td>neo4j</td></tr>
+    </table>
+    
+</body>
+</html>
