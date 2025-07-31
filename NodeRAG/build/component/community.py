@@ -1,6 +1,5 @@
 import networkx as nx
 from sortedcontainers import SortedDict
-import json
 import backoff
 from json.decoder import JSONDecodeError
 

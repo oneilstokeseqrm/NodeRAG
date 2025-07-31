@@ -168,7 +168,7 @@ class NodeConfig():
             self.embedding_client = set_embedding_client(API_client(self.embedding_config))
         except:
             self.embedding_client = None
-            self.console.print(f'warning: embedding_config is not valid')
+            self.console.print('warning: embedding_config is not valid')
     
 
     @model_config.setter
@@ -182,7 +182,7 @@ class NodeConfig():
             self.API_client = None
             self.semantic_text_splitter = None
             self.token_counter = None
-            self.console.print(f'warning: model_config is not valid')
+            self.console.print('warning: model_config is not valid')
 
     @property
     def language(self):

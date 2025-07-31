@@ -124,13 +124,11 @@ class Embedding_pipeline():
                 LLM_store.append(line)
         
         tasks = []
-        context_dict = {}
         
         self.config.tracker.set(len(LLM_store),desc='Rerun embedding')
         
         for store in LLM_store:
             input_data = store['input_data']
-            meta_data = store['meta_data']
             store.pop('input_data')
             store.pop('meta_data')
             tasks.append(self.request_save(input_data,store,self.config))

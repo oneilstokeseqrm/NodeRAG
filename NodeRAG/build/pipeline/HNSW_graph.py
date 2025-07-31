@@ -51,7 +51,7 @@ class HNSW_pipeline():
         
         self.config.console.print(f'[yellow]Generating HNSW graph for {len(unHNSW)} nodes[/yellow]')
         self.hnsw.add_nodes(unHNSW)
-        self.config.console.print(f'[green]HNSW graph has been added to the graph[/green]')
+        self.config.console.print('[green]HNSW graph has been added to the graph[/green]')
         self.config.tracker.set(len(unHNSW),desc="storing HNSW graph")
         for id,embedding in unHNSW:
             self.mapper.add_attribute(id,'embedding','HNSW')

@@ -55,7 +55,7 @@ def cache_error(func):
                 if response == 'Error cached':
                     return response
                 else:
-                    raise Exception(f'Error happened, please check the error log.')
+                    raise Exception('Error happened, please check the error log.')
         return response
             
     return wrapper
@@ -89,7 +89,7 @@ def cache_error_async(func):
                     if response == 'Error cached':
                         return response
                     else:
-                        raise Exception(f'Error happened, please check the error log.')
+                        raise Exception('Error happened, please check the error log.')
         return response
             
     return wrapper
