@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_beta",
+  "interaction_id": "int_b0c37d34-c0a9-4ce3-a509-4ec4f8b4c345",
+  "interaction_type": "voice_memo",
+  "text": "Voice Memo Transcription - Integration Planning Session\n\nRecorded by: Rachel Thompson, CTO\nDate: January 28, 2024\nDuration: 5 minutes 30 seconds\n\nTranscript:\n\"Post-meeting notes from the Salesforce integration planning session. The technical team provided excellent clarity on the implementation approach. Key takeaways: First, we'll start with a sandbox pilot using 100 customer records to validate field mapping and data flow. This should take about one week. Second, the conflict resolution strategy looks solid - we'll use Salesforce as master for customer data and their platform for interaction tracking. Third, the real-time webhook approach will give us the immediate sync we need for lead scoring. Fourth, no additional API costs is a huge win for our budget. Fifth, the 2-3 week timeline fits perfectly with our Q1 goals. Action items for our team: prepare the sandbox environment, identify the 100 pilot records, and review our current lead scoring algorithms to ensure compatibility. I'm confident this integration will significantly improve our sales team's efficiency and customer insights. Next meeting scheduled for Tuesday to kick off the pilot phase.\"",
+  "account_id": "acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8",
+  "timestamp": "2024-01-28T16:20:00Z",
+  "user_id": "usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5",
+  "source_system": "voice_memo"
+}

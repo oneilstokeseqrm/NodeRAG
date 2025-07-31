@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_45fff9c1-0d25-487c-a38b-aab1f8f6c29a",
+  "interaction_type": "custom_notes",
+  "text": "Account Review Notes - Q4 2023 Performance\n\nAccount: ACME Corporation Headquarters\nReview Period: October - December 2023\nAccount Manager: Jennifer Martinez\n\nPerformance Summary:\n- Monthly recurring revenue: $2,500 (stable)\n- Support ticket volume: 12 tickets (down 25% from Q3)\n- Average resolution time: 4.2 hours (improved from 6.1 hours)\n- Customer satisfaction score: 4.7/5.0 (up from 4.3/5.0)\n\nKey Achievements:\n- Successfully migrated to new data center with zero downtime\n- Implemented automated backup system per client request\n- Completed security audit with no major findings\n\nUpcoming Opportunities:\n- Premium analytics package upgrade discussion scheduled\n- Potential expansion to additional business units\n- Contract renewal due in March 2024\n\nRisk Factors:\n- Budget constraints mentioned in recent calls\n- New IT director may want to review all vendor relationships\n\nNext Actions:\n- Schedule Q1 business review meeting\n- Prepare ROI analysis for premium features\n- Maintain regular check-ins with key stakeholders",
+  "account_id": "acc_6997f38c-1d49-4255-8fb6-a4424abf3bde",
+  "timestamp": "2024-01-19T09:15:00Z",
+  "user_id": "usr_0138bd39-4af4-4a78-8e53-bb17d7898abe",
+  "source_system": "custom"
+}

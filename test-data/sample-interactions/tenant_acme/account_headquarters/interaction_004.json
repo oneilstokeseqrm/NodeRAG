@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_107b16fa-9a32-4781-a989-5ec179e8b805",
+  "interaction_type": "voice_memo",
+  "text": "Voice Memo Transcription - Internal Meeting Notes\n\nRecorded by: Jennifer Martinez, Account Manager\nDate: January 18, 2024\nDuration: 3 minutes 45 seconds\n\nTranscript:\n\"This is a follow-up memo regarding the ACME Corporation account review meeting. Key points discussed: First, they're interested in upgrading to our premium analytics package, which would increase their monthly spend by approximately $800. Second, they've requested a demo of our new AI-powered reporting features scheduled for next week. Third, there was a concern raised about data export capabilities - they need to ensure compliance with their internal audit requirements. Action items: Schedule demo with technical team, prepare compliance documentation, and draft upgrade proposal. The client seems very satisfied with our current service level and is looking to expand their usage. This could be a significant upsell opportunity for Q1.\"",
+  "account_id": "acc_6997f38c-1d49-4255-8fb6-a4424abf3bde",
+  "timestamp": "2024-01-18T16:45:30Z",
+  "user_id": "usr_0138bd39-4af4-4a78-8e53-bb17d7898abe",
+  "source_system": "voice_memo"
+}

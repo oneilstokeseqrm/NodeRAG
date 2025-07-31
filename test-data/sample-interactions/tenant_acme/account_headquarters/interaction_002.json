@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_da6496a1-ed68-4b64-9405-276769f5b628",
+  "interaction_type": "call",
+  "text": "Call transcript - Customer Support Call\n\nAgent: Thank you for calling ACME support, this is Sarah. How can I help you today?\n\nCustomer: Hi Sarah, I'm calling about our software license renewal. We received a notification that our enterprise license expires next month, but I thought we had auto-renewal enabled.\n\nAgent: Let me check your account details. I can see here that auto-renewal was disabled last quarter due to a payment method update. Would you like me to re-enable it?\n\nCustomer: Yes, please. And can you confirm the renewal rate? We want to make sure there are no surprise price increases.\n\nAgent: Absolutely. Your current rate is locked in at $5,000 annually for the next two years. I'm enabling auto-renewal now and you'll receive a confirmation email within 24 hours.\n\nCustomer: Perfect, thank you for your help!\n\nCall duration: 8 minutes 32 seconds",
+  "account_id": "acc_6997f38c-1d49-4255-8fb6-a4424abf3bde",
+  "timestamp": "2024-01-16T14:22:15Z",
+  "user_id": "usr_0138bd39-4af4-4a78-8e53-bb17d7898abe",
+  "source_system": "internal"
+}

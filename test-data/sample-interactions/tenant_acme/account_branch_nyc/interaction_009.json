@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_acme",
+  "interaction_id": "int_f1dd5ea5-620c-4155-b4d2-38e1306292f6",
+  "interaction_type": "voice_memo",
+  "text": "Voice Memo Transcription - Weekly Team Update\n\nRecorded by: Tom Anderson, IT Administrator\nDate: January 23, 2024\nDuration: 4 minutes 12 seconds\n\nTranscript:\n\"Weekly update for the NYC branch IT operations. First, the new user onboarding is progressing well - we have 3 out of 5 accounts already configured and tested. The remaining 2 should be ready by Thursday. Second, we've identified a potential issue with our VPN connection that's causing intermittent slowdowns during peak hours. I've opened a ticket with the network team to investigate. Third, the automated reporting demo went really well yesterday. The branch manager is excited about the weekly sales summaries and wants to move forward with the premium add-on. I'll need to coordinate with procurement to get the budget approval. Fourth, we're planning a security awareness training session for all new users next month. I'll reach out to the security team to schedule this. Overall, things are running smoothly and the team is adapting well to the new system features.\"",
+  "account_id": "acc_c02b9aa6-8704-4bfd-b861-864817134521",
+  "timestamp": "2024-01-23T15:30:00Z",
+  "user_id": "usr_01fc9d7c-7ed1-45b1-a054-15598367fd45",
+  "source_system": "voice_memo"
+}

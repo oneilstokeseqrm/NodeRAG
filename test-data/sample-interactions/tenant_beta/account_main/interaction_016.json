@@ -1,0 +1,10 @@
+{
+  "tenant_id": "tenant_beta",
+  "interaction_id": "int_448eeceb-82c1-45d2-855a-1ec9b2c75a4d",
+  "interaction_type": "email",
+  "text": "Subject: Pilot Phase Results - Salesforce Integration\n\nHi Kevin,\n\nI wanted to share the results from our pilot phase testing. Overall, we're very impressed with the integration performance!\n\nPilot Results Summary:\n- Data sync accuracy: 99.8% (exceeded our 99.5% target)\n- Average sync latency: 18 seconds (well under our 30-second requirement)\n- Zero data loss incidents\n- All 100 test records synced successfully\n\nUser Feedback:\n- Sales team loves the real-time lead scoring updates\n- Customer service team appreciates having interaction history in Salesforce\n- No performance impact on our existing Salesforce workflows\n\nMinor Issues Identified:\n- One custom field mapping needed adjustment (resolved)\n- Webhook retry logic triggered twice during high-traffic periods (expected behavior)\n\nNext Steps:\n- We're ready to proceed with full deployment\n- Can we schedule the production cutover for next Friday?\n- Please send the go-live checklist and rollback procedures\n\nThe team is excited to move forward with this integration. It's going to significantly improve our sales and customer service operations.\n\nThanks for the excellent support throughout the pilot!\n\nBest regards,\nRachel Thompson\nCTO, Beta Corporation",
+  "account_id": "acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8",
+  "timestamp": "2024-02-05T09:30:00Z",
+  "user_id": "usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5",
+  "source_system": "gmail"
+}
