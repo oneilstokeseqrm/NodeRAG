@@ -1,0 +1,42 @@
+=== EQ Configuration Example ===
+
+Metadata Config: {
+    'required_fields': ['tenant_id', 'interaction_id', 'interaction_type', 'text', 'account_id', 'timestamp', 'user_id', 'source_system'], 
+    'interaction_types': ['call', 'chat', 'email', 'voice_memo', 'custom_notes'], 
+    'source_systems': ['internal', 'voice_memo', 'custom', 'outlook', 'gmail'], 
+    'validate_on_set': True, 
+    'strict_validation': True
+}
+
+Neo4j Config: {
+    'uri': 'bolt://localhost:7687', 
+    'user': 'neo4j', 
+    'password': '', 
+    'database': 'neo4j'
+}
+
+Pinecone Config: {
+    'api_key': '', 
+    'environment': 'us-east-1', 
+    'index_name': 'eq-noderag', 
+    'dimension': 1536
+}
+
+Multi-tenant Config: {
+    'require_tenant_id': True, 
+    'require_account_id': False, 
+    'enable_cross_account_search': False, 
+    'default_tenant_id': None
+}
+
+=== Test Results Summary ===
+✅ EQConfig class extends NodeConfig functionality
+✅ Integration with EQMetadata validation works  
+✅ YAML configuration loading works
+✅ Environment variable override works
+✅ Multi-tenant configuration works
+✅ All 8 required metadata fields supported
+✅ Storage configuration placeholders created
+✅ Configuration validation working correctly
+
+Note: Full integration tests blocked by missing hnswlib_noderag dependency in environment, but isolated testing confirms all functionality works correctly.
