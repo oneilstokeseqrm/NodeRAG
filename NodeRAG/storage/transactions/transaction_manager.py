@@ -90,12 +90,21 @@ class TransactionManager:
             neo4j_ops = [op for op in transaction.operations if op.target_store == "neo4j"]
             pinecone_ops = [op for op in transaction.operations if op.target_store == "pinecone"]
             
+            # Phase 1: Execute Neo4j operations
             if neo4j_ops:
                 logger.info(f"Executing {len(neo4j_ops)} Neo4j operations")
                 for op in neo4j_ops:
                     try:
                         op.result = await op.method(*op.args, **op.kwargs)
                         op.executed = True
+                        
+                        if op.result is False:
+                            error_msg = f"Neo4j {op.operation_type} returned False indicating failure"
+                            logger.error(error_msg)
+                            transaction.error = error_msg
+                            await self._rollback_transaction(transaction)
+                            return False, error_msg
+                            
                     except Exception as e:
                         logger.error(f"Neo4j operation failed: {e}")
                         transaction.error = str(e)
@@ -104,12 +113,21 @@ class TransactionManager:
                 
                 transaction.state = TransactionState.NEO4J_PREPARED
             
+            # Phase 2: Execute Pinecone operations
             if pinecone_ops:
                 logger.info(f"Executing {len(pinecone_ops)} Pinecone operations")
                 for op in pinecone_ops:
                     try:
                         op.result = await op.method(*op.args, **op.kwargs)
                         op.executed = True
+                        
+                        if op.result is False:
+                            error_msg = f"Pinecone {op.operation_type} returned False indicating failure"
+                            logger.error(error_msg)
+                            transaction.error = error_msg
+                            await self._rollback_transaction(transaction)
+                            return False, error_msg
+                            
                     except Exception as e:
                         logger.error(f"Pinecone operation failed: {e}")
                         transaction.error = str(e)
@@ -264,12 +282,21 @@ class TransactionManager:
             neo4j_result = neo4j_op.result
             pinecone_result = pinecone_op.result
             
-            total_success = neo4j_result if isinstance(neo4j_result, int) else pinecone_result[0]
-            errors = pinecone_result[1] if isinstance(pinecone_result, tuple) else []
+            if isinstance(pinecone_result, tuple) and len(pinecone_result) == 2:
+                total_success = pinecone_result[0]
+                errors = pinecone_result[1]
+            elif isinstance(neo4j_result, int):
+                total_success = neo4j_result
+                errors = []
+                logger.warning(f"Unexpected Pinecone result type: {type(pinecone_result)}")
+            else:
+                logger.error(f"Unexpected result types - Neo4j: {type(neo4j_result)}, Pinecone: {type(pinecone_result)}")
+                return 0, [f"Unexpected result types in batch operation"]
             
             return total_success, errors
         else:
-            return 0, [error]
+            # Transaction failed
+            return 0, [error] if error else ["Transaction failed"]
     
     def get_transaction_log(self, limit: int = 100) -> List[Dict[str, Any]]:
         """Get recent transaction log entries"""
