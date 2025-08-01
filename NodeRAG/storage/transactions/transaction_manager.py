@@ -201,7 +201,7 @@ class TransactionManager:
             operation_type="add_node",
             target_store="neo4j",
             method=self.neo4j.add_node,
-            args=(node_id, node_type, metadata.to_dict()),
+            args=(node_id, node_type, metadata),
             kwargs={"properties": node_properties or {}},
             rollback_method=self.neo4j.delete_node,
             rollback_args=(node_id,)
@@ -245,11 +245,12 @@ class TransactionManager:
         pinecone_batch = []
         
         for node in nodes_data:
-            neo4j_batch.append((
-                node["node_id"],
-                node["node_type"],
-                {**node["metadata"].to_dict(), **(node.get("node_properties", {}))}
-            ))
+            neo4j_batch.append({
+                "node_id": node["node_id"],
+                "node_type": node["node_type"],
+                **node["metadata"].to_dict(),
+                **(node.get("node_properties", {}))
+            })
             
             pinecone_batch.append((
                 node["node_id"],

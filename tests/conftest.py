@@ -3,19 +3,16 @@ import pytest
 import asyncio
 from typing import Generator
 
+pytest_plugins = ('pytest_asyncio',)
 
 @pytest.fixture(scope="session")
-def event_loop() -> Generator:
+def event_loop():
     """Create an instance of the default event loop for the test session."""
-    loop = asyncio.new_event_loop()
+    policy = asyncio.get_event_loop_policy()
+    loop = policy.new_event_loop()
     yield loop
     loop.close()
 
-
-@pytest.fixture(scope="function")
-async def async_client():
-    """Fixture for async test setup"""
-    yield
-
-
-pytest_plugins = ('pytest_asyncio',)
+def pytest_configure(config):
+    """Configure pytest-asyncio"""
+    config.option.asyncio_mode = "auto"

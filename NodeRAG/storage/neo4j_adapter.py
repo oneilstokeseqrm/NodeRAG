@@ -361,6 +361,10 @@ class Neo4jAdapter:
             logger.info(f"Deleted {deleted_count} nodes with ID {node_id}")
             return deleted_count > 0
 
+    async def delete_node(self, node_id: str) -> bool:
+        """Delete a node by ID (alias for delete_node_by_id)"""
+        return await self.delete_node_by_id(node_id)
+
 
     async def clear_tenant_data(self, tenant_id: str) -> Tuple[int, int]:
         """Delete all nodes and relationships for a tenant
