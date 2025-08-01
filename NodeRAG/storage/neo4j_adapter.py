@@ -346,22 +346,62 @@ class Neo4jAdapter:
             logger.error(f"Failed to get subgraph for tenant {tenant_id}: {e}")
             return {'nodes': [], 'relationships': [], 'node_count': 0, 'relationship_count': 0}
     
-    async def clear_tenant_data(self, tenant_id: str) -> bool:
-        """Clear all data for a specific tenant (for testing)"""
-        queries = [
-            "MATCH ()-[r:RELATIONSHIP]->() WHERE r.tenant_id = $tenant_id DELETE r",
-            "MATCH (n:Node) WHERE n.tenant_id = $tenant_id DELETE n"
-        ]
+    async def delete_node_by_id(self, node_id: str) -> bool:
+        """Delete a single node by its ID"""
+        async with self.driver.session(database=self.database) as session:
+            query = """
+            MATCH (n {node_id: $node_id})
+            DETACH DELETE n
+            RETURN count(n) as deleted_count
+            """
+            result = await session.run(query, node_id=node_id)
+            record = await result.single()
+            deleted_count = record["deleted_count"] if record else 0
+            
+            logger.info(f"Deleted {deleted_count} nodes with ID {node_id}")
+            return deleted_count > 0
+
+
+    async def clear_tenant_data(self, tenant_id: str) -> Tuple[int, int]:
+        """Delete all nodes and relationships for a tenant
         
+        Args:
+            tenant_id: The tenant whose data to clear
+            
+        Returns:
+            Tuple[int, int]: (deleted_nodes_count, deleted_relationships_count)
+        """
         try:
             async with self.driver.session(database=self.database) as session:
-                for query in queries:
-                    await session.run(query, tenant_id=tenant_id)
-            logger.info(f"Cleared all data for tenant {tenant_id}")
-            return True
+                count_query = """
+                MATCH (n {tenant_id: $tenant_id})
+                WITH count(n) as node_count
+                MATCH ()-[r {tenant_id: $tenant_id}]-()
+                RETURN node_count, count(r) as rel_count
+                """
+                
+                result = await session.run(count_query, tenant_id=tenant_id)
+                record = await result.single()
+                
+                if record:
+                    node_count = record["node_count"]
+                    rel_count = record["rel_count"] // 2  # Relationships are counted twice
+                else:
+                    node_count = 0
+                    rel_count = 0
+                
+                delete_query = """
+                MATCH (n {tenant_id: $tenant_id})
+                DETACH DELETE n
+                """
+                
+                await session.run(delete_query, tenant_id=tenant_id)
+                
+                logger.info(f"Cleared tenant {tenant_id}: {node_count} nodes, {rel_count} relationships")
+                return node_count, rel_count
         except Exception as e:
             logger.error(f"Failed to clear data for tenant {tenant_id}: {e}")
-            return False
+            return 0, 0
     
     async def get_statistics(self) -> Dict[str, Any]:
         """Get database statistics"""

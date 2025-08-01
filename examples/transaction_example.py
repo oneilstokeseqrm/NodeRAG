@@ -1,6 +1,7 @@
 """Example usage of Transaction Manager"""
 import asyncio
 import numpy as np
+import uuid
 from datetime import datetime
 
 from NodeRAG.storage.neo4j_adapter import Neo4jAdapter
@@ -38,12 +39,12 @@ async def main():
         
         metadata = EQMetadata(
             tenant_id="example_txn_tenant",
-            interaction_id="int_example_001",
+            interaction_id=f"int_{uuid.uuid4()}",
             interaction_type="email",
             text="Customer inquiry about new product features",
-            account_id="acc_example_001",
+            account_id=f"acc_{uuid.uuid4()}",
             timestamp=datetime.utcnow().isoformat() + "Z",
-            user_id="usr_example_001",
+            user_id=f"usr_{uuid.uuid4()}",
             source_system="outlook"
         )
         
