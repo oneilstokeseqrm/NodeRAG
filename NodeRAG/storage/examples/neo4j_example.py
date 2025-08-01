@@ -99,8 +99,8 @@ async def main():
         print(f"Total relationships: {stats.get('total_relationships', 0)}")
         
         print("\nCleaning up test data...")
-        cleanup_success = await adapter.clear_tenant_data("example_tenant_123")
-        print(f"Cleanup successful: {cleanup_success}")
+        deleted_nodes, deleted_rels = await adapter.clear_tenant_data("example_tenant_123")
+        print(f"Cleanup successful: {deleted_nodes} nodes, {deleted_rels} relationships")
         
     except Exception as e:
         print(f"Error: {e}")
