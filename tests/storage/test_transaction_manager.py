@@ -225,7 +225,7 @@ class TestTransactionManager:
         assert success is False
         assert "Mock upsert_vector failure" in error
         
-        assert ("add_node", ("rollback_test", "entity", metadata.to_dict()), {"properties": {}}) in neo4j.operations_log
+        assert ("add_node", ("rollback_test", "entity", metadata), {"properties": {}}) in neo4j.operations_log
         assert ("delete_node", ("rollback_test",), {}) in neo4j.operations_log  # Rollback
         
         assert len([op for op in pinecone.operations_log if op[0] == "upsert_vector"]) == 1
