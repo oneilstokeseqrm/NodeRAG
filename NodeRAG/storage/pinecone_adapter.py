@@ -97,9 +97,28 @@ class PineconeAdapter:
     async def upsert_vector(self, vector_id: str, embedding: List[float], 
                           metadata: EQMetadata, namespace: Optional[str] = None,
                           additional_metadata: Optional[Dict] = None) -> bool:
-        """Upsert a single vector with metadata"""
+        """Upsert a single vector with metadata
+        
+        Args:
+            vector_id: Unique identifier for the vector
+            embedding: Vector embedding
+            metadata: EQMetadata object
+            namespace: Optional namespace override
+            additional_metadata: Optional additional metadata
+            
+        Returns:
+            bool: True if successful
+            
+        Raises:
+            Exception: If upsert fails
+        """
         try:
             namespace = namespace or metadata.tenant_id
+            
+            if len(embedding) != self.dimension:
+                error_msg = f"Invalid embedding dimension for {vector_id}: expected {self.dimension}, got {len(embedding)}"
+                logger.error(error_msg)
+                raise ValueError(error_msg)
             
             vector_metadata = self.prepare_metadata(metadata, additional_metadata)
             
@@ -117,11 +136,22 @@ class PineconeAdapter:
             
         except Exception as e:
             logger.error(f"Failed to upsert vector {vector_id}: {e}")
-            return False
+            raise
     
     async def upsert_vectors_batch(self, vectors: List[Tuple[str, List[float], EQMetadata, Optional[Dict]]],
                                  namespace: Optional[str] = None) -> Tuple[int, List[str]]:
-        """Batch upsert vectors for performance"""
+        """Batch upsert vectors for performance
+        
+        Args:
+            vectors: List of (vector_id, embedding, metadata, additional_metadata) tuples
+            namespace: Optional namespace override
+            
+        Returns:
+            Tuple[int, List[str]]: (successful_count, list_of_failed_ids)
+            
+        Raises:
+            Exception: If batch upsert fails completely
+        """
         successful_count = 0
         errors = []
         
@@ -132,10 +162,20 @@ class PineconeAdapter:
                 namespace_groups[ns] = []
             
             try:
+                if len(embedding) != self.dimension:
+                    error_msg = f"Invalid dimension for {vector_id}: expected {self.dimension}, got {len(embedding)}"
+                    logger.error(error_msg)
+                    errors.append(vector_id)
+                    continue
+                
                 vector_metadata = self.prepare_metadata(metadata, additional)
                 namespace_groups[ns].append((vector_id, embedding, vector_metadata))
             except Exception as e:
-                errors.append(f"Vector {vector_id}: {str(e)}")
+                logger.error(f"Vector {vector_id} validation failed: {e}")
+                errors.append(vector_id)
+        
+        if not any(namespace_groups.values()):
+            raise ValueError(f"All {len(vectors)} vectors failed validation")
         
         batch_size = 100
         
@@ -146,8 +186,10 @@ class PineconeAdapter:
                     self.index.upsert(vectors=batch, namespace=ns)
                     successful_count += len(batch)
                 except Exception as e:
-                    errors.append(f"Batch in namespace {ns}: {str(e)}")
+                    logger.error(f"Batch upsert failed in namespace {ns}: {e}")
+                    raise
         
+        logger.info(f"Batch upserted {successful_count} vectors, {len(errors)} failed")
         return successful_count, errors
     
     async def search(self, query_embedding: List[float], filters: Dict[str, Any],
