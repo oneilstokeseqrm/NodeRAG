@@ -1,0 +1,5 @@
+Filter,Result Count,Vector IDs
+"interaction_type=email, tenant_id=filter_test_tenant",2,"filter_vec_0, filter_vec_2"
+"source_system=outlook, tenant_id=filter_test_tenant",1,filter_vec_0
+"interaction_type=email, source_system=outlook, tenant_id=filter_test_tenant",1,filter_vec_0
+"interaction_type=chat, tenant_id=filter_test_tenant",1,filter_vec_1
