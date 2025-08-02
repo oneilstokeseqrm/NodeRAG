@@ -1,4 +1,4 @@
-from .build.Node import NodeRag
+from .src.Node import NodeRag
 from .config import NodeConfig      
 from .search import NodeSearch
 

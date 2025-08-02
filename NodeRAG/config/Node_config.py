@@ -24,13 +24,13 @@ from ..LLM import (
     API_client
 )
 
-from ..build.component import text_unit_index_counter
-from ..build.component import document_index_counter
-from ..build.component import semantic_unit_index_counter
-from ..build.component import entity_index_counter
-from ..build.component import relation_index_counter
-from ..build.component import attribute_index_counter
-from ..build.component import community_summary_index_counter,high_level_element_index_counter
+from ..src.component import text_unit_index_counter
+from ..src.component import document_index_counter
+from ..src.component import semantic_unit_index_counter
+from ..src.component import entity_index_counter
+from ..src.component import relation_index_counter
+from ..src.component import attribute_index_counter
+from ..src.component import community_summary_index_counter,high_level_element_index_counter
 
 
 
