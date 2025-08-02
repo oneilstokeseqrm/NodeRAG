@@ -1,18 +1,23 @@
 
+from typing import Optional
 from ...storage import genid
 from ...utils.readable_index import attribute_index
 from .unit import Unit_base
-
+from ...standards.eq_metadata import EQMetadata
 
 attribute_index_counter = attribute_index()
 
-
 class Attribute(Unit_base):
-    def __init__(self, raw_context:str = None,node:str = None):
+    def __init__(self, raw_context: str = None, node: str = None, 
+                 metadata: Optional[EQMetadata] = None):
+        super().__init__()
         self.node = node
         self.raw_context = raw_context
         self._hash_id = None
         self._human_readable_id = None
+        
+        if metadata:
+            self.metadata = metadata
     
     
     @property

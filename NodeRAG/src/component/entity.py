@@ -1,16 +1,23 @@
+from typing import Optional
 from .unit import Unit_base
 from ...storage import genid
 from ...utils.readable_index import entity_index
+from ...standards.eq_metadata import EQMetadata
 
 entity_index_counter = entity_index()
 
 class Entity(Unit_base):
     
-    def __init__(self, raw_context:str,text_hash_id:str = None):
+    def __init__(self, raw_context: str, metadata: Optional[EQMetadata] = None, 
+                 text_hash_id: str = None):
+        super().__init__()
         self.raw_context = raw_context
         self.text_hash_id = text_hash_id
         self._hash_id = None
         self._human_readable_id = None
+        
+        if metadata:
+            self.metadata = metadata
     @property
     def hash_id(self):
         if not self._hash_id:

@@ -1,21 +1,24 @@
 import json
-
+from typing import Optional
 
 from .unit import Unit_base
 from ...storage import genid
 from ...utils.readable_index import text_unit_index
-
-
-
+from ...standards.eq_metadata import EQMetadata
 
 text_unit_index_counter = text_unit_index()
 
-
 class Text_unit(Unit_base):
-    def __init__(self, raw_context:str = None,hash_id:str = None,human_readable_id:int = None,semantic_units:list = []):
+    def __init__(self, raw_context: str = None, hash_id: str = None,
+                 human_readable_id: int = None, semantic_units: list = [],
+                 metadata: Optional[EQMetadata] = None):
+        super().__init__()
         self.raw_context = raw_context
         self._hash_id = hash_id
         self._human_readable_id = human_readable_id
+        
+        if metadata:
+            self.metadata = metadata
         
     @property
     def hash_id(self):
