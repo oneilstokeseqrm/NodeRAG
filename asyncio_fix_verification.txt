@@ -1,0 +1,126 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.8, pytest-8.4.1, pluggy-1.6.0 -- /home/ubuntu/.pyenv/versions/3.12.8/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/repos/NodeRAG
+configfile: pyproject.toml
+plugins: langsmith-0.4.4, rerunfailures-15.1, dash-3.1.1, Faker-18.13.0, anyio-4.8.0, asyncio-0.26.0, cov-6.2.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 101 items
+
+tests/component/test_metadata_support.py::TestComponentMetadata::test_entity_with_valid_metadata PASSED [  0%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_entity_with_invalid_metadata PASSED [  1%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_entity_without_metadata PASSED [  2%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_semantic_unit_with_metadata PASSED [  3%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_text_unit_with_metadata PASSED [  4%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_relationship_with_metadata PASSED [  5%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_attribute_with_metadata PASSED [  6%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_document_without_metadata PASSED [  7%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_all_components_inherit_from_unit_base PASSED [  8%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_metadata_validation_in_base_class PASSED [  9%]
+tests/config/test_eq_config.py::TestEQConfig::test_eq_config_initialization PASSED [ 10%]
+tests/config/test_eq_config.py::TestEQConfig::test_metadata_config_defaults PASSED [ 11%]
+tests/config/test_eq_config.py::TestEQConfig::test_storage_config_loading PASSED [ 12%]
+tests/config/test_eq_config.py::TestEQConfig::test_environment_variable_override PASSED [ 13%]
+tests/config/test_eq_config.py::TestEQConfig::test_multi_tenant_config PASSED [ 14%]
+tests/config/test_eq_config.py::TestEQConfig::test_current_metadata_validation PASSED [ 15%]
+tests/config/test_eq_config.py::TestEQConfig::test_config_validation PASSED [ 16%]
+tests/config/test_eq_config.py::TestEQConfig::test_config_export PASSED  [ 17%]
+tests/config/test_eq_config.py::TestEQConfig::test_from_main_folder_classmethod PASSED [ 18%]
+tests/config/test_eq_config_integration.py::test_config_metadata_integration PASSED [ 19%]
+tests/integration/test_id_generation_integration.py::test_id_generation_with_real_metadata PASSED [ 20%]
+tests/integration/test_id_generation_integration.py::test_id_generation_with_config_integration PASSED [ 21%]
+tests/integration/test_id_generation_integration.py::test_lineage_tracking_integration PASSED [ 22%]
+tests/integration/test_id_generation_integration.py::test_metadata_validation_integration PASSED [ 23%]
+tests/integration/test_id_generation_integration.py::test_tenant_isolation_integration PASSED [ 24%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_batch_performance PASSED [ 25%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_complete_workflow_with_eq_metadata PASSED [ 26%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_index_usage_verification PASSED [ 27%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_connection_resilience PASSED [ 28%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_namespace_isolation_verification PASSED [ 29%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_metadata_filtering_all_fields PASSED [ 30%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_batch_upsert_performance PASSED [ 31%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_complete_workflow FAILED [ 32%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_valid_metadata_creation PASSED [ 33%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_empty_required_fields_validation PASSED [ 34%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_whitespace_only_fields_validation PASSED [ 35%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_uuid_format_validation PASSED [ 36%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_missing_uuid_prefix_validation PASSED [ 37%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_timestamp_format_validation PASSED [ 38%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_interaction_type_validation PASSED [ 39%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_source_system_validation PASSED [ 40%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_all_valid_interaction_types PASSED [ 41%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_all_valid_source_systems PASSED [ 42%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_from_dict_creation PASSED [ 43%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_copy_with_node_info PASSED [ 44%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_semantic_unit_propagation PASSED [ 45%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_entity_propagation PASSED [ 46%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_relationship_propagation PASSED [ 47%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_attribute_propagation_single_entity PASSED [ 48%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_attribute_propagation_multiple_entities PASSED [ 49%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_community_propagation PASSED [ 50%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_empty_entity_list_error PASSED [ 51%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_empty_community_list_error PASSED [ 52%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_semantic_unit PASSED [ 53%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_entity PASSED [ 54%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_community PASSED [ 55%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection PASSED [ 56%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_single_node PASSED [ 57%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_nodes_batch PASSED [ 58%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship PASSED [ 59%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_nodes_by_metadata PASSED [ 60%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_tenant_isolation PASSED [ 61%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_subgraph PASSED [ 62%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics PASSED [ 63%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_clear_tenant_data FAILED [ 64%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_invalid_metadata_validation PASSED [ 65%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_connection PASSED [ 66%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_single_vector PASSED [ 67%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_vectors_batch PASSED [ 68%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_metadata_preparation PASSED [ 69%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_search_with_filters PASSED [ 70%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_isolation 
+
+=================================== FAILURES ===================================
+________________ TestPineconeIntegration.test_complete_workflow ________________
+tests/integration/test_pinecone_integration.py:358: in test_complete_workflow
+    assert len(results) == 6
+E   assert 0 == 6
+E    +  where 0 = len([])
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:51:25 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '18', 'x-pinecone-request-id': '642490027176646282', 'x-envoy-upstream-service-time': '19', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___________________ TestNeo4jAdapter.test_clear_tenant_data ____________________
+tests/storage/test_neo4j_adapter.py:212: in test_clear_tenant_data
+    assert success is True
+E   assert (0, 0) is True
+=============================== warnings summary ===============================
+tests/integration/test_neo4j_integration.py:34
+  /home/ubuntu/repos/NodeRAG/tests/integration/test_neo4j_integration.py:34: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/integration/test_pinecone_integration.py:40
+  /home/ubuntu/repos/NodeRAG/tests/integration/test_pinecone_integration.py:40: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/storage/test_transaction_integration.py:89
+  /home/ubuntu/repos/NodeRAG/tests/storage/test_transaction_integration.py:89: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/config/test_eq_config_integration.py::test_config_metadata_integration
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/python.py:161: PytestReturnNotNoneWarning: Test functions should return None, but tests/config/test_eq_config_integration.py::test_config_metadata_integration returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_complete_workflow
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_clear_tenant_data
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/selectors.py:468: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+============= 2 failed, 69 passed, 4 warnings in 159.91s (0:02:39) =============
+Task was destroyed but it is pending!
+task: <Task pending name='Task-208' coro=<TestPineconeAdapter.test_namespace_isolation() running at /home/ubuntu/repos/NodeRAG/tests/storage/test_pinecone_adapter.py:252> wait_for=<Future pending cb=[Task.task_wakeup()]>>

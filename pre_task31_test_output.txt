@@ -1,0 +1,949 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.8, pytest-8.4.1, pluggy-1.6.0 -- /home/ubuntu/.pyenv/versions/3.12.8/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/repos/NodeRAG
+configfile: pyproject.toml
+plugins: langsmith-0.4.4, rerunfailures-15.1, dash-3.1.1, Faker-18.13.0, anyio-4.8.0, asyncio-0.26.0, cov-6.2.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 91 items
+
+tests/config/test_eq_config.py::TestEQConfig::test_eq_config_initialization PASSED [  1%]
+tests/config/test_eq_config.py::TestEQConfig::test_metadata_config_defaults PASSED [  2%]
+tests/config/test_eq_config.py::TestEQConfig::test_storage_config_loading PASSED [  3%]
+tests/config/test_eq_config.py::TestEQConfig::test_environment_variable_override PASSED [  4%]
+tests/config/test_eq_config.py::TestEQConfig::test_multi_tenant_config PASSED [  5%]
+tests/config/test_eq_config.py::TestEQConfig::test_current_metadata_validation PASSED [  6%]
+tests/config/test_eq_config.py::TestEQConfig::test_config_validation PASSED [  7%]
+tests/config/test_eq_config.py::TestEQConfig::test_config_export PASSED  [  8%]
+tests/config/test_eq_config.py::TestEQConfig::test_from_main_folder_classmethod PASSED [  9%]
+tests/config/test_eq_config_integration.py::test_config_metadata_integration PASSED [ 10%]
+tests/integration/test_id_generation_integration.py::test_id_generation_with_real_metadata PASSED [ 12%]
+tests/integration/test_id_generation_integration.py::test_id_generation_with_config_integration PASSED [ 13%]
+tests/integration/test_id_generation_integration.py::test_lineage_tracking_integration PASSED [ 14%]
+tests/integration/test_id_generation_integration.py::test_metadata_validation_integration PASSED [ 15%]
+tests/integration/test_id_generation_integration.py::test_tenant_isolation_integration PASSED [ 16%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_batch_performance PASSED [ 17%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_complete_workflow_with_eq_metadata PASSED [ 18%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_index_usage_verification PASSED [ 19%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_connection_resilience PASSED [ 20%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_namespace_isolation_verification PASSED [ 21%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_metadata_filtering_all_fields FAILED [ 23%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_batch_upsert_performance FAILED [ 24%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_complete_workflow FAILED [ 25%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_valid_metadata_creation PASSED [ 26%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_empty_required_fields_validation PASSED [ 27%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_whitespace_only_fields_validation PASSED [ 28%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_uuid_format_validation PASSED [ 29%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_missing_uuid_prefix_validation PASSED [ 30%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_timestamp_format_validation PASSED [ 31%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_interaction_type_validation PASSED [ 32%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_source_system_validation PASSED [ 34%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_all_valid_interaction_types PASSED [ 35%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_all_valid_source_systems PASSED [ 36%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_from_dict_creation PASSED [ 37%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_copy_with_node_info PASSED [ 38%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_semantic_unit_propagation PASSED [ 39%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_entity_propagation PASSED [ 40%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_relationship_propagation PASSED [ 41%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_attribute_propagation_single_entity PASSED [ 42%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_attribute_propagation_multiple_entities PASSED [ 43%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_community_propagation PASSED [ 45%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_empty_entity_list_error PASSED [ 46%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_empty_community_list_error PASSED [ 47%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_semantic_unit PASSED [ 48%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_entity PASSED [ 49%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_community PASSED [ 50%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection FAILED [ 51%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_single_node FAILED [ 52%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_nodes_batch FAILED [ 53%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship FAILED [ 54%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_nodes_by_metadata FAILED [ 56%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_tenant_isolation FAILED [ 57%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_subgraph FAILED [ 58%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics FAILED [ 59%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_clear_tenant_data FAILED [ 60%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_invalid_metadata_validation FAILED [ 61%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_connection FAILED [ 62%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_single_vector FAILED [ 63%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_vectors_batch FAILED [ 64%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_metadata_preparation FAILED [ 65%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_search_with_filters FAILED [ 67%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_isolation FAILED [ 68%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_delete_vectors FAILED [ 69%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_cleanup FAILED [ 70%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_invalid_metadata_handling FAILED [ 71%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_get_statistics FAILED [ 72%]
+tests/storage/test_transaction_fixes.py::test_dimension_mismatch_triggers_rollback FAILED [ 73%]
+tests/storage/test_transaction_fixes.py::test_batch_operation_with_failures FAILED [ 74%]
+tests/storage/test_transaction_fixes.py::test_data_consistency_maintained FAILED [ 75%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_successful_node_and_embedding_creation FAILED [ 76%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_batch_transaction_success FAILED [ 78%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_rollback_on_pinecone_failure FAILED [ 79%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_consistency_after_multiple_transactions FAILED [ 80%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_begin_transaction PASSED [ 81%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_success FAILED [ 82%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_neo4j_failure FAILED [ 83%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_pinecone_failure FAILED [ 84%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_batch_operations_success FAILED [ 85%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_logging FAILED [ 86%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_concurrent_transactions FAILED [ 87%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_rollback_with_mock_adapters FAILED [ 89%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check FAILED [ 90%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_state_transitions PASSED [ 91%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_operation_creation PASSED [ 92%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_semantic_unit_id_generation PASSED [ 93%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_entity_id_deduplication PASSED [ 94%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_entity_tenant_isolation PASSED [ 95%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_relationship_id_consistency PASSED [ 96%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_community_id_generation PASSED [ 97%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_id_format_validation PASSED [ 98%]
+tests/utils/test_id_generation.py::TestMetadataTracker::test_lineage_tracking PASSED [100%]
+
+=================================== FAILURES ===================================
+__________ TestPineconeIntegration.test_metadata_filtering_all_fields __________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace integration_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '28', 'x-pinecone-request-id': '4134978825335610545', 'x-envoy-upstream-service-time': '28', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace perf_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '31', 'x-pinecone-request-id': '8984223007742943507', 'x-envoy-upstream-service-time': '31', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '6130504885681066804', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+____________ TestPineconeIntegration.test_batch_upsert_performance _____________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace integration_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:37 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '12', 'x-pinecone-request-id': '4699728587242656504', 'x-envoy-upstream-service-time': '13', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace perf_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:37 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '12', 'x-pinecone-request-id': '4205932354835954331', 'x-envoy-upstream-service-time': '13', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:37 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '12', 'x-pinecone-request-id': '3462556800606361053', 'x-envoy-upstream-service-time': '12', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeIntegration.test_complete_workflow ________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace integration_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:38 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '3', 'x-pinecone-request-id': '1878434888873419975', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace perf_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:38 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '5954592493357992823', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:35:38 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '6778644333261442677', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_______________________ TestNeo4jAdapter.test_connection _______________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+____________________ TestNeo4jAdapter.test_add_single_node _____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+____________________ TestNeo4jAdapter.test_add_nodes_batch _____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+____________________ TestNeo4jAdapter.test_add_relationship ____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_________________ TestNeo4jAdapter.test_get_nodes_by_metadata __________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+____________________ TestNeo4jAdapter.test_tenant_isolation ____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+______________________ TestNeo4jAdapter.test_get_subgraph ______________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_______________________ TestNeo4jAdapter.test_statistics _______________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+___________________ TestNeo4jAdapter.test_clear_tenant_data ____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+______________ TestNeo4jAdapter.test_invalid_metadata_validation _______________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_____________________ TestPineconeAdapter.test_connection ______________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:02 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '20', 'x-pinecone-request-id': '5969967313007058499', 'x-envoy-upstream-service-time': '21', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:03 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '17', 'x-pinecone-request-id': '6204688379859496294', 'x-envoy-upstream-service-time': '18', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:03 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '2927008013197898441', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeAdapter.test_upsert_single_vector _________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:05 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '24', 'x-pinecone-request-id': '8812902824105902298', 'x-envoy-upstream-service-time': '26', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:05 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '7010163420555878550', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:05 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '860593654314840742', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeAdapter.test_upsert_vectors_batch _________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:06 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '3800283806891064160', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:06 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '3416099497827552282', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:06 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '6042166107577288772', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeAdapter.test_metadata_preparation _________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:07 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '645923228364489981', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:07 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '844017578775081818', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:07 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '948523338796293757', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________________ TestPineconeAdapter.test_search_with_filters _________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:10 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '3820056047072392830', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:10 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '8401642197445377347', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:10 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '4712035501750628497', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________________ TestPineconeAdapter.test_namespace_isolation _________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:12 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '4831863487164344071', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:12 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '7548200152310175657', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:12 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '8407604699091198289', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___________________ TestPineconeAdapter.test_delete_vectors ____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:15 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '205054645289346231', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:15 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '2860439204691678655', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:15 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '7613685397763526192', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+__________________ TestPineconeAdapter.test_namespace_cleanup __________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:18 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '7034215312082826665', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:18 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '4196007549864904095', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:18 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '15', 'x-pinecone-request-id': '3147625397844890770', 'x-envoy-upstream-service-time': '15', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+______________ TestPineconeAdapter.test_invalid_metadata_handling ______________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:18 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '2348560039756830838', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:19 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '8', 'x-pinecone-request-id': '2640140962517795808', 'x-envoy-upstream-service-time': '8', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:19 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '21', 'x-pinecone-request-id': '7047613862820041569', 'x-envoy-upstream-service-time': '21', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___________________ TestPineconeAdapter.test_get_statistics ____________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:19 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '6216154442828438633', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:19 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '4822937838778618427', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:20 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '6388240442375611352', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+__________________ test_dimension_mismatch_triggers_rollback ___________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:23 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '6376797676498684088', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:24 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '5200249611468992819', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+______________________ test_batch_operation_with_failures ______________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:28 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '14', 'x-pinecone-request-id': '5076358088532543108', 'x-envoy-upstream-service-time': '15', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:28 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '11', 'x-pinecone-request-id': '1320353050127973955', 'x-envoy-upstream-service-time': '11', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_______________________ test_data_consistency_maintained _______________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '32', 'x-pinecone-request-id': '1148952194553616525', 'x-envoy-upstream-service-time': '32', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '36', 'x-pinecone-request-id': '3773434241288555061', 'x-envoy-upstream-service-time': '37', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+____ TestTransactionIntegration.test_successful_node_and_embedding_creation ____
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '5187586349289646716', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '5669252624116478495', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+__________ TestTransactionIntegration.test_batch_transaction_success ___________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:39 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '2382437075048609763', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:39 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '22', 'x-pinecone-request-id': '7135526967644174842', 'x-envoy-upstream-service-time': '22', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________ TestTransactionIntegration.test_rollback_on_pinecone_failure _________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '8548410681752336695', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '11', 'x-pinecone-request-id': '1430886041260085319', 'x-envoy-upstream-service-time': '12', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___ TestTransactionIntegration.test_consistency_after_multiple_transactions ____
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:44 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '8225699069911294848', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:36:44 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '3470734949983993691', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________ TestTransactionManager.test_add_node_with_embedding_success __________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+______ TestTransactionManager.test_add_node_with_embedding_neo4j_failure _______
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_____ TestTransactionManager.test_add_node_with_embedding_pinecone_failure _____
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_____________ TestTransactionManager.test_batch_operations_success _____________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_______________ TestTransactionManager.test_transaction_logging ________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+_____________ TestTransactionManager.test_concurrent_transactions ______________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+___________ TestTransactionManager.test_rollback_with_mock_adapters ____________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+___________________ TestTransactionManager.test_health_check ___________________
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: in runtest
+    super().runtest()
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: in inner
+    _loop = _get_event_loop_no_warn()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: in _get_event_loop_no_warn
+    return asyncio.get_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: in get_event_loop
+    raise RuntimeError('There is no current event loop in thread %r.'
+E   RuntimeError: There is no current event loop in thread 'MainThread'.
+=============================== warnings summary ===============================
+tests/integration/test_neo4j_integration.py:34
+  /home/ubuntu/repos/NodeRAG/tests/integration/test_neo4j_integration.py:34: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/integration/test_pinecone_integration.py:40
+  /home/ubuntu/repos/NodeRAG/tests/integration/test_pinecone_integration.py:40: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/storage/test_transaction_integration.py:89
+  /home/ubuntu/repos/NodeRAG/tests/storage/test_transaction_integration.py:89: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/config/test_eq_config_integration.py::test_config_metadata_integration
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/python.py:161: PytestReturnNotNoneWarning: Test functions should return None, but tests/config/test_eq_config_integration.py::test_config_metadata_integration returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_batch_performance
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:884: DeprecationWarning: The event_loop fixture provided by pytest-asyncio has been redefined in
+  /home/ubuntu/repos/NodeRAG/tests/conftest.py:8
+  Replacing the event_loop fixture with a custom implementation is deprecated
+  and will lead to errors in the future.
+  If you want to request an asyncio event loop with a scope other than function
+  scope, use the "loop_scope" argument to the asyncio mark when marking the tests.
+  If you want to return different types of event loops, use the event_loop_policy
+  fixture.
+  
+    warnings.warn(/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestNeo4jAdapter.test_add_relationship' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestNeo4jAdapter.test_statistics' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestPineconeAdapter.test_upsert_single_vector' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestPineconeAdapter.test_namespace_isolation' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestPineconeAdapter.test_get_statistics' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionIntegration.test_successful_node_and_embedding_creation' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionIntegration.test_consistency_after_multiple_transactions' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_add_node_with_embedding_pinecone_failure' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_rollback_with_mock_adapters' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_health_check' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+
+
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/asyncio/streams.py:716: RuntimeWarning: coroutine 'TestPineconeIntegration.test_complete_workflow' was never awaited
+    data = bytes(memoryview(self._buffer)[:n])
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/unittest/mock.py:769: RuntimeWarning: coroutine 'TestTransactionManager.test_batch_operations_success' was never awaited
+    def __setattr__(self, name, value):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/unittest/mock.py:769: RuntimeWarning: coroutine 'TestTransactionManager.test_transaction_logging' was never awaited
+    def __setattr__(self, name, value):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/unittest/mock.py:769: RuntimeWarning: coroutine 'TestTransactionManager.test_concurrent_transactions' was never awaited
+    def __setattr__(self, name, value):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_metadata_filtering_all_fields
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_batch_upsert_performance
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_complete_workflow
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_single_node
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_nodes_batch
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_nodes_by_metadata
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_tenant_isolation
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_subgraph
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_clear_tenant_data
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_invalid_metadata_validation
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_connection
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_single_vector
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_vectors_batch
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_metadata_preparation
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_search_with_filters
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_isolation
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_delete_vectors
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_cleanup
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_invalid_metadata_handling
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_get_statistics
+FAILED tests/storage/test_transaction_fixes.py::test_dimension_mismatch_triggers_rollback
+FAILED tests/storage/test_transaction_fixes.py::test_batch_operation_with_failures
+FAILED tests/storage/test_transaction_fixes.py::test_data_consistency_maintained
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_successful_node_and_embedding_creation
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_batch_transaction_success
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_rollback_on_pinecone_failure
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_consistency_after_multiple_transactions
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_success
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_neo4j_failure
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_pinecone_failure
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_batch_operations_success
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_logging
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_concurrent_transactions
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_rollback_with_mock_adapters
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check
+============ 38 failed, 53 passed, 9 warnings in 100.63s (0:01:40) =============
