@@ -1,21 +1,22 @@
-from typing import List
+from typing import List, Optional
 from .unit import Unit_base
 from ...storage import genid
 from ...utils.readable_index import relation_index
 from .entity import Entity
-
-
+from ...standards.eq_metadata import EQMetadata
 
 relation_index_counter = relation_index()
 
 class Relationship(Unit_base):
     
     def __init__(self, relationship_tuple: List[str] = None, text_hash_id: str = None, 
-                 frozen_set: frozenset = None, context: str = None,human_readable_id:int = None):
+                 frozen_set: frozenset = None, context: str = None, human_readable_id: int = None,
+                 metadata: Optional[EQMetadata] = None):
+        super().__init__()
         if relationship_tuple:
             self.relationship_tuple = relationship_tuple
-            self.source = Entity(relationship_tuple[0], text_hash_id)
-            self.target = Entity(relationship_tuple[2], text_hash_id)
+            self.source = Entity(relationship_tuple[0], metadata=metadata, text_hash_id=text_hash_id)
+            self.target = Entity(relationship_tuple[2], metadata=metadata, text_hash_id=text_hash_id)
             self.unique_relationship = frozenset((self.source.hash_id,self.target.hash_id))
             self.raw_context = " ".join(self.relationship_tuple)
             self._human_readable_id = None
@@ -29,6 +30,9 @@ class Relationship(Unit_base):
         
         self.text_hash_id = text_hash_id
         self._hash_id = None
+        
+        if metadata:
+            self.metadata = metadata
         
         
     @property

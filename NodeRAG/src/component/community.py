@@ -2,20 +2,22 @@ import networkx as nx
 from sortedcontainers import SortedDict
 import backoff
 from json.decoder import JSONDecodeError
+from typing import Optional
 
 from ...storage import genid
 from ...utils.readable_index import community_summary_index,high_level_element_index
 from .unit import Unit_base
 from ...storage.graph_mapping import Mapper
+from ...standards.eq_metadata import EQMetadata
 
 community_summary_index_counter = community_summary_index()
 high_level_element_index_counter = high_level_element_index()
 
-
 class Community_summary(Unit_base):
         
-        def __init__(self,community_node:str|None,mapper:Mapper,graph:nx.MultiGraph,config):
-            
+        def __init__(self, community_node: str|None, mapper: Mapper, graph: nx.MultiGraph, config,
+                     metadata: Optional[EQMetadata] = None):
+            super().__init__()
             self.community_node = community_node
             self.client = config.API_client
             self.mapper = mapper
@@ -26,10 +28,18 @@ class Community_summary(Unit_base):
             self._hash_id = None
             self._human_readable_id = None
             
+            if metadata:
+                self.metadata = metadata
+            
         @property
         def hash_id(self):
             if not self._hash_id:
-                self._hash_id = genid(self.community_node,"sha256")
+                if isinstance(self.community_node, str):
+                    self._hash_id = genid([self.community_node], "sha256")
+                elif self.community_node is None:
+                    self._hash_id = genid([""], "sha256")
+                else:
+                    self._hash_id = genid(self.community_node, "sha256")
             return self._hash_id
         @property
         def human_readable_id(self):
@@ -92,7 +102,9 @@ class Community_summary(Unit_base):
             
                 
 class High_level_elements(Unit_base):
-    def __init__(self,context:str,title:str,config):
+    def __init__(self, context: str, title: str, config, 
+                 metadata: Optional[EQMetadata] = None):
+        super().__init__()
         self.context = context
         self.title = title
         self.embedding_client = config.embedding_client
@@ -100,6 +112,9 @@ class High_level_elements(Unit_base):
         self._title_hash_id = None
         self._human_readable_id = None
         self.embedding = None
+        
+        if metadata:
+            self.metadata = metadata
 
     @property
     def hash_id(self):

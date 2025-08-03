@@ -1,16 +1,18 @@
+from typing import Optional
 from ...utils.text_spliter import SemanticTextSplitter
 from ...storage import genid
 from ...utils.readable_index import document_index
 from .unit import Unit_base
 from .text_unit import Text_unit
-
+from ...standards.eq_metadata import EQMetadata
 
 document_index_counter = document_index()
 
-
 class document(Unit_base):
-    def __init__(self, raw_context:str = None,path:str = None,splitter:SemanticTextSplitter = None):
-
+    def __init__(self, raw_context: str = None, path: str = None, 
+                 metadata: Optional[EQMetadata] = None,
+                 splitter: SemanticTextSplitter = None):
+        super().__init__()
         self.path = path
         self.raw_context = raw_context
         self._processed_context = False
@@ -20,6 +22,9 @@ class document(Unit_base):
         self.text_hash_id = None
         self.text_human_readable_id = None
         self.splitter = splitter
+        
+        if metadata:
+            self.metadata = metadata
 
     @property
     def hash_id(self):
@@ -37,7 +42,7 @@ class document(Unit_base):
         if not self._processed_context:
             self._processed_context = True
             texts = self.splitter.split(self.raw_context)
-            self.text_units = [Text_unit(text) for text in texts]
+            self.text_units = [Text_unit(text, metadata=self.metadata) for text in texts]
             self.text_hash_id = [text.hash_id for text in self.text_units]
             self.text_human_readable_id = [text.human_readable_id for text in self.text_units]
             
