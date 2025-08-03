@@ -1,0 +1,6 @@
+{
+  "iterations": 10000,
+  "avg_without_ms": 0.0017340892005904605,
+  "avg_with_ms": 0.010117528401815434,
+  "overhead_percent": 483.449132741868
+}

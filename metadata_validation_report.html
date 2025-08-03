@@ -1,0 +1,106 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Task 3.1 Metadata Validation Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .pass { color: green; font-weight: bold; }
+            .fail { color: red; font-weight: bold; }
+            .section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+        </style>
+    </head>
+    <body>
+        <h1>Task 3.1 Component Metadata Validation Report</h1>
+        <p>Generated: 2025-08-03T11:09:34.026439+00:00</p>
+        
+        <div class="section">
+            <h2>Component Tests</h2>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Status</th>
+                    <th>Has Metadata</th>
+                    <th>Tenant ID</th>
+                </tr>
+    
+                <tr>
+                    <td>Entity</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+                <tr>
+                    <td>Document</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+                <tr>
+                    <td>Semantic_unit</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+                <tr>
+                    <td>Relationship</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+                <tr>
+                    <td>Attribute</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+                <tr>
+                    <td>Text_unit</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+                <tr>
+                    <td>Community_summary</td>
+                    <td class="pass">PASS</td>
+                    <td>True</td>
+                    <td>tenant_12345678-1234-4567-8901-123456789012</td>
+                </tr>
+        
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>Edge Cases</h2>
+    
+            <h3>Backward Compatibility</h3>
+            <p class="pass">Status: PASS</p>
+            <pre>{
+  "status": "PASS",
+  "entity_created": true,
+  "metadata_is_none": true,
+  "tenant_id_is_none": true,
+  "hash_id_generated": true
+}</pre>
+        
+            <h3>Invalid Metadata Rejection</h3>
+            <p class="pass">Status: PASS</p>
+            <pre>{
+  "status": "PASS",
+  "validation_error": "Invalid metadata: ['tenant_id cannot be empty', \"interaction_id must be UUID v4 format with 'int_' prefix\", 'timestamp must be ISO8601 format (YYYY-MM-DDTHH:MM:SSZ)', 'interaction_type must be one of: call, chat, email, voice_memo, custom_notes']",
+  "correctly_rejected": true
+}</pre>
+        
+        </div>
+    </body>
+    </html>
+    
