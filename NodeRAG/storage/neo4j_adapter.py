@@ -366,14 +366,14 @@ class Neo4jAdapter:
         return await self.delete_node_by_id(node_id)
 
 
-    async def clear_tenant_data(self, tenant_id: str) -> Tuple[int, int]:
+    async def clear_tenant_data(self, tenant_id: str) -> bool:
         """Delete all nodes and relationships for a tenant
         
         Args:
             tenant_id: The tenant whose data to clear
             
         Returns:
-            Tuple[int, int]: (deleted_nodes_count, deleted_relationships_count)
+            bool: True if successful, False if error occurred
         """
         try:
             async with self.driver.session(database=self.database) as session:
@@ -402,10 +402,10 @@ class Neo4jAdapter:
                 await session.run(delete_query, tenant_id=tenant_id)
                 
                 logger.info(f"Cleared tenant {tenant_id}: {node_count} nodes, {rel_count} relationships")
-                return node_count, rel_count
+                return True  # Return boolean success indicator
         except Exception as e:
             logger.error(f"Failed to clear data for tenant {tenant_id}: {e}")
-            return 0, 0
+            return False
     
     async def get_statistics(self) -> Dict[str, Any]:
         """Get database statistics"""

@@ -1,0 +1,38 @@
+{
+  "namespace_lifecycle": {
+    "namespace_creation": null,
+    "namespace_listing": null,
+    "namespace_usage": null,
+    "namespace_deletion": null,
+    "cleanup_issues": [
+      "General Pinecone error: 'PineconeAdapter' object has no attribute 'upsert_vectors'"
+    ],
+    "general_error": "'PineconeAdapter' object has no attribute 'upsert_vectors'"
+  },
+  "concurrent_operations": {
+    "concurrent_creates": {
+      "total_operations": 3,
+      "successful": 0,
+      "failed": 3,
+      "exceptions": 0
+    },
+    "concurrent_deletes": null,
+    "race_conditions": []
+  },
+  "dimension_validation": {
+    "correct_dimensions": null,
+    "incorrect_dimensions": null,
+    "dimension_errors": [],
+    "general_error": "'PineconeAdapter' object has no attribute 'upsert_vectors'"
+  },
+  "root_cause_analysis": {
+    "namespace_404_errors": [
+      "General Pinecone error: 'PineconeAdapter' object has no attribute 'upsert_vectors'"
+    ],
+    "dimension_issues": [],
+    "timing_issues": [],
+    "likely_causes": [
+      "Namespace cleanup timing issues"
+    ]
+  }
+}
