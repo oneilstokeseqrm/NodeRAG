@@ -1,0 +1,63 @@
+{
+  "timestamp": "2025-08-03T11:09:34.026439+00:00",
+  "validation_results": {},
+  "component_tests": {
+    "Entity": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "validation_passed": true
+    },
+    "Document": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "validation_passed": true
+    },
+    "Semantic_unit": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "validation_passed": true
+    },
+    "Relationship": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "validation_passed": true
+    },
+    "Attribute": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "validation_passed": true
+    },
+    "Text_unit": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "validation_passed": true
+    },
+    "Community_summary": {
+      "status": "PASS",
+      "has_metadata": true,
+      "tenant_id": "tenant_12345678-1234-4567-8901-123456789012",
+      "genid_bug_fixed": true
+    }
+  },
+  "propagation_tests": {},
+  "edge_cases": {
+    "backward_compatibility": {
+      "status": "PASS",
+      "entity_created": true,
+      "metadata_is_none": true,
+      "tenant_id_is_none": true,
+      "hash_id_generated": true
+    },
+    "invalid_metadata_rejection": {
+      "status": "PASS",
+      "validation_error": "Invalid metadata: ['tenant_id cannot be empty', \"interaction_id must be UUID v4 format with 'int_' prefix\", 'timestamp must be ISO8601 format (YYYY-MM-DDTHH:MM:SSZ)', 'interaction_type must be one of: call, chat, email, voice_memo, custom_notes']",
+      "correctly_rejected": true
+    }
+  }
+}
