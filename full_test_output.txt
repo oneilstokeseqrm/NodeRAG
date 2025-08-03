@@ -1,0 +1,3469 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.8, pytest-8.4.1, pluggy-1.6.0 -- /home/ubuntu/.pyenv/versions/3.12.8/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/repos/NodeRAG
+configfile: pyproject.toml
+plugins: langsmith-0.4.4, rerunfailures-15.1, dash-3.1.1, Faker-18.13.0, anyio-4.8.0, asyncio-0.26.0, cov-6.2.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 104 items
+
+tests/component/test_metadata_support.py::TestComponentMetadata::test_entity_with_valid_metadata PASSED [  0%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_entity_with_invalid_metadata PASSED [  1%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_entity_without_metadata PASSED [  2%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_semantic_unit_with_metadata PASSED [  3%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_text_unit_with_metadata PASSED [  4%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_relationship_with_metadata PASSED [  5%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_attribute_with_metadata PASSED [  6%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_document_without_metadata PASSED [  7%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_all_components_inherit_from_unit_base PASSED [  8%]
+tests/component/test_metadata_support.py::TestComponentMetadata::test_metadata_validation_in_base_class PASSED [  9%]
+tests/config/test_eq_config.py::TestEQConfig::test_eq_config_initialization PASSED [ 10%]
+tests/config/test_eq_config.py::TestEQConfig::test_metadata_config_defaults PASSED [ 11%]
+tests/config/test_eq_config.py::TestEQConfig::test_storage_config_loading PASSED [ 12%]
+tests/config/test_eq_config.py::TestEQConfig::test_environment_variable_override PASSED [ 13%]
+tests/config/test_eq_config.py::TestEQConfig::test_multi_tenant_config PASSED [ 14%]
+tests/config/test_eq_config.py::TestEQConfig::test_current_metadata_validation PASSED [ 15%]
+tests/config/test_eq_config.py::TestEQConfig::test_config_validation PASSED [ 16%]
+tests/config/test_eq_config.py::TestEQConfig::test_config_export PASSED  [ 17%]
+tests/config/test_eq_config.py::TestEQConfig::test_from_main_folder_classmethod PASSED [ 18%]
+tests/config/test_eq_config_integration.py::test_config_metadata_integration PASSED [ 19%]
+tests/integration/test_id_generation_integration.py::test_id_generation_with_real_metadata PASSED [ 20%]
+tests/integration/test_id_generation_integration.py::test_id_generation_with_config_integration PASSED [ 21%]
+tests/integration/test_id_generation_integration.py::test_lineage_tracking_integration PASSED [ 22%]
+tests/integration/test_id_generation_integration.py::test_metadata_validation_integration PASSED [ 23%]
+tests/integration/test_id_generation_integration.py::test_tenant_isolation_integration PASSED [ 24%]
+tests/integration/test_metadata_integration.py::TestMetadataIntegration::test_document_to_text_unit_propagation PASSED [ 25%]
+tests/integration/test_metadata_integration.py::TestMetadataIntegration::test_relationship_to_entity_propagation PASSED [ 25%]
+tests/integration/test_metadata_integration.py::TestMetadataIntegration::test_multi_tenant_isolation PASSED [ 26%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_batch_performance PASSED [ 27%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_complete_workflow_with_eq_metadata PASSED [ 28%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_index_usage_verification PASSED [ 29%]
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_connection_resilience PASSED [ 30%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_namespace_isolation_verification PASSED [ 31%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_metadata_filtering_all_fields FAILED [ 32%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_batch_upsert_performance FAILED [ 33%]
+tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_complete_workflow FAILED [ 34%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_valid_metadata_creation PASSED [ 35%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_empty_required_fields_validation PASSED [ 36%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_whitespace_only_fields_validation PASSED [ 37%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_uuid_format_validation PASSED [ 38%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_missing_uuid_prefix_validation PASSED [ 39%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_timestamp_format_validation PASSED [ 40%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_interaction_type_validation PASSED [ 41%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_invalid_source_system_validation PASSED [ 42%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_all_valid_interaction_types PASSED [ 43%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_all_valid_source_systems PASSED [ 44%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_from_dict_creation PASSED [ 45%]
+tests/standards/test_eq_metadata.py::TestEQMetadata::test_copy_with_node_info PASSED [ 46%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_semantic_unit_propagation PASSED [ 47%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_entity_propagation PASSED [ 48%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_relationship_propagation PASSED [ 49%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_attribute_propagation_single_entity PASSED [ 50%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_attribute_propagation_multiple_entities PASSED [ 50%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_community_propagation PASSED [ 51%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_empty_entity_list_error PASSED [ 52%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_empty_community_list_error PASSED [ 53%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_semantic_unit PASSED [ 54%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_entity PASSED [ 55%]
+tests/standards/test_eq_metadata.py::TestMetadataPropagation::test_validation_rules_community PASSED [ 56%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection FAILED [ 57%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_single_node FAILED [ 58%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_nodes_batch FAILED [ 59%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship FAILED [ 60%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_nodes_by_metadata FAILED [ 61%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_tenant_isolation FAILED [ 62%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_subgraph FAILED [ 63%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics FAILED [ 64%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_clear_tenant_data FAILED [ 65%]
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_invalid_metadata_validation FAILED [ 66%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_connection FAILED [ 67%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_single_vector FAILED [ 68%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_vectors_batch FAILED [ 69%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_metadata_preparation FAILED [ 70%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_search_with_filters FAILED [ 71%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_isolation FAILED [ 72%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_delete_vectors FAILED [ 73%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_cleanup FAILED [ 74%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_invalid_metadata_handling FAILED [ 75%]
+tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_get_statistics FAILED [ 75%]
+tests/storage/test_transaction_fixes.py::test_dimension_mismatch_triggers_rollback FAILED [ 76%]
+tests/storage/test_transaction_fixes.py::test_batch_operation_with_failures FAILED [ 77%]
+tests/storage/test_transaction_fixes.py::test_data_consistency_maintained FAILED [ 78%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_successful_node_and_embedding_creation FAILED [ 79%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_batch_transaction_success FAILED [ 80%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_rollback_on_pinecone_failure FAILED [ 81%]
+tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_consistency_after_multiple_transactions FAILED [ 82%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_begin_transaction PASSED [ 83%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_success FAILED [ 84%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_neo4j_failure FAILED [ 85%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_pinecone_failure FAILED [ 86%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_batch_operations_success FAILED [ 87%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_logging FAILED [ 88%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_concurrent_transactions FAILED [ 89%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_rollback_with_mock_adapters FAILED [ 90%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check FAILED [ 91%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_state_transitions PASSED [ 92%]
+tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_operation_creation PASSED [ 93%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_semantic_unit_id_generation PASSED [ 94%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_entity_id_deduplication PASSED [ 95%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_entity_tenant_isolation PASSED [ 96%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_relationship_id_consistency PASSED [ 97%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_community_id_generation PASSED [ 98%]
+tests/utils/test_id_generation.py::TestNodeIDGenerator::test_id_format_validation PASSED [ 99%]
+tests/utils/test_id_generation.py::TestMetadataTracker::test_lineage_tracking PASSED [100%]
+
+=================================== FAILURES ===================================
+__________ TestPineconeIntegration.test_metadata_filtering_all_fields __________
+
+self = <Coroutine test_metadata_filtering_all_fields>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd344cbb1d0>}
+coro = <coroutine object TestPineconeIntegration.test_metadata_filtering_all_fields at 0x7fd343402400>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace integration_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '7691356131781617085', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace perf_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '16', 'x-pinecone-request-id': '7433299586146733006', 'x-envoy-upstream-service-time': '16', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '12', 'x-pinecone-request-id': '9179660218278277294', 'x-envoy-upstream-service-time': '12', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+____________ TestPineconeIntegration.test_batch_upsert_performance _____________
+
+self = <Coroutine test_batch_upsert_performance>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd344cbb410>}
+coro = <coroutine object TestPineconeIntegration.test_batch_upsert_performance at 0x7fd344c66dc0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace integration_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:34 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '2391058277329511793', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace perf_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:34 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '5', 'x-pinecone-request-id': '1660905014433797906', 'x-envoy-upstream-service-time': '5', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:34 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '4800219624269502016', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeIntegration.test_complete_workflow ________________
+
+self = <Coroutine test_complete_workflow>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd344d4c0b0>}
+coro = <coroutine object TestPineconeIntegration.test_complete_workflow at 0x7fd344d82f60>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace integration_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:36 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '6978890110102923875', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace perf_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:36 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '2347486065378001836', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace filter_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:36 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '1658901818212435106', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_______________________ TestNeo4jAdapter.test_connection _______________________
+
+self = <Coroutine test_connection>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd3412eede0>}
+coro = <coroutine object TestNeo4jAdapter.test_connection at 0x7fd344c61470>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+____________________ TestNeo4jAdapter.test_add_single_node _____________________
+
+self = <Coroutine test_add_single_node>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344bf0f50>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:40.143243+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_add_single_node at 0x7fd3412e8ca0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+____________________ TestNeo4jAdapter.test_add_nodes_batch _____________________
+
+self = <Coroutine test_add_nodes_batch>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344bf0a70>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:42.050981+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_add_nodes_batch at 0x7fd3412e9220>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+____________________ TestNeo4jAdapter.test_add_relationship ____________________
+
+self = <Coroutine test_add_relationship>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344266330>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:43.919649+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_add_relationship at 0x7fd344c568c0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_________________ TestNeo4jAdapter.test_get_nodes_by_metadata __________________
+
+self = <Coroutine test_get_nodes_by_metadata>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd3442641a0>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:45.803749+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_get_nodes_by_metadata at 0x7fd3433a5180>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+____________________ TestNeo4jAdapter.test_tenant_isolation ____________________
+
+self = <Coroutine test_tenant_isolation>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344bf19d0>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:47.684213+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_tenant_isolation at 0x7fd3433a4d30>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+______________________ TestNeo4jAdapter.test_get_subgraph ______________________
+
+self = <Coroutine test_get_subgraph>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344265040>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:49.548700+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_get_subgraph at 0x7fd34131a110>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_______________________ TestNeo4jAdapter.test_statistics _______________________
+
+self = <Coroutine test_statistics>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344224d40>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:51.530085+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_statistics at 0x7fd34131e2b0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+___________________ TestNeo4jAdapter.test_clear_tenant_data ____________________
+
+self = <Coroutine test_clear_tenant_data>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd344226de0>, 'sample_metadata': EQMetadata...655440000', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:53.292160+00:00')}
+coro = <coroutine object TestNeo4jAdapter.test_clear_tenant_data at 0x7fd344c19fc0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+______________ TestNeo4jAdapter.test_invalid_metadata_validation _______________
+
+self = <Coroutine test_invalid_metadata_validation>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'neo4j_adapter': <NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd3412ef950>}
+coro = <coroutine object TestNeo4jAdapter.test_invalid_metadata_validation at 0x7fd34131e510>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_____________________ TestPineconeAdapter.test_connection ______________________
+
+self = <Coroutine test_connection>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e291c0>}
+coro = <coroutine object TestPineconeAdapter.test_connection at 0x7fd3433cb240>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:56 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '20', 'x-pinecone-request-id': '4778828278072494398', 'x-envoy-upstream-service-time': '20', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:56 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '6105594739105581546', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:56 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '5654969517085487202', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeAdapter.test_upsert_single_vector _________________
+
+self = <Coroutine test_upsert_single_vector>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e2a1b0>, 'sample_embedding': ...456789012', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:56.442679+00:00')}
+coro = <coroutine object TestPineconeAdapter.test_upsert_single_vector at 0x7fd3433a5460>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:56 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '608864388133864269', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:57 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '7192150795479501971', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:57 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '5618622612069725005', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeAdapter.test_upsert_vectors_batch _________________
+
+self = <Coroutine test_upsert_vectors_batch>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e3a180>, 'sample_metadata': E...456789012', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:59.070571+00:00')}
+coro = <coroutine object TestPineconeAdapter.test_upsert_vectors_batch at 0x7fd3840f04f0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:59 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '18', 'x-pinecone-request-id': '6724788375295638489', 'x-envoy-upstream-service-time': '19', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:59 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '20', 'x-pinecone-request-id': '1607668998377486828', 'x-envoy-upstream-service-time': '20', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:30:59 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '970967667375117189', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+________________ TestPineconeAdapter.test_metadata_preparation _________________
+
+self = <Coroutine test_metadata_preparation>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd3412edb20>, 'sample_metadata': E...456789012', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:30:59.861703+00:00')}
+coro = <coroutine object TestPineconeAdapter.test_metadata_preparation at 0x7fd34131ee90>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:00 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '1519102216912566248', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:00 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '6352672992887379842', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:00 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '3', 'x-pinecone-request-id': '369191286346021843', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________________ TestPineconeAdapter.test_search_with_filters _________________
+
+self = <Coroutine test_search_with_filters>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e39a00>, 'sample_embedding': ...456789012', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:31:02.217265+00:00')}
+coro = <coroutine object TestPineconeAdapter.test_search_with_filters at 0x7fd344c568c0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:02 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '4', 'x-pinecone-request-id': '8835254001115091603', 'x-envoy-upstream-service-time': '5', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:02 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '5577343349583619992', 'x-envoy-upstream-service-time': '4', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:02 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '3511358272966799520', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________________ TestPineconeAdapter.test_namespace_isolation _________________
+
+self = <Coroutine test_namespace_isolation>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e38a10>, 'sample_embedding': ...09838295156, 0.9056824297173253, 0.4802734821841239, 0.8155451089954822, 0.3006660773502311, 0.16529754339360359, ...]}
+coro = <coroutine object TestPineconeAdapter.test_namespace_isolation at 0x7fd3412e9bc0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:04 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '5682674331065319344', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:04 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '8378287330376795292', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:04 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '5706456099873103220', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___________________ TestPineconeAdapter.test_delete_vectors ____________________
+
+self = <Coroutine test_delete_vectors>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e2a4b0>, 'sample_embedding': ...456789012', source_system='outlook', node_hash_id=None, node_type=None, created_at='2025-08-03T13:31:08.152068+00:00')}
+coro = <coroutine object TestPineconeAdapter.test_delete_vectors at 0x7fd34131ee90>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:08 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '13', 'x-pinecone-request-id': '5793251518092005133', 'x-envoy-upstream-service-time': '13', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:08 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '18', 'x-pinecone-request-id': '3355035692319949916', 'x-envoy-upstream-service-time': '19', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:08 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '8', 'x-pinecone-request-id': '2287212994796577256', 'x-envoy-upstream-service-time': '8', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+__________________ TestPineconeAdapter.test_namespace_cleanup __________________
+
+self = <Coroutine test_namespace_cleanup>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e28050>}
+coro = <coroutine object TestPineconeAdapter.test_namespace_cleanup at 0x7fd3412e9a60>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:11 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '2383796913535689648', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:11 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '7495422103746097123', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:11 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '197536428383526872', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+______________ TestPineconeAdapter.test_invalid_metadata_handling ______________
+
+self = <Coroutine test_invalid_metadata_handling>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e29d90>, 'sample_embedding': ...66578822, 0.2805888438431825, 0.053402354978222544, 0.4857929070429835, 0.05611306485401124, 0.17351643506233583, ...]}
+coro = <coroutine object TestPineconeAdapter.test_invalid_metadata_handling at 0x7fd3433cb4c0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:14 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '6840301719750066840', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:14 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '1938818399597029112', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:14 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '4538028305222088261', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___________________ TestPineconeAdapter.test_get_statistics ____________________
+
+self = <Coroutine test_get_statistics>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'pinecone_adapter': <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343507290>}
+coro = <coroutine object TestPineconeAdapter.test_get_statistics at 0x7fd34131efc0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:15 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '6186876379201871591', 'x-envoy-upstream-service-time': '3', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_1: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:15 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '8', 'x-pinecone-request-id': '8382077698002397918', 'x-envoy-upstream-service-time': '8', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace test_tenant_2: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:15 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '4227229108709925971', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+__________________ test_dimension_mismatch_triggers_rollback ___________________
+
+self = <Coroutine test_dimension_mismatch_triggers_rollback>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'adapters': (<NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd34510f740>, <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343e06900>)}
+coro = <coroutine object test_dimension_mismatch_triggers_rollback at 0x7fd344d83de0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:18 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '20', 'x-pinecone-request-id': '6746914178653336279', 'x-envoy-upstream-service-time': '21', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:18 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '10', 'x-pinecone-request-id': '5381855394019558318', 'x-envoy-upstream-service-time': '10', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+______________________ test_batch_operation_with_failures ______________________
+
+self = <Coroutine test_batch_operation_with_failures>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'adapters': (<NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd343e04050>, <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343dece30>)}
+coro = <coroutine object test_batch_operation_with_failures at 0x7fd344c565c0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:20 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '3065435591773839004', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:21 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '1629064666678173159', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_______________________ test_data_consistency_maintained _______________________
+
+self = <Coroutine test_data_consistency_maintained>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'adapters': (<NodeRAG.storage.neo4j_adapter.Neo4jAdapter object at 0x7fd343e05d00>, <NodeRAG.storage.pinecone_adapter.PineconeAdapter object at 0x7fd343dec830>)}
+coro = <coroutine object test_data_consistency_maintained at 0x7fd343403780>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:23 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '11', 'x-pinecone-request-id': '8974162429746828605', 'x-envoy-upstream-service-time': '11', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace fix_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:23 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '5', 'x-pinecone-request-id': '1699669313487428826', 'x-envoy-upstream-service-time': '6', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+____ TestTransactionIntegration.test_successful_node_and_embedding_creation ____
+
+self = <Coroutine test_successful_node_and_embedding_creation>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='txn_test_tenant', interaction_id='int_txn_test_123', interaction_type='email... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343507920>}
+coro = <coroutine object TestTransactionIntegration.test_successful_node_and_embedding_creation at 0x7fd344c565c0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:29 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '8714197051983261149', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:29 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '19', 'x-pinecone-request-id': '6223541536645240206', 'x-envoy-upstream-service-time': '20', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+__________ TestTransactionIntegration.test_batch_transaction_success ___________
+
+self = <Coroutine test_batch_transaction_success>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='txn_test_tenant', interaction_id='int_txn_test_123', interaction_type='email... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343deed50>}
+coro = <coroutine object TestTransactionIntegration.test_batch_transaction_success at 0x7fd341306560>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '38', 'x-pinecone-request-id': '7783304697884459561', 'x-envoy-upstream-service-time': '38', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '17', 'x-pinecone-request-id': '8413460527934874315', 'x-envoy-upstream-service-time': '17', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________ TestTransactionIntegration.test_rollback_on_pinecone_failure _________
+
+self = <Coroutine test_rollback_on_pinecone_failure>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='txn_test_tenant', interaction_id='int_txn_test_123', interaction_type='email... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343deedb0>}
+coro = <coroutine object TestTransactionIntegration.test_rollback_on_pinecone_failure at 0x7fd34131a3b0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '6240211862755554665', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '20', 'x-pinecone-request-id': '8782904845302735551', 'x-envoy-upstream-service-time': '20', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+___ TestTransactionIntegration.test_consistency_after_multiple_transactions ____
+
+self = <Coroutine test_consistency_after_multiple_transactions>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='txn_test_tenant', interaction_id='int_txn_test_123', interaction_type='email... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343deda60>}
+coro = <coroutine object TestTransactionIntegration.test_consistency_after_multiple_transactions at 0x7fd344c67680>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+------------------------------ Captured log setup ------------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:40 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '2', 'x-pinecone-request-id': '7325809899926142336', 'x-envoy-upstream-service-time': '2', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+---------------------------- Captured log teardown -----------------------------
+ERROR    NodeRAG.storage.pinecone_adapter:pinecone_adapter.py:262 Failed to delete namespace txn_test_tenant: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Date': 'Sun, 03 Aug 2025 13:31:40 GMT', 'Content-Type': 'application/json', 'Content-Length': '55', 'Connection': 'keep-alive', 'x-pinecone-request-latency-ms': '1', 'x-pinecone-request-id': '1937951451224237058', 'x-envoy-upstream-service-time': '1', 'server': 'envoy'})
+HTTP response body: {"code":5,"message":"Namespace not found","details":[]}
+_________ TestTransactionManager.test_add_node_with_embedding_success __________
+
+self = <Coroutine test_add_node_with_embedding_success>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='test_tenant', interaction_id='int_test_123', interaction_type='email', text=... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343dedd60>}
+coro = <coroutine object TestTransactionManager.test_add_node_with_embedding_success at 0x7fd3433a4d30>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+______ TestTransactionManager.test_add_node_with_embedding_neo4j_failure _______
+
+self = <Coroutine test_add_node_with_embedding_neo4j_failure>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='test_tenant', interaction_id='int_test_123', interaction_type='email', text=... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd34354ae70>}
+coro = <coroutine object TestTransactionManager.test_add_node_with_embedding_neo4j_failure at 0x7fd344b134c0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_____ TestTransactionManager.test_add_node_with_embedding_pinecone_failure _____
+
+self = <Coroutine test_add_node_with_embedding_pinecone_failure>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='test_tenant', interaction_id='int_test_123', interaction_type='email', text=... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343dc1250>}
+coro = <coroutine object TestTransactionManager.test_add_node_with_embedding_pinecone_failure at 0x7fd3433cb380>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_____________ TestTransactionManager.test_batch_operations_success _____________
+
+self = <Coroutine test_batch_operations_success>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='test_tenant', interaction_id='int_test_123', interaction_type='email', text=... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd344cd40b0>}
+coro = <coroutine object TestTransactionManager.test_batch_operations_success at 0x7fd3433a5180>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_______________ TestTransactionManager.test_transaction_logging ________________
+
+self = <Coroutine test_transaction_logging>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='test_tenant', interaction_id='int_test_123', interaction_type='email', text=... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd343deda30>}
+coro = <coroutine object TestTransactionManager.test_transaction_logging at 0x7fd344c19fc0>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+_____________ TestTransactionManager.test_concurrent_transactions ______________
+
+self = <Coroutine test_concurrent_transactions>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'sample_metadata': EQMetadata(tenant_id='test_tenant', interaction_id='int_test_123', interaction_type='email', text=... 'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd344212120>}
+coro = <coroutine object TestTransactionManager.test_concurrent_transactions at 0x7fd3433a5740>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+___________ TestTransactionManager.test_rollback_with_mock_adapters ____________
+
+self = <Coroutine test_rollback_with_mock_adapters>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (), kwargs = {}
+coro = <coroutine object TestTransactionManager.test_rollback_with_mock_adapters at 0x7fd3433d4360>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+___________________ TestTransactionManager.test_health_check ___________________
+
+self = <Coroutine test_health_check>
+
+    def runtest(self) -> None:
+        self.obj = wrap_in_sync(
+            # https://github.com/pytest-dev/pytest-asyncio/issues/596
+            self.obj,  # type: ignore[has-type]
+        )
+>       super().runtest()
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = ()
+kwargs = {'transaction_manager': <NodeRAG.storage.transactions.transaction_manager.TransactionManager object at 0x7fd344267980>}
+coro = <coroutine object TestTransactionManager.test_health_check at 0x7fd3440b8040>
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        coro = func(*args, **kwargs)
+>       _loop = _get_event_loop_no_warn()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:1066: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+policy = None
+
+    def _get_event_loop_no_warn(
+        policy: AbstractEventLoopPolicy | None = None,
+    ) -> asyncio.AbstractEventLoop:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            if policy is not None:
+                return policy.get_event_loop()
+            else:
+>               return asyncio.get_event_loop()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:996: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7fd3451a82c0>
+
+    def get_event_loop(self):
+        """Get the event loop for the current context.
+    
+        Returns an instance of EventLoop or raises an exception.
+        """
+        if (self._local._loop is None and
+                not self._local._set_called and
+                threading.current_thread() is threading.main_thread()):
+            stacklevel = 2
+            try:
+                f = sys._getframe(1)
+            except AttributeError:
+                pass
+            else:
+                # Move up the call stack so that the warning is attached
+                # to the line outside asyncio itself.
+                while f:
+                    module = f.f_globals.get('__name__')
+                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+                        break
+                    f = f.f_back
+                    stacklevel += 1
+            import warnings
+            warnings.warn('There is no current event loop',
+                          DeprecationWarning, stacklevel=stacklevel)
+            self.set_event_loop(self.new_event_loop())
+    
+        if self._local._loop is None:
+>           raise RuntimeError('There is no current event loop in thread %r.'
+                               % threading.current_thread().name)
+E           RuntimeError: There is no current event loop in thread 'MainThread'.
+
+../../.pyenv/versions/3.12.8/lib/python3.12/asyncio/events.py:702: RuntimeError
+=============================== warnings summary ===============================
+tests/integration/test_neo4j_integration.py:34
+  /home/ubuntu/repos/NodeRAG/tests/integration/test_neo4j_integration.py:34: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/integration/test_pinecone_integration.py:40
+  /home/ubuntu/repos/NodeRAG/tests/integration/test_pinecone_integration.py:40: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/storage/test_transaction_integration.py:89
+  /home/ubuntu/repos/NodeRAG/tests/storage/test_transaction_integration.py:89: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestNeo4jAdapter.test_get_subgraph' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestPineconeAdapter.test_connection' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestPineconeAdapter.test_search_with_filters' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestPineconeAdapter.test_invalid_metadata_handling' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'test_data_consistency_maintained' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionIntegration.test_rollback_on_pinecone_failure' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_add_node_with_embedding_neo4j_failure' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_concurrent_transactions' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_rollback_with_mock_adapters' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+/home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/unraisableexception.py:33: RuntimeWarning: coroutine 'TestTransactionManager.test_health_check' was never awaited
+  gc.collect()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+
+
+tests/config/test_eq_config_integration.py::test_config_metadata_integration
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/_pytest/python.py:161: PytestReturnNotNoneWarning: Test functions should return None, but tests/config/test_eq_config_integration.py::test_config_metadata_integration returned <class 'bool'>.
+  Did you mean to use `assert` instead of `return`?
+  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
+    warnings.warn(
+
+tests/integration/test_neo4j_integration.py::TestNeo4jIntegration::test_batch_performance
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/pytest_asyncio/plugin.py:884: DeprecationWarning: The event_loop fixture provided by pytest-asyncio has been redefined in
+  /home/ubuntu/repos/NodeRAG/tests/conftest.py:8
+  Replacing the event_loop fixture with a custom implementation is deprecated
+  and will lead to errors in the future.
+  If you want to request an asyncio event loop with a scope other than function
+  scope, use the "loop_scope" argument to the asyncio mark when marking the tests.
+  If you want to return different types of event loops, use the event_loop_policy
+  fixture.
+  
+    warnings.warn(
+
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/neo4j/_codec/packstream/v1/__init__.py:74: RuntimeWarning: coroutine 'TestNeo4jAdapter.test_connection' was never awaited
+    def _pack(self, data, dehydration_hooks=None):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/neo4j/_codec/packstream/v1/__init__.py:74: RuntimeWarning: coroutine 'TestNeo4jAdapter.test_add_single_node' was never awaited
+    def _pack(self, data, dehydration_hooks=None):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/neo4j/_codec/packstream/v1/__init__.py:87: RuntimeWarning: coroutine 'TestPineconeIntegration.test_complete_workflow' was never awaited
+    if any(value is v for v in NONE_VALUES):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics
+  /home/ubuntu/.pyenv/versions/3.12.8/lib/python3.12/site-packages/neo4j/_codec/packstream/v1/__init__.py:87: RuntimeWarning: coroutine 'TestNeo4jAdapter.test_add_nodes_batch' was never awaited
+    if any(value is v for v in NONE_VALUES):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_metadata_filtering_all_fields
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_batch_upsert_performance
+FAILED tests/integration/test_pinecone_integration.py::TestPineconeIntegration::test_complete_workflow
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_single_node
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_nodes_batch
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_add_relationship
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_nodes_by_metadata
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_tenant_isolation
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_get_subgraph
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_statistics
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_clear_tenant_data
+FAILED tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_invalid_metadata_validation
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_connection
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_single_vector
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_upsert_vectors_batch
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_metadata_preparation
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_search_with_filters
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_isolation
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_delete_vectors
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_namespace_cleanup
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_invalid_metadata_handling
+FAILED tests/storage/test_pinecone_adapter.py::TestPineconeAdapter::test_get_statistics
+FAILED tests/storage/test_transaction_fixes.py::test_dimension_mismatch_triggers_rollback
+FAILED tests/storage/test_transaction_fixes.py::test_batch_operation_with_failures
+FAILED tests/storage/test_transaction_fixes.py::test_data_consistency_maintained
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_successful_node_and_embedding_creation
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_batch_transaction_success
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_rollback_on_pinecone_failure
+FAILED tests/storage/test_transaction_integration.py::TestTransactionIntegration::test_consistency_after_multiple_transactions
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_success
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_neo4j_failure
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_add_node_with_embedding_pinecone_failure
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_batch_operations_success
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_transaction_logging
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_concurrent_transactions
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_rollback_with_mock_adapters
+FAILED tests/storage/test_transaction_manager.py::TestTransactionManager::test_health_check
+============ 38 failed, 66 passed, 9 warnings in 101.18s (0:01:41) =============

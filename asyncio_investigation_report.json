@@ -1,0 +1,17 @@
+{
+  "environment": {
+    "timestamp": "2025-08-03T13:49:28.120038",
+    "python_version": "3.12.8 (main, Dec 23 2024, 05:56:58) [GCC 11.4.0]",
+    "platform": "Linux-5.10.223-x86_64-with-glibc2.35",
+    "asyncio_version": "builtin",
+    "event_loop_policy": "<asyncio.unix_events._UnixDefaultEventLoopPolicy object at 0x7f7572a062d0>",
+    "pytest_asyncio_version": "0.26.0",
+    "event_loop_running": false,
+    "event_loop_closed": false
+  },
+  "conflicts": [
+    "IPython detected - may have existing event loop",
+    "nest_asyncio installed - may affect event loop behavior",
+    "uvloop installed - alternative event loop implementation"
+  ]
+}

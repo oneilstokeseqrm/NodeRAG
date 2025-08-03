@@ -1,0 +1,12 @@
+{
+  "test_command": "python -m pytest tests/storage/test_neo4j_adapter.py::TestNeo4jAdapter::test_connection -v",
+  "main_branch": {
+    "passed": true,
+    "error_snippet": "N/A"
+  },
+  "previous_commit": {
+    "passed": true,
+    "error_snippet": "N/A"
+  },
+  "regression": false
+}
