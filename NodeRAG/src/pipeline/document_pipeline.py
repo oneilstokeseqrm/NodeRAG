@@ -1,13 +1,16 @@
 import os
 import json
+from typing import Dict, List, Optional
 
 from ...config import NodeConfig
 from ...storage.storage import storage
 from ..component.document import document
+from ..component.text_unit import Text_unit
 from ...logging import info_timer
+from ...standards.eq_metadata import EQMetadata
 
 
-class document_pipline():
+class document_pipeline():
 
     def __init__(self, config:NodeConfig):
         
@@ -39,7 +42,7 @@ class document_pipline():
             for path in self.documents_path:
                 with open(path, 'r', encoding='utf-8') as f:
                     raw_context = f.read()
-                self._documents.append(document(raw_context,path,self.config.semantic_text_splitter))
+                self._documents.append(document(raw_context, path, splitter=self.config.semantic_text_splitter))
         return self._documents
     
     @property
@@ -110,6 +113,39 @@ class document_pipline():
         self._hash_ids = None
         
     
+    def process_interaction(self, interaction_payload: Dict) -> List[Text_unit]:
+        """Process single interaction with metadata validation and propagation"""
+        
+        metadata = EQMetadata(
+            tenant_id=interaction_payload.get('tenant_id', ''),
+            account_id=interaction_payload.get('account_id', ''),
+            interaction_id=interaction_payload.get('interaction_id', ''),
+            interaction_type=interaction_payload.get('interaction_type', ''),
+            text=interaction_payload.get('text', ''),
+            timestamp=interaction_payload.get('timestamp', ''),
+            user_id=interaction_payload.get('user_id', ''),
+            source_system=interaction_payload.get('source_system', '')
+        )
+        
+        validation_errors = metadata.validate()
+        if validation_errors:
+            raise ValueError(f"Metadata validation failed: {validation_errors}")
+        
+        doc = document(
+            raw_context=interaction_payload['text'],
+            metadata=metadata,
+            splitter=self.config.semantic_text_splitter if hasattr(self.config, 'semantic_text_splitter') else None
+        )
+        
+        doc.split()
+        text_units = doc.text_units or []
+        
+        for unit in text_units:
+            if not hasattr(unit, 'metadata') or unit.metadata is None:
+                unit.metadata = metadata
+            
+        return text_units
+
     @info_timer(message='Document Pipeline')
     async def main(self):
         self.integrity_check()
