@@ -15,6 +15,7 @@ class Semantic_unit(Unit_base):
         self._hash_id = None
         self._human_readable_id = None
         
+        
         if metadata:
             self.metadata = metadata
         
