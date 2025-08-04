@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Semantic Unit Creation Log</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .success { color: green; }
+        .fail { color: red; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        pre { background-color: #f5f5f5; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Semantic Unit Metadata Creation Log</h1>
+    
+    <h2>Test Results Summary</h2>
+    <table>
+        <tr><th>Test</th><th>Result</th><th>Details</th></tr>
+
+        <tr>
+            <td>basic_creation</td>
+            <td class="success">SUCCESS</td>
+            <td><pre>{
+  "semantic_unit_created": true,
+  "hash_id": "8c659950293d0772c453976bd1afa7c1261318cd1ef122a1842267dbba3da0aa",
+  "has_metadata_in_graph": true,
+  "text_field_excluded": true,
+  "context_stored": true,
+  "edge_created": true
+}</pre></td>
+        </tr>
+
+        <tr>
+            <td>deduplication</td>
+            <td class="success">SUCCESS</td>
+            <td><pre>{
+  "same_hash_id": true,
+  "hash_id": "aed25cc51b2d29d1854f8468e9921435e66aa313127c953c4f6d6a5e39ce571e",
+  "different_metadata": true,
+  "node_count": 1
+}</pre></td>
+        </tr>
+
+        <tr>
+            <td>batch_summary</td>
+            <td class="success">SUCCESS</td>
+            <td><pre>{
+  "total_semantic_units": 4,
+  "all_metadata_present": true,
+  "text_properly_excluded": true
+}</pre></td>
+        </tr>
+
+    </table>
+    
+    <h2>Key Validations</h2>
+    <ul>
+        <li>✅ Semantic units created with all metadata fields (except 'text')</li>
+        <li>✅ Content-based hash IDs maintained (deduplication works)</li>
+        <li>✅ Metadata properly stored in NetworkX graph</li>
+        <li>✅ Multi-tenant isolation preserved</li>
+        <li>✅ Non-UUID user_id formats accepted</li>
+    </ul>
+</body>
+</html>

@@ -1,5 +1,17 @@
+"""
+Graph Pipeline Module
+
+Note: Semantic_unit constructor signature (verified 2025-08-04):
+    Semantic_unit(raw_context: str, metadata: Optional[EQMetadata] = None, text_hash_id: str = None)
+    
+All calls must use named parameters for clarity and maintainability.
+"""
+
 import networkx as nx
-from typing import List,Dict
+from typing import List, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ...standards.eq_metadata import EQMetadata
 import json
 import os
 import asyncio
@@ -50,6 +62,8 @@ class Graph_pipeline:
         with open(self.config.text_decomposition_path, 'r', encoding='utf-8') as f:
             for line in f:
                 data = json.loads(line)
+                if 'metadata' not in data or not data['metadata']:
+                    raise ValueError(f"Missing metadata in text decomposition data: {data.get('text_id', 'unknown')}")
                 if self.check_processed(data):
                     data_list.append(data)
                 else:
@@ -76,9 +90,38 @@ class Graph_pipeline:
         await asyncio.gather(*tasks)
         self.config.tracker.close()
         
-    async def graph_tasks(self,data:Dict):
+    async def graph_tasks(self, data: Dict):
+        """Process graph tasks with REQUIRED metadata
+        
+        Args:
+            data: Dict containing text_hash_id, response, and metadata (all required)
+        
+        Raises:
+            ValueError: If required fields are missing or invalid
+        """
         text_hash_id = data.get('text_hash_id')
+        if not text_hash_id:
+            raise ValueError("text_hash_id is required in graph tasks data")
+        
         response = data.get('response')
+        if not response:
+            raise ValueError("response is required in graph tasks data")
+        
+        metadata_dict = data.get('metadata')
+        if not metadata_dict:
+            raise ValueError("metadata is REQUIRED in graph tasks data - multi-tenant isolation depends on it")
+        
+        from ...standards.eq_metadata import EQMetadata
+        try:
+            metadata = EQMetadata.from_dict(metadata_dict)
+        except Exception as e:
+            raise ValueError(f"Failed to create EQMetadata from dict: {e}")
+        
+        validation_errors = metadata.validate()
+        if validation_errors:
+            raise ValueError(f"Invalid metadata in graph tasks: {validation_errors}")
+        
+        print(f"Graph tasks processing with tenant_id={metadata.tenant_id}, interaction_id={metadata.interaction_id}")
 
         if isinstance(response,dict):   
             Output = response.get('Output')
@@ -88,8 +131,8 @@ class Graph_pipeline:
                 entities = output.get('entities')
                 relationships = output.get('relationships')
                 
-                semantic_unit_hash_id = self.add_semantic_unit(semantic_unit,text_hash_id)
-                entities_hash_id = self.add_entities(entities,text_hash_id)
+                semantic_unit_hash_id = self.add_semantic_unit(semantic_unit,text_hash_id,metadata)
+                entities_hash_id = self.add_entities(entities,text_hash_id,metadata)
         
                 entities_hash_id_re = await self.add_relationships(relationships,text_hash_id)
                 entities_hash_id.extend(entities_hash_id_re)
@@ -105,31 +148,93 @@ class Graph_pipeline:
                 f.write(json.dumps(data, ensure_ascii=False) + '\n')
                 
     
-    def add_semantic_unit(self,semantic_unit:Dict,text_hash_id:str):
+    def add_semantic_unit(self, semantic_unit: Dict, text_hash_id: str, metadata: 'EQMetadata'):
+        """Add semantic unit with REQUIRED metadata propagation
         
-        semantic_unit = Semantic_unit(semantic_unit,text_hash_id)
-        if self.G.has_node(semantic_unit.hash_id):
-            self.G.nodes[semantic_unit.hash_id]['weight'] += 1
+        Args:
+            semantic_unit: Dict with 'context' key containing the semantic unit text
+            text_hash_id: Hash ID of the source text unit
+            metadata: EQMetadata object with all 8 required fields (REQUIRED)
+        
+        Raises:
+            ValueError: If metadata is None or invalid
+        """
+        if metadata is None:
+            raise ValueError("Metadata is REQUIRED for semantic unit creation - multi-tenant isolation depends on it")
+        
+        from ...standards.eq_metadata import EQMetadata
+        if not isinstance(metadata, EQMetadata):
+            raise ValueError(f"Metadata must be EQMetadata instance, got {type(metadata)}")
+        
+        semantic_unit_obj = Semantic_unit(
+            raw_context=semantic_unit.get('context', ''),
+            metadata=metadata,
+            text_hash_id=text_hash_id
+        )
+        if self.G.has_node(semantic_unit_obj.hash_id):
+            self.G.nodes[semantic_unit_obj.hash_id]['weight'] += 1
         else:
-            self.G.add_node(semantic_unit.hash_id,type ='semantic_unit',weight = 1)
-            self.semantic_units.append(semantic_unit)
-        return semantic_unit.hash_id
+            node_attrs = {'type':'semantic_unit','weight':1,'text_hash_id':text_hash_id,'context':semantic_unit_obj.raw_context}
+            
+            node_attrs.update({
+                'tenant_id': metadata.tenant_id,
+                'account_id': metadata.account_id,
+                'interaction_id': metadata.interaction_id,
+                'interaction_type': metadata.interaction_type,
+                'timestamp': metadata.timestamp,
+                'user_id': metadata.user_id,
+                'source_system': metadata.source_system
+            })
+            
+            self.G.add_node(semantic_unit_obj.hash_id, **node_attrs)
+            
+            self.G.add_edge(text_hash_id, semantic_unit_obj.hash_id)
+            
+            self.semantic_units.append(semantic_unit_obj)
+        return semantic_unit_obj.hash_id
         
-    def add_entities(self,entities:List[Dict],text_hash_id:str):
+    def add_entities(self, entities: List[Dict], text_hash_id: str, metadata: 'EQMetadata'):
+        """Add entities with REQUIRED metadata propagation
+        
+        Args:
+            entities: List of entity dictionaries
+            text_hash_id: Hash ID of the source text unit
+            metadata: EQMetadata object with all 8 required fields (REQUIRED)
+        
+        Raises:
+            ValueError: If metadata is None or invalid
+        """
+        if metadata is None:
+            raise ValueError("Metadata is REQUIRED for entity creation - multi-tenant isolation depends on it")
         
         entities_hash_id = []
         
         for entity in entities:
+            entity_obj = Entity(
+                raw_context=entity.get('name', ''),
+                metadata=metadata,
+                text_hash_id=text_hash_id
+            )
+            entities_hash_id.append(entity_obj.hash_id)
             
-            entity = Entity(entity,text_hash_id)
-            entities_hash_id.append(entity.hash_id)
-            
-            if self.G.has_node(entity.hash_id):
-                self.G.nodes[entity.hash_id]['weight'] += 1
-            
+            if self.G.has_node(entity_obj.hash_id):
+                self.G.nodes[entity_obj.hash_id]['weight'] += 1
             else:
-                self.G.add_node(entity.hash_id,type = 'entity',weight = 1)
-                self.entities.append(entity)
+                node_attrs = {'type': 'entity', 'weight': 1, 'text_hash_id': text_hash_id, 'context': entity_obj.raw_context}
+                
+                node_attrs.update({
+                    'tenant_id': metadata.tenant_id,
+                    'account_id': metadata.account_id,
+                    'interaction_id': metadata.interaction_id,
+                    'interaction_type': metadata.interaction_type,
+                    'timestamp': metadata.timestamp,
+                    'user_id': metadata.user_id,
+                    'source_system': metadata.source_system
+                })
+                
+                self.G.add_node(entity_obj.hash_id, **node_attrs)
+                self.G.add_edge(text_hash_id, entity_obj.hash_id)
+                self.entities.append(entity_obj)
         
         return entities_hash_id
     

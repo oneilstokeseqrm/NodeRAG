@@ -1,0 +1,5 @@
+interaction_id,semantic_unit_index,semantic_unit_text,hash_id,tenant_id,account_id,user_id,interaction_type,source_system,text_excluded,all_metadata_present
+int_12345678-1234-4567-8901-123456789001,0,Customer wants to upgrade plan,84d33014201743fc858f0a24e8a826dce61e60e96d54e44b814df13993013b3d,tenant_alpha,acc_12345678-1234-4567-8901-123456789001,user@company.com,chat,internal,True,True
+int_12345678-1234-4567-8901-123456789001,1,Billing issue needs resolution,509db28d9f82628ebb46d62420f6c57a33ed35931a61cdfa148eb6a680864d36,tenant_alpha,acc_12345678-1234-4567-8901-123456789001,user@company.com,chat,internal,True,True
+int_12345678-1234-4567-8901-123456789002,0,Product feature request received,e191d4b5bc450b6a40be9ed3a1728bc1206b9dfc30b43a6ab51b31105f935698,tenant_beta,acc_12345678-1234-4567-8901-123456789002,EMP-12345,email,outlook,True,True
+int_12345678-1234-4567-8901-123456789002,1,Follow-up scheduled for next week,8272e064eecd865be46bf8c92ba3ffb493f3b7eef75924820e3e3e26694f7936,tenant_beta,acc_12345678-1234-4567-8901-123456789002,EMP-12345,email,outlook,True,True

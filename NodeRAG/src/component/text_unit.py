@@ -42,6 +42,9 @@ class Text_unit(Unit_base):
         json_format = config.prompt_manager.text_decomposition_json
         input_data = {'query':prompt,'response_format':json_format}
         meta_data = {'text_hash_id':self.hash_id,'text_id':self.human_readable_id}
+        
+        if hasattr(self, 'metadata') and self.metadata:
+            meta_data['metadata'] = self.metadata.to_dict()
 
      
         response = await config.API_client(input_data,cache_path =config.LLM_error_cache,meta_data = meta_data)
