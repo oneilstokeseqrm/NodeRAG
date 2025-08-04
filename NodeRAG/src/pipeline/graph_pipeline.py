@@ -79,6 +79,12 @@ class Graph_pipeline:
     async def graph_tasks(self,data:Dict):
         text_hash_id = data.get('text_hash_id')
         response = data.get('response')
+        metadata_dict = data.get('metadata')
+        
+        metadata = None
+        if metadata_dict:
+            from ...standards.eq_metadata import EQMetadata
+            metadata = EQMetadata.from_dict(metadata_dict)
 
         if isinstance(response,dict):   
             Output = response.get('Output')
@@ -88,7 +94,7 @@ class Graph_pipeline:
                 entities = output.get('entities')
                 relationships = output.get('relationships')
                 
-                semantic_unit_hash_id = self.add_semantic_unit(semantic_unit,text_hash_id)
+                semantic_unit_hash_id = self.add_semantic_unit(semantic_unit,text_hash_id,metadata)
                 entities_hash_id = self.add_entities(entities,text_hash_id)
         
                 entities_hash_id_re = await self.add_relationships(relationships,text_hash_id)
@@ -105,15 +111,28 @@ class Graph_pipeline:
                 f.write(json.dumps(data, ensure_ascii=False) + '\n')
                 
     
-    def add_semantic_unit(self,semantic_unit:Dict,text_hash_id:str):
+    def add_semantic_unit(self,semantic_unit:Dict,text_hash_id:str,metadata=None):
         
-        semantic_unit = Semantic_unit(semantic_unit,text_hash_id)
-        if self.G.has_node(semantic_unit.hash_id):
-            self.G.nodes[semantic_unit.hash_id]['weight'] += 1
+        semantic_unit_obj = Semantic_unit(semantic_unit.get('context', ''),metadata,text_hash_id)
+        if self.G.has_node(semantic_unit_obj.hash_id):
+            self.G.nodes[semantic_unit_obj.hash_id]['weight'] += 1
         else:
-            self.G.add_node(semantic_unit.hash_id,type ='semantic_unit',weight = 1)
-            self.semantic_units.append(semantic_unit)
-        return semantic_unit.hash_id
+            node_attrs = {'type':'semantic_unit','weight':1,'text_hash_id':text_hash_id,'context':semantic_unit_obj.raw_context}
+            
+            if metadata:
+                node_attrs.update({
+                    'tenant_id': metadata.tenant_id,
+                    'account_id': metadata.account_id,
+                    'interaction_id': metadata.interaction_id,
+                    'interaction_type': metadata.interaction_type,
+                    'timestamp': metadata.timestamp,
+                    'user_id': metadata.user_id,
+                    'source_system': metadata.source_system
+                })
+            
+            self.G.add_node(semantic_unit_obj.hash_id,**node_attrs)
+            self.semantic_units.append(semantic_unit_obj)
+        return semantic_unit_obj.hash_id
         
     def add_entities(self,entities:List[Dict],text_hash_id:str):
         
