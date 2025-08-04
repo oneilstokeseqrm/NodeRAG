@@ -33,6 +33,8 @@ class EQMetadata:
         
         for field_name in required_fields:
             value = getattr(self, field_name)
+            if field_name == 'user_id':
+                continue  # Handle user_id separately with flexible validation
             if not value or (isinstance(value, str) and not value.strip()):
                 errors.append(f"{field_name} cannot be empty")
         
@@ -42,8 +44,8 @@ class EQMetadata:
         if self.account_id and not self._validate_uuid_format(self.account_id, 'acc_'):
             errors.append(f"account_id must be UUID v4 format with 'acc_' prefix")
             
-        if self.user_id and not self._validate_uuid_format(self.user_id, 'usr_'):
-            errors.append(f"user_id must be UUID v4 format with 'usr_' prefix")
+        if not self.user_id or not isinstance(self.user_id, str) or not self.user_id.strip():
+            errors.append(f"user_id must be a non-empty string")
         
         if self.timestamp and not self._validate_iso8601(self.timestamp):
             errors.append(f"timestamp must be ISO8601 format (YYYY-MM-DDTHH:MM:SSZ)")
