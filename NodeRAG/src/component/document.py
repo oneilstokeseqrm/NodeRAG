@@ -9,9 +9,9 @@ from ...standards.eq_metadata import EQMetadata
 document_index_counter = document_index()
 
 class document(Unit_base):
-    def __init__(self, raw_context: str = None, path: str = None, 
+    def __init__(self, raw_context: Optional[str] = None, path: Optional[str] = None, 
                  metadata: Optional[EQMetadata] = None,
-                 splitter: SemanticTextSplitter = None):
+                 splitter: Optional[SemanticTextSplitter] = None):
         super().__init__()
         self.path = path
         self.raw_context = raw_context
@@ -29,7 +29,7 @@ class document(Unit_base):
     @property
     def hash_id(self):
         if not self._hash_id:
-            self._hash_id = genid([self.raw_context],"sha256")
+            self._hash_id = genid([self.raw_context or ""],"sha256")
         return self._hash_id
     
     @property
@@ -41,10 +41,15 @@ class document(Unit_base):
     def split(self) -> None:
         if not self._processed_context:
             self._processed_context = True
-            texts = self.splitter.split(self.raw_context)
-            self.text_units = [Text_unit(text, metadata=self.metadata) for text in texts]
-            self.text_hash_id = [text.hash_id for text in self.text_units]
-            self.text_human_readable_id = [text.human_readable_id for text in self.text_units]
+            if self.splitter and self.raw_context:
+                texts = self.splitter.split(self.raw_context)
+                self.text_units = [Text_unit(text, metadata=self.metadata) for text in texts]
+                self.text_hash_id = [text.hash_id for text in self.text_units]
+                self.text_human_readable_id = [text.human_readable_id for text in self.text_units]
+            else:
+                self.text_units = [Text_unit(self.raw_context or "", metadata=self.metadata)]
+                self.text_hash_id = [self.text_units[0].hash_id]
+                self.text_human_readable_id = [self.text_units[0].human_readable_id]
             
     
         

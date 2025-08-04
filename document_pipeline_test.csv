@@ -1,0 +1,64 @@
+file,chunk_index,chunk_id,chunk_text_preview,tenant_id,account_id,user_id,interaction_type,interaction_id,source_system,timestamp,has_metadata,metadata_valid,all_fields_present
+interaction_009.json,0,1ebc004a4234f626c0786057281f02fb7d3d41b73df362a2d5667e257208f5f5,"Voice Memo Transcription - Weekly Team Update
+
+Recorded by: Tom Anderson, IT Administrator
+Date: Jan...",tenant_acme,acc_c02b9aa6-8704-4bfd-b861-864817134521,usr_01fc9d7c-7ed1-45b1-a054-15598367fd45,voice_memo,int_f1dd5ea5-620c-4155-b4d2-38e1306292f6,voice_memo,2024-01-23T15:30:00Z,True,True,True
+interaction_007.json,0,febf8cf0dbd8a442d89f170f619d779957348ab7b535cc47e8b60d8c5919814d,"Call transcript - Account Setup Support
+
+Agent: Good morning, this is Alex from technical support. H...",tenant_acme,acc_c02b9aa6-8704-4bfd-b861-864817134521,usr_51686f0a-0eea-4eea-8c76-2fc52f7f7326,call,int_c19228bf-1629-4943-895f-3bbb74d751ac,internal,2024-01-21T10:15:00Z,True,True,True
+interaction_006.json,0,23df7715c888946a843addf67b92a83c35d2c1f9d4688286fa9de1e19644bc06,"Subject: New User Onboarding Request - NYC Branch
+
+Hello Support Team,
+
+We need to onboard 5 new use...",tenant_acme,acc_c02b9aa6-8704-4bfd-b861-864817134521,usr_01fc9d7c-7ed1-45b1-a054-15598367fd45,email,int_33e2cf28-27f8-4f48-bddf-cb2231c91df7,gmail,2024-01-20T11:30:00Z,True,True,True
+interaction_008.json,0,e3b0accb24363c963563c160c9e4702b0d414cfd42b485045abd2ad570079612,"Live Chat Session - Feature Request
+
+[09:45] Customer: Hi, I'm wondering if there's a way to set up ...",tenant_acme,acc_c02b9aa6-8704-4bfd-b861-864817134521,usr_01fc9d7c-7ed1-45b1-a054-15598367fd45,chat,int_b6dfe3f5-eb47-41ac-8a47-c6e9a58e4802,internal,2024-01-22T09:45:00Z,True,True,True
+interaction_010.json,0,d25ced078154e5fa4b4c369af7fee56555994349efe7a1af8c1ec5a925a33387,"Branch Performance Review - January 2024
+
+Branch: ACME NYC
+Review Date: January 24, 2024
+Reviewed by...",tenant_acme,acc_c02b9aa6-8704-4bfd-b861-864817134521,usr_01fc9d7c-7ed1-45b1-a054-15598367fd45,custom_notes,int_20e96acf-4f8d-4152-9818-9db7b5502108,custom,2024-01-24T11:00:00Z,True,True,True
+interaction_005.json,0,93b30a7ad772eb250e9c08b89501775f1c78a093d8fdeb71a64987d8e4d231b6,"Account Review Notes - Q4 2023 Performance
+
+Account: ACME Corporation Headquarters
+Review Period: Oc...",tenant_acme,acc_6997f38c-1d49-4255-8fb6-a4424abf3bde,usr_0138bd39-4af4-4a78-8e53-bb17d7898abe,custom_notes,int_45fff9c1-0d25-487c-a38b-aab1f8f6c29a,custom,2024-01-19T09:15:00Z,True,True,True
+interaction_002.json,0,d8d0d2d4cee171ddf8862504730039996b7bdb02560cbf83f1eea507afed342f,"Call transcript - Customer Support Call
+
+Agent: Thank you for calling ACME support, this is Sarah. H...",tenant_acme,acc_6997f38c-1d49-4255-8fb6-a4424abf3bde,usr_0138bd39-4af4-4a78-8e53-bb17d7898abe,call,int_da6496a1-ed68-4b64-9405-276769f5b628,internal,2024-01-16T14:22:15Z,True,True,True
+interaction_001.json,0,b1d377b45fc2941bbd25fc266ce7c4f152c05dbca9f88045e84eb626e4e9d42f,"Subject: Invoice Discrepancy - Account #12345
+
+Dear Support Team,
+
+I noticed a discrepancy in our la...",tenant_acme,acc_6997f38c-1d49-4255-8fb6-a4424abf3bde,usr_13753caa-8c95-45b5-b53a-100a6361cdd8,email,int_a1b3eade-7ab5-48b8-b1b1-84e954723147,outlook,2024-01-15T10:30:00Z,True,True,True
+interaction_004.json,0,efb67d50b4ff32b119c175563ab52c806185a830198179e04cbb2fad7e6bd265,"Voice Memo Transcription - Internal Meeting Notes
+
+Recorded by: Jennifer Martinez, Account Manager
+D...",tenant_acme,acc_6997f38c-1d49-4255-8fb6-a4424abf3bde,usr_0138bd39-4af4-4a78-8e53-bb17d7898abe,voice_memo,int_107b16fa-9a32-4781-a989-5ec179e8b805,voice_memo,2024-01-18T16:45:30Z,True,True,True
+interaction_003.json,0,0aed2b69d92081d8e2f5e9aa2791b3d7c92f9a6972ca1cefacdab824542758d1,"Live Chat Session - Technical Support
+
+[14:30] Customer: Hi, I'm having trouble accessing our dashbo...",tenant_acme,acc_6997f38c-1d49-4255-8fb6-a4424abf3bde,usr_4fe204d9-f75c-4bb4-b987-f8fb830edd6f,chat,int_31c34265-d1e7-4406-9a85-02d9adecc4ea,internal,2024-01-17T14:30:00Z,True,True,True
+interaction_015.json,0,e20553e0e869a0fb517f42c93bafbf9a5e19b604774e3b5c7234bcdb40c584c7,"Integration Project Status - Week 1
+
+Project: Salesforce Integration for Beta Corp
+Project Manager: ...",tenant_beta,acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8,usr_7029a564-87b0-47ec-833f-cb025544f720,custom_notes,int_300c2c5d-1cd5-423c-89a7-244660e66695,custom,2024-01-29T13:45:00Z,True,True,True
+interaction_012.json,0,f05465af32e20fad6b0fc6df386cada64fb252e912805553db67b6455aa3fd56,"Call transcript - Technical Discovery Call
+
+Agent: Good afternoon, this is Marcus from our integrati...",tenant_beta,acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8,usr_7029a564-87b0-47ec-833f-cb025544f720,call,int_697e769f-deef-4348-b178-68d499c839fe,internal,2024-01-26T14:30:00Z,True,True,True
+interaction_014.json,0,0723cfc88b03a4e22add4371189707359fdc8cebf720c861ab8d818dc8d21618,"Voice Memo Transcription - Integration Planning Session
+
+Recorded by: Rachel Thompson, CTO
+Date: Jan...",tenant_beta,acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8,usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5,voice_memo,int_b0c37d34-c0a9-4ce3-a509-4ec4f8b4c345,voice_memo,2024-01-28T16:20:00Z,True,True,True
+interaction_011.json,0,e85c977ae5df25c80e46982624a4adc2ad06471ef75ce6100098c23c885cf2f6,"Subject: System Integration Requirements - Beta Corp
+
+Dear Technical Team,
+
+We are planning to integ...",tenant_beta,acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8,usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5,email,int_f0eeee83-edf6-4424-960f-f3c8a120fcb2,outlook,2024-01-25T08:45:00Z,True,True,True
+interaction_013.json,0,3ac7db9579b09f0b2adb87beb69bb639aa34f395a060f0735c3bcfb30b8f1320,"Live Chat Session - Implementation Support
+
+[10:15] Customer: Hi, I'm following up on our Salesforce...",tenant_beta,acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8,usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5,chat,int_3f2a564f-8423-48a2-bff4-3f8c31ea6750,internal,2024-01-27T10:15:00Z,True,True,True
+interaction_016.json,0,d358990236642d916e90d9a8a16c4dc593368f21372afd55f0c6776c4187b1bd,"Subject: Pilot Phase Results - Salesforce Integration
+
+Hi Kevin,
+
+I wanted to share the results from...",tenant_beta,acc_2a901c5d-9bb3-40d3-901d-39e0e76fcdb8,usr_5d2a4665-1114-48f0-b34e-31d7ffb56cb5,email,int_448eeceb-82c1-45d2-855a-1ec9b2c75a4d,gmail,2024-02-05T09:30:00Z,True,True,True

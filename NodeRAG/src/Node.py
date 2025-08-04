@@ -9,7 +9,7 @@ from ..config import NodeConfig
 
 from .pipeline import (
     INIT_pipeline,
-    document_pipline,
+    document_pipeline,
     text_pipline,
     Graph_pipeline,
     Attribution_generation_pipeline,
@@ -53,7 +53,7 @@ class NodeRag():
 
         # define the state to pipeline mapping
         self.state_pipeline_map = {
-            State.DOCUMENT_PIPELINE: document_pipline,
+            State.DOCUMENT_PIPELINE: document_pipeline,
             State.TEXT_PIPELINE: text_pipline,
             State.GRAPH_PIPELINE: Graph_pipeline,
             State.ATTRIBUTE_PIPELINE: Attribution_generation_pipeline,

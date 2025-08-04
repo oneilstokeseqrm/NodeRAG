@@ -1,5 +1,5 @@
 from .INIT_pipeline import INIT_pipeline
-from .document_pipeline import document_pipline
+from .document_pipeline import document_pipeline
 from .text_pipeline import text_pipline
 from .graph_pipeline import Graph_pipeline
 from .attribute_generation import Attribution_generation_pipeline
@@ -10,7 +10,7 @@ from .HNSW_graph import HNSW_pipeline
 
 
 __all__ = ['INIT_pipeline',
-           'document_pipline',
+           'document_pipeline',
            'text_pipline',
            'Graph_pipeline',
            'Attribution_generation_pipeline',
