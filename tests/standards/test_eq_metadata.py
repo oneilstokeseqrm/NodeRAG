@@ -230,6 +230,57 @@ class TestEQMetadata:
         assert node_metadata.node_type == "entity"
         assert node_metadata.tenant_id == "tenant_acme"  # Original fields preserved
 
+    def test_flexible_user_id_formats(self):
+        """Test that user_id accepts various string formats"""
+        test_cases = [
+            ("user@example.com", True, "Email format"),
+            ("EMP123456", True, "Employee ID format"),
+            ("12345", True, "Numeric string"),
+            ("salesforce_123", True, "External system ID"),
+            ("usr_6ba7b812-9dad-41d4-80b4-00c04fd430c8", True, "UUID format (backward compatibility)"),
+            ("", False, "Empty string"),
+            ("   ", False, "Whitespace only"),
+        ]
+        
+        for user_id, should_pass, description in test_cases:
+            metadata = EQMetadata(
+                tenant_id="tenant_acme",
+                interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
+                interaction_type="email",
+                text="Test content",
+                account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
+                timestamp="2024-01-15T10:30:00Z",
+                user_id=user_id,
+                source_system="outlook"
+            )
+            
+            errors = metadata.validate()
+            user_id_errors = [e for e in errors if "user_id" in e]
+            passed = len(user_id_errors) == 0
+            
+            if should_pass:
+                assert passed, f"{description}: user_id '{user_id}' should be valid but got errors: {user_id_errors}"
+            else:
+                assert not passed, f"{description}: user_id '{user_id}' should be invalid but passed validation"
+
+    def test_user_id_none_validation(self):
+        """Test that None user_id is properly rejected"""
+        metadata = EQMetadata(
+            tenant_id="tenant_acme",
+            interaction_id="int_550e8400-e29b-41d4-a716-446655440000",
+            interaction_type="email",
+            text="Test content",
+            account_id="acc_6ba7b810-9dad-41d4-80b4-00c04fd430c8",
+            timestamp="2024-01-15T10:30:00Z",
+            user_id=None,
+            source_system="outlook"
+        )
+        
+        errors = metadata.validate()
+        user_id_errors = [e for e in errors if "user_id" in e]
+        assert len(user_id_errors) >= 1
+        assert any("user_id must be a non-empty string" in error for error in user_id_errors)
+
 
 class TestMetadataPropagation:
     """Test cases for metadata propagation rules"""
