@@ -1,5 +1,8 @@
 import networkx as nx
-from typing import List,Dict
+from typing import List, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ...standards.eq_metadata import EQMetadata
 import json
 import os
 import asyncio
@@ -111,26 +114,48 @@ class Graph_pipeline:
                 f.write(json.dumps(data, ensure_ascii=False) + '\n')
                 
     
-    def add_semantic_unit(self,semantic_unit:Dict,text_hash_id:str,metadata=None):
+    def add_semantic_unit(self, semantic_unit: Dict, text_hash_id: str, metadata: 'EQMetadata'):
+        """Add semantic unit with REQUIRED metadata propagation
         
-        semantic_unit_obj = Semantic_unit(semantic_unit.get('context', ''),metadata,text_hash_id)
+        Args:
+            semantic_unit: Dict with 'context' key containing the semantic unit text
+            text_hash_id: Hash ID of the source text unit
+            metadata: EQMetadata object with all 8 required fields (REQUIRED)
+        
+        Raises:
+            ValueError: If metadata is None or invalid
+        """
+        if metadata is None:
+            raise ValueError("Metadata is REQUIRED for semantic unit creation - multi-tenant isolation depends on it")
+        
+        from ...standards.eq_metadata import EQMetadata
+        if not isinstance(metadata, EQMetadata):
+            raise ValueError(f"Metadata must be EQMetadata instance, got {type(metadata)}")
+        
+        semantic_unit_obj = Semantic_unit(
+            raw_context=semantic_unit.get('context', ''),
+            metadata=metadata,
+            text_hash_id=text_hash_id
+        )
         if self.G.has_node(semantic_unit_obj.hash_id):
             self.G.nodes[semantic_unit_obj.hash_id]['weight'] += 1
         else:
             node_attrs = {'type':'semantic_unit','weight':1,'text_hash_id':text_hash_id,'context':semantic_unit_obj.raw_context}
             
-            if metadata:
-                node_attrs.update({
-                    'tenant_id': metadata.tenant_id,
-                    'account_id': metadata.account_id,
-                    'interaction_id': metadata.interaction_id,
-                    'interaction_type': metadata.interaction_type,
-                    'timestamp': metadata.timestamp,
-                    'user_id': metadata.user_id,
-                    'source_system': metadata.source_system
-                })
+            node_attrs.update({
+                'tenant_id': metadata.tenant_id,
+                'account_id': metadata.account_id,
+                'interaction_id': metadata.interaction_id,
+                'interaction_type': metadata.interaction_type,
+                'timestamp': metadata.timestamp,
+                'user_id': metadata.user_id,
+                'source_system': metadata.source_system
+            })
             
-            self.G.add_node(semantic_unit_obj.hash_id,**node_attrs)
+            self.G.add_node(semantic_unit_obj.hash_id, **node_attrs)
+            
+            self.G.add_edge(text_hash_id, semantic_unit_obj.hash_id)
+            
             self.semantic_units.append(semantic_unit_obj)
         return semantic_unit_obj.hash_id
         

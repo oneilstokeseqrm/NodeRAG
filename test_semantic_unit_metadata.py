@@ -5,11 +5,6 @@ import networkx as nx
 from typing import List, Dict
 import sys
 import os
-import types
-
-sys.modules["ruamel"] = types.ModuleType("ruamel")
-sys.modules["ruamel.yaml"] = types.ModuleType("ruamel.yaml")
-sys.modules["ruamel.yaml.YAML"] = types.ModuleType("ruamel.yaml.YAML")
 
 sys.path.append('.')
 
