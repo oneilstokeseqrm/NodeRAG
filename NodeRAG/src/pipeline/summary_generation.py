@@ -59,7 +59,8 @@ class SummaryGeneration:
         
         for i,community in enumerate(partition):
             community_name = [self.G_ig.vs[node]['name'] for node in community if self.G_ig.vs[node]['name'] in self.mapper.embeddings]
-            self.communities.append(Community_summary(community_name,self.mapper,self.G,self.config))
+            community_node = community_name[0] if community_name else None
+            self.communities.append(Community_summary(community_node,self.mapper,self.G,self.config))
     
     def _extract_metadata_from_community(self, node_names: list[str]) -> EQMetadata:
         """Extract metadata from community member nodes for high_level_elements"""
@@ -176,6 +177,10 @@ class SummaryGeneration:
                 else:
                     metadata = self._extract_metadata_from_community(node_names)
                     
+                    print(f"Creating high_level_element node {he.hash_id[:20]}... with metadata:")
+                    print(f"  tenant_id: {metadata.tenant_id}")
+                    print(f"  source: {'extracted' if metadata.tenant_id != 'AGGREGATED' else 'fallback'}")
+                    
                     node_attrs = {
                         'type': 'high_level_element', 
                         'weight': 1,
@@ -202,6 +207,7 @@ class SummaryGeneration:
                         'source_system': metadata.source_system
                     }
                     self.G.add_node(he.title_hash_id, **title_attrs)
+                    print(f"Created title node {he.title_hash_id[:20]}... with same metadata")
                     high_level_elements.append(he)
                 
                 edge = (he.hash_id,he.title_hash_id)
