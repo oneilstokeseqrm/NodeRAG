@@ -39,7 +39,13 @@ class SummaryGeneration:
             self.mapper = Mapper([self.config.semantic_units_path,
                                   self.config.attributes_path])
             self.mapper.add_embedding(self.config.embedding)
-            self.G = storage.load(self.config.graph_path)
+            self.G = storage.load_pickle(self.config.graph_path)
+            
+            import networkx as nx
+            if not isinstance(self.G, nx.Graph):
+                raise TypeError(f"Expected networkx.Graph, got {type(self.G)}")
+            
+            print(f"Loaded graph with {self.G.number_of_nodes()} nodes and {self.G.number_of_edges()} edges")
             self.G_ig = IGraph(self.G).to_igraph()
             self.nodes_high_level_elements_group = []
             self.nodes_high_level_elements_match = []
@@ -57,6 +63,8 @@ class SummaryGeneration:
     
     def _extract_metadata_from_community(self, node_names: list[str]) -> EQMetadata:
         """Extract metadata from community member nodes for high_level_elements"""
+        print(f"Extracting metadata from community of {len(node_names)} nodes")
+        
         for node_name in node_names:
             if self.G.has_node(node_name):
                 node_data = self.G.nodes[node_name]
@@ -64,6 +72,7 @@ class SummaryGeneration:
                                  'interaction_type', 'timestamp', 'user_id', 'source_system']
                 
                 if all(field in node_data for field in required_fields):
+                    print(f"  Using metadata from node {node_name}: tenant_id={node_data['tenant_id']}")
                     return EQMetadata(
                         tenant_id=node_data['tenant_id'],
                         account_id=node_data['account_id'],
@@ -75,6 +84,7 @@ class SummaryGeneration:
                         source_system=node_data['source_system']
                     )
         
+        print(f"  No valid metadata found, using AGGREGATED fallback")
         return EQMetadata(
             tenant_id='AGGREGATED',
             account_id='AGGREGATED', 
