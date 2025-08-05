@@ -24,9 +24,15 @@ def load_test_config() -> Dict[str, Any]:
         
         os.makedirs('./test_output', exist_ok=True)
         os.makedirs('./test_output/info', exist_ok=True)
+        os.makedirs('./test_output/cache', exist_ok=True)
         os.makedirs('./test_output/chromadb', exist_ok=True)
         os.makedirs('./test_output/llm_cache', exist_ok=True)
         os.makedirs('./test_output/llm_error_cache', exist_ok=True)
+        
+        text_decomposition_path = './test_output/cache/text_decomposition.jsonl'
+        if not os.path.exists(text_decomposition_path):
+            with open(text_decomposition_path, 'w') as f:
+                pass  # Create empty file
         
         document_hash_path = './test_output/info/document_hash.json'
         if not os.path.exists(document_hash_path):
@@ -112,9 +118,15 @@ def get_minimal_test_config() -> Dict[str, Any]:
     
     os.makedirs('./test_output', exist_ok=True)
     os.makedirs('./test_output/info', exist_ok=True)
+    os.makedirs('./test_output/cache', exist_ok=True)
     os.makedirs('./test_output/chromadb', exist_ok=True)
     os.makedirs('./test_output/llm_cache', exist_ok=True)
     os.makedirs('./test_output/llm_error_cache', exist_ok=True)
+    
+    text_decomposition_path = './test_output/cache/text_decomposition.jsonl'
+    if not os.path.exists(text_decomposition_path):
+        with open(text_decomposition_path, 'w') as f:
+            pass  # Create empty file
     
     document_hash_path = './test_output/info/document_hash.json'
     if not os.path.exists(document_hash_path):
