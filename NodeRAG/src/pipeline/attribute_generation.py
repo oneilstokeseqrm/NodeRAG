@@ -159,11 +159,49 @@ class Attribution_generation_pipeline:
             
         response = await self.API_client({'query':query})
         if response is not None:
-            attribute = Attribute(response,node)
+            entity_metadata = None
+            if self.G.has_node(node):
+                node_data = self.G.nodes[node]
+                
+                if all(field in node_data for field in ['tenant_id', 'account_id', 'interaction_id', 
+                                                        'interaction_type', 'timestamp', 'user_id', 'source_system']):
+                    from ...standards.eq_metadata import EQMetadata
+                    try:
+                        entity_metadata = EQMetadata(
+                            tenant_id=node_data['tenant_id'],
+                            account_id=node_data['account_id'],
+                            interaction_id=node_data['interaction_id'],
+                            interaction_type=node_data['interaction_type'],
+                            text=f'Attribute for entity {node}',
+                            timestamp=node_data['timestamp'],
+                            user_id=node_data['user_id'],
+                            source_system=node_data['source_system']
+                        )
+                    except Exception as e:
+                        print(f"Warning: Could not create metadata for attribute: {e}")
+            
+            attribute = Attribute(response, node, metadata=entity_metadata)
             
             self.attributes.append(attribute)
             self.G.nodes[node]['attributes'] = [attribute.hash_id]
-            self.G.add_node(attribute.hash_id,type='attribute',weight=1)
+            
+            if entity_metadata:
+                node_attrs = {
+                    'type': 'attribute',
+                    'weight': 1,
+                    'tenant_id': entity_metadata.tenant_id,
+                    'account_id': entity_metadata.account_id,
+                    'interaction_id': entity_metadata.interaction_id,
+                    'interaction_type': entity_metadata.interaction_type,
+                    'timestamp': entity_metadata.timestamp,
+                    'user_id': entity_metadata.user_id,
+                    'source_system': entity_metadata.source_system
+                }
+                self.G.add_node(attribute.hash_id, **node_attrs)
+            else:
+                print(f"Warning: No metadata found for entity {node}, creating attribute without metadata")
+                self.G.add_node(attribute.hash_id, type='attribute', weight=1)
+                
             self.G.add_edge(node,attribute.hash_id,weight=1)
         self.config.tracker.update()
 
