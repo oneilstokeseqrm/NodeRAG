@@ -5,6 +5,7 @@ import asyncio
 import faiss
 import math
 import numpy as np
+from datetime import datetime, timezone
 
 from ...storage import (
     Mapper,
@@ -16,7 +17,7 @@ from ..component import (
     High_level_elements
 )
 from ...config import NodeConfig
-
+from ...standards.eq_metadata import EQMetadata
 
 from ...utils import (
     IGraph,
@@ -53,6 +54,37 @@ class SummaryGeneration:
         for i,community in enumerate(partition):
             community_name = [self.G_ig.vs[node]['name'] for node in community if self.G_ig.vs[node]['name'] in self.mapper.embeddings]
             self.communities.append(Community_summary(community_name,self.mapper,self.G,self.config))
+    
+    def _extract_metadata_from_community(self, node_names: list[str]) -> EQMetadata:
+        """Extract metadata from community member nodes for high_level_elements"""
+        for node_name in node_names:
+            if self.G.has_node(node_name):
+                node_data = self.G.nodes[node_name]
+                required_fields = ['tenant_id', 'account_id', 'interaction_id', 
+                                 'interaction_type', 'timestamp', 'user_id', 'source_system']
+                
+                if all(field in node_data for field in required_fields):
+                    return EQMetadata(
+                        tenant_id=node_data['tenant_id'],
+                        account_id=node_data['account_id'],
+                        interaction_id=node_data['interaction_id'],
+                        interaction_type=node_data['interaction_type'],
+                        text='',
+                        timestamp=node_data['timestamp'],
+                        user_id=node_data['user_id'],
+                        source_system=node_data['source_system']
+                    )
+        
+        return EQMetadata(
+            tenant_id='AGGREGATED',
+            account_id='AGGREGATED', 
+            interaction_id='AGGREGATED',
+            interaction_type='summary',
+            text='',
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            user_id='system',
+            source_system='internal'
+        )
             
     async def generate_community_summary(self,community:Community_summary):
         
@@ -132,8 +164,34 @@ class SummaryGeneration:
                         continue
                     
                 else:
-                    self.G.add_node(he.hash_id, type='high_level_element', weight=1)
-                    self.G.add_node(he.title_hash_id, type='high_level_element_title', weight=1, related_node=he.hash_id)
+                    metadata = self._extract_metadata_from_community(node_names)
+                    
+                    node_attrs = {
+                        'type': 'high_level_element', 
+                        'weight': 1,
+                        'tenant_id': metadata.tenant_id,
+                        'account_id': metadata.account_id,
+                        'interaction_id': metadata.interaction_id,
+                        'interaction_type': metadata.interaction_type,
+                        'timestamp': metadata.timestamp,
+                        'user_id': metadata.user_id,
+                        'source_system': metadata.source_system
+                    }
+                    self.G.add_node(he.hash_id, **node_attrs)
+                    
+                    title_attrs = {
+                        'type': 'high_level_element_title', 
+                        'weight': 1, 
+                        'related_node': he.hash_id,
+                        'tenant_id': metadata.tenant_id,
+                        'account_id': metadata.account_id,
+                        'interaction_id': metadata.interaction_id,
+                        'interaction_type': metadata.interaction_type,
+                        'timestamp': metadata.timestamp,
+                        'user_id': metadata.user_id,
+                        'source_system': metadata.source_system
+                    }
+                    self.G.add_node(he.title_hash_id, **title_attrs)
                     high_level_elements.append(he)
                 
                 edge = (he.hash_id,he.title_hash_id)
