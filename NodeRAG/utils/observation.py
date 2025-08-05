@@ -23,6 +23,7 @@ class ProcessState():
     
     def __init__(self):
         self.observers = []
+        self._current_task = 0
         
     def add_observer(self, observer: Observer):
         self.observers.append(observer)

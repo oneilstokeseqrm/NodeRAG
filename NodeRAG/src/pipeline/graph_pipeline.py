@@ -134,7 +134,7 @@ class Graph_pipeline:
                 semantic_unit_hash_id = self.add_semantic_unit(semantic_unit,text_hash_id,metadata)
                 entities_hash_id = self.add_entities(entities,text_hash_id,metadata)
         
-                entities_hash_id_re = await self.add_relationships(relationships,text_hash_id)
+                entities_hash_id_re = await self.add_relationships(relationships, text_hash_id, metadata)
                 entities_hash_id.extend(entities_hash_id_re)
                 self.add_semantic_belongings(semantic_unit_hash_id,entities_hash_id)
             data['processed'] = True
@@ -247,7 +247,26 @@ class Graph_pipeline:
             else:
                 self.G.add_edge(semantic_unit_hash_id,entity_hash_id,weight = 1)
             
-    async def add_relationships(self,relationships:List[str],text_hash_id:str):
+    async def add_relationships(self, relationships: List[str], text_hash_id: str, metadata: 'EQMetadata'):
+        """Add relationships with REQUIRED metadata propagation
+        
+        Args:
+            relationships: List of relationship strings
+            text_hash_id: Hash ID of the source text unit
+            metadata: EQMetadata object with all 8 required fields (REQUIRED)
+        
+        Returns:
+            List[str]: Entity hash IDs involved in relationships
+            
+        Raises:
+            ValueError: If metadata is None or invalid
+        """
+        if metadata is None:
+            raise ValueError("Metadata is REQUIRED for relationship creation - multi-tenant isolation depends on it")
+        
+        from ...standards.eq_metadata import EQMetadata
+        if not isinstance(metadata, EQMetadata):
+            raise ValueError(f"Metadata must be EQMetadata instance, got {type(metadata)}")
         
         entities_hash_id = []
         for relationship in relationships:
@@ -258,29 +277,56 @@ class Graph_pipeline:
             if len(relationship) != 3:
                 relationship = await self.reconstruct_relationship(relationship)
             
-            relationship = Relationship(relationship,text_hash_id)
-            hash_id = relationship.hash_id
+            relationship_obj = Relationship(relationship_tuple=relationship, text_hash_id=text_hash_id, metadata=metadata)
+            hash_id = relationship_obj.hash_id
             if hash_id in self.relationship_lookup:
                 Re = self.relationship_lookup[hash_id]
-                Re.add(relationship.raw_context)
+                Re.add(relationship_obj.raw_context)
                 continue
             
             
-            self.relationship.append(relationship)
-            self.relationship_lookup[hash_id] = relationship
+            self.relationship.append(relationship_obj)
+            self.relationship_lookup[hash_id] = relationship_obj
             
             
-            for node in [relationship.source, relationship.target, relationship]:
+            for node in [relationship_obj.source, relationship_obj.target, relationship_obj]:
                 if not self.G.has_node(node.hash_id):
-                    self.G.add_node(node.hash_id, type='entity' if node in [relationship.source, relationship.target] else 'relationship', weight=1)
-                    if node in [relationship.source, relationship.target]:
+                    node_attrs = {
+                        'type': 'entity' if node in [relationship_obj.source, relationship_obj.target] else 'relationship', 
+                        'weight': 1,
+                        'text_hash_id': text_hash_id
+                    }
+                    
+                    node_attrs.update({
+                        'tenant_id': metadata.tenant_id,
+                        'account_id': metadata.account_id,
+                        'interaction_id': metadata.interaction_id,
+                        'interaction_type': metadata.interaction_type,
+                        'timestamp': metadata.timestamp,
+                        'user_id': metadata.user_id,
+                        'source_system': metadata.source_system
+                    })
+                    
+                    self.G.add_node(node.hash_id, **node_attrs)
+                    if node in [relationship_obj.source, relationship_obj.target]:
                         self.relationship_nodes.append(node)
                         entities_hash_id.append(node.hash_id)
                     
 
-            for edge in [(relationship.source.hash_id, relationship.hash_id), (relationship.hash_id, relationship.target.hash_id)]:
+            for edge in [(relationship_obj.source.hash_id, relationship_obj.hash_id), (relationship_obj.hash_id, relationship_obj.target.hash_id)]:
                 if not self.G.has_edge(*edge):
-                    self.G.add_edge(*edge, weight=1)
+                    edge_attrs = {
+                        'weight': 1,
+                        'text_hash_id': text_hash_id,
+                        'tenant_id': metadata.tenant_id,
+                        'account_id': metadata.account_id,
+                        'interaction_id': metadata.interaction_id,
+                        'interaction_type': metadata.interaction_type,
+                        'timestamp': metadata.timestamp,
+                        'user_id': metadata.user_id,
+                        'source_system': metadata.source_system
+                    }
+                    self.G.add_edge(*edge, **edge_attrs)
                 else:
                     self.G[edge[0]][edge[1]]['weight'] += 1
         return entities_hash_id
