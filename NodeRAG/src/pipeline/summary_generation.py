@@ -5,6 +5,7 @@ import asyncio
 import faiss
 import math
 import numpy as np
+from datetime import datetime, timezone
 
 from ...storage import (
     Mapper,
@@ -16,7 +17,7 @@ from ..component import (
     High_level_elements
 )
 from ...config import NodeConfig
-
+from ...standards.eq_metadata import EQMetadata
 
 from ...utils import (
     IGraph,
@@ -38,7 +39,13 @@ class SummaryGeneration:
             self.mapper = Mapper([self.config.semantic_units_path,
                                   self.config.attributes_path])
             self.mapper.add_embedding(self.config.embedding)
-            self.G = storage.load(self.config.graph_path)
+            self.G = storage.load_pickle(self.config.graph_path)
+            
+            import networkx as nx
+            if not isinstance(self.G, nx.Graph):
+                raise TypeError(f"Expected networkx.Graph, got {type(self.G)}")
+            
+            print(f"Loaded graph with {self.G.number_of_nodes()} nodes and {self.G.number_of_edges()} edges")
             self.G_ig = IGraph(self.G).to_igraph()
             self.nodes_high_level_elements_group = []
             self.nodes_high_level_elements_match = []
@@ -52,7 +59,43 @@ class SummaryGeneration:
         
         for i,community in enumerate(partition):
             community_name = [self.G_ig.vs[node]['name'] for node in community if self.G_ig.vs[node]['name'] in self.mapper.embeddings]
-            self.communities.append(Community_summary(community_name,self.mapper,self.G,self.config))
+            community_node = community_name[0] if community_name else None
+            self.communities.append(Community_summary(community_node,self.mapper,self.G,self.config))
+    
+    def _extract_metadata_from_community(self, node_names: list[str]) -> EQMetadata:
+        """Extract metadata from community member nodes for high_level_elements"""
+        print(f"Extracting metadata from community of {len(node_names)} nodes")
+        
+        for node_name in node_names:
+            if self.G.has_node(node_name):
+                node_data = self.G.nodes[node_name]
+                required_fields = ['tenant_id', 'account_id', 'interaction_id', 
+                                 'interaction_type', 'timestamp', 'user_id', 'source_system']
+                
+                if all(field in node_data for field in required_fields):
+                    print(f"  Using metadata from node {node_name}: tenant_id={node_data['tenant_id']}")
+                    return EQMetadata(
+                        tenant_id=node_data['tenant_id'],
+                        account_id=node_data['account_id'],
+                        interaction_id=node_data['interaction_id'],
+                        interaction_type=node_data['interaction_type'],
+                        text='',
+                        timestamp=node_data['timestamp'],
+                        user_id=node_data['user_id'],
+                        source_system=node_data['source_system']
+                    )
+        
+        print(f"  No valid metadata found, using AGGREGATED fallback")
+        return EQMetadata(
+            tenant_id='AGGREGATED',
+            account_id='AGGREGATED', 
+            interaction_id='AGGREGATED',
+            interaction_type='summary',
+            text='',
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            user_id='system',
+            source_system='internal'
+        )
             
     async def generate_community_summary(self,community:Community_summary):
         
@@ -132,8 +175,39 @@ class SummaryGeneration:
                         continue
                     
                 else:
-                    self.G.add_node(he.hash_id, type='high_level_element', weight=1)
-                    self.G.add_node(he.title_hash_id, type='high_level_element_title', weight=1, related_node=he.hash_id)
+                    metadata = self._extract_metadata_from_community(node_names)
+                    
+                    print(f"Creating high_level_element node {he.hash_id[:20]}... with metadata:")
+                    print(f"  tenant_id: {metadata.tenant_id}")
+                    print(f"  source: {'extracted' if metadata.tenant_id != 'AGGREGATED' else 'fallback'}")
+                    
+                    node_attrs = {
+                        'type': 'high_level_element', 
+                        'weight': 1,
+                        'tenant_id': metadata.tenant_id,
+                        'account_id': metadata.account_id,
+                        'interaction_id': metadata.interaction_id,
+                        'interaction_type': metadata.interaction_type,
+                        'timestamp': metadata.timestamp,
+                        'user_id': metadata.user_id,
+                        'source_system': metadata.source_system
+                    }
+                    self.G.add_node(he.hash_id, **node_attrs)
+                    
+                    title_attrs = {
+                        'type': 'high_level_element_title', 
+                        'weight': 1, 
+                        'related_node': he.hash_id,
+                        'tenant_id': metadata.tenant_id,
+                        'account_id': metadata.account_id,
+                        'interaction_id': metadata.interaction_id,
+                        'interaction_type': metadata.interaction_type,
+                        'timestamp': metadata.timestamp,
+                        'user_id': metadata.user_id,
+                        'source_system': metadata.source_system
+                    }
+                    self.G.add_node(he.title_hash_id, **title_attrs)
+                    print(f"Created title node {he.title_hash_id[:20]}... with same metadata")
                     high_level_elements.append(he)
                 
                 edge = (he.hash_id,he.title_hash_id)
