@@ -22,16 +22,18 @@ class HNSW:
     
     @property
     def nxgraphs(self):
-        graph_layer_0 = self.hnsw.get_layer_graph(0)
-        if graph_layer_0 is not None:
-            if self._nxgraphs is None:
-                self._nxgraphs = nx.Graph()
-                for id,neighbors in graph_layer_0.items():
-                    for neighbor in neighbors:
-                        self._nxgraphs.add_edge(self.id_map[id],self.id_map[neighbor])
-            return self._nxgraphs
-        else:
-            return None
+        """
+        DEPRECATED: HNSW NetworkX graph should not be used or merged with business graph.
+        This property is kept for backward compatibility but returns None.
+        HNSW internal nodes (integer IDs 0-15) do not belong in the business graph.
+        """
+        import warnings
+        warnings.warn(
+            "HNSW.nxgraphs is deprecated. HNSW graph should not be merged with business data.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        return None
     
     def add_nodes(self, nodes: List[Tuple[str, np.ndarray]]):
         current_length = len(self.id_map)
@@ -101,10 +103,15 @@ class HNSW:
         
             
     def save_HNSW(self):
-        
+        """Save HNSW index and mappings (but NOT the NetworkX graph)"""
         self.hnsw.save_index(self.config.HNSW_path)
         storage({'id':list(self.id_map.keys()),'node':list(self.id_map.values())}).save_parquet(self.config.id_map_path)
-        storage(self.nxgraphs).save_pickle(self.config.hnsw_graph_path)
+        
+        # REMOVED: NetworkX graph saving
+        # The HNSW NetworkX graph should NOT be saved or merged with business graph
+        # as it contains internal index nodes (0-15) without metadata
+        # OLD CODE (REMOVED):
+        # storage(self.nxgraphs).save_pickle(self.config.hnsw_graph_path) (important-comment)
     
     def get_layer_graph(self,layer:int):
         return self.hnsw.get_layer_graph(layer)
