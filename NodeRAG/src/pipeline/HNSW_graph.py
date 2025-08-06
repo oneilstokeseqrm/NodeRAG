@@ -68,10 +68,11 @@ class HNSW_pipeline():
     async def main(self):
         if os.path.exists(self.config.embedding):
             self.generate_HNSW()
-            self.hnsw.save_HNSW()
+            self.hnsw.save_HNSW()  # This saves only index and mappings, NOT NetworkX graph (important-comment)
             self.mapper.update_save()
             self.delete_embedding()
-            self.config.console.print('[green]HNSW graph saved[/green]')
+            self.config.console.print('[green]HNSW index saved[/green]')
+            # NOTE: HNSW NetworkX graph is NOT saved to prevent index node pollution
         
         
             

@@ -63,16 +63,25 @@ class NodeSearch():
         else:
             raise Exception('No base graph found.')
         
-        if os.path.exists(self.config.hnsw_graph_path):
-            HNSW_graph = storage.load(self.config.hnsw_graph_path)
-        else:
-            raise Exception('No HNSW graph found.')
+        # REMOVED: HNSW graph concatenation
+        # HNSW internal nodes (0-15) should not be mixed with business data
+        # OLD CODE:
+        # if os.path.exists(self.config.hnsw_graph_path): (important-comment)
+        #     HNSW_graph = storage.load(self.config.hnsw_graph_path) (important-comment)
+        # else:
+        #     raise Exception('No HNSW graph found.') (important-comment)
+        #
+        # if self.config.unbalance_adjust:
+        #         G = GraphConcat(G).concat(HNSW_graph) (important-comment)
+        #         return GraphConcat.unbalance_adjust(G) (important-comment)
+        #
+        # return GraphConcat(G).concat(HNSW_graph) (important-comment)
         
+        # Return business graph only - HNSW search works through index directly
         if self.config.unbalance_adjust:
-                G = GraphConcat(G).concat(HNSW_graph)
-                return GraphConcat.unbalance_adjust(G)
-            
-        return GraphConcat(G).concat(HNSW_graph)
+            return GraphConcat.unbalance_adjust(G)
+        
+        return G
         
     
     def search(self,query:str):
