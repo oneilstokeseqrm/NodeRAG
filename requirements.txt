@@ -275,4 +275,3 @@ yarl==1.18.3
     # via aiohttp
 neo4j>=5.0.0
 pinecone>=3.0.0
-nest_asyncio>=1.5.6

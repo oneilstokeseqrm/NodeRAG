@@ -5,12 +5,11 @@ import os
 import warnings
 import logging
 import threading
-from contextlib import asynccontextmanager
-from typing import Optional, Dict, Any, Union, TypeVar, Callable
+import concurrent.futures
+from typing import Optional, Dict, Any, Union
 from enum import Enum
 import asyncio
 import time
-import nest_asyncio
 
 from .storage import storage
 from .neo4j_adapter import Neo4jAdapter
@@ -18,7 +17,6 @@ from .pinecone_adapter import PineconeAdapter
 from ..config.eq_config import EQConfig
 from ..standards.eq_metadata import EQMetadata
 
-nest_asyncio.apply()
 
 logger = logging.getLogger(__name__)
 
@@ -34,42 +32,51 @@ class StorageFactory:
     """
     Factory for creating and managing storage adapters.
     Provides migration path from file to cloud storage.
-    Thread-safe singleton implementation.
+    Thread-safe singleton implementation with isolated async execution.
     """
     
     _instances: Dict[str, Any] = {}
     _config: Optional[EQConfig] = None
     _backend_mode: StorageBackend = StorageBackend.FILE
-    _lock = threading.Lock()  # Add thread lock
-    _async_lock = asyncio.Lock()  # Add async lock for async operations
-    _event_loop: Optional[asyncio.AbstractEventLoop] = None  # Reusable event loop
+    _lock = threading.Lock()  # Thread lock for singleton safety
+    _executor: Optional[concurrent.futures.ThreadPoolExecutor] = None  # Lazy-initialized executor
     
     @classmethod
-    def _get_or_create_event_loop(cls) -> asyncio.AbstractEventLoop:
-        """Get or create a reusable event loop for async operations"""
-        if cls._event_loop is None or cls._event_loop.is_closed():
-            try:
-                cls._event_loop = asyncio.get_running_loop()
-            except RuntimeError:
-                cls._event_loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(cls._event_loop)
-        return cls._event_loop
+    def _get_executor(cls):
+        """Get or create the ThreadPoolExecutor lazily"""
+        if cls._executor is None or cls._executor._shutdown:
+            cls._executor = concurrent.futures.ThreadPoolExecutor(
+                max_workers=1, 
+                thread_name_prefix="storage-factory-async"
+            )
+        return cls._executor
     
     @classmethod
     def _run_async(cls, coro):
         """
-        Run an async coroutine in a sync context efficiently.
-        Reuses event loop when possible.
+        Run an async coroutine in a sync context using a dedicated thread.
+        This avoids modifying global asyncio behavior while allowing
+        async operations from synchronous code.
         """
-        try:
-            loop = asyncio.get_running_loop()
-            return loop.run_until_complete(coro)
-        except RuntimeError:
-            loop = cls._get_or_create_event_loop()
+        def run_in_new_loop():
+            """Run coroutine in a fresh event loop in the executor thread"""
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
             try:
-                return asyncio.run(coro)
-            except RuntimeError:
                 return loop.run_until_complete(coro)
+            finally:
+                loop.close()
+                asyncio.set_event_loop(None)
+        
+        try:
+            existing_loop = asyncio.get_running_loop()
+            logger.warning("StorageFactory._run_async called from existing async context")
+            future = asyncio.ensure_future(coro)
+            return asyncio.get_event_loop().run_until_complete(future)
+        except RuntimeError:
+            executor = cls._get_executor()
+            future = executor.submit(run_in_new_loop)
+            return future.result()
     
     @classmethod
     def initialize(cls, config: Union[EQConfig, Dict[str, Any]], 
@@ -276,14 +283,9 @@ class StorageFactory:
                 
             cls._instances.clear()
             
-            # Clean up event loop
-            if cls._event_loop and not cls._event_loop.is_closed():
-                try:
-                    cls._event_loop.close()
-                except Exception as e:
-                    logger.warning(f"Error closing event loop: {e}")
-                finally:
-                    cls._event_loop = None
+            if cls._executor is not None and not cls._executor._shutdown:
+                cls._executor.shutdown(wait=True, cancel_futures=False)
+                logger.info("Executor thread pool shutdown complete")
             
             logger.info("Storage factory cleaned up")
     

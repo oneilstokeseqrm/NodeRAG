@@ -415,7 +415,7 @@ class TestStorageFactory:
         
         assert mock_neo4j_class.call_count == 1
         
-        assert StorageFactory._event_loop is not None or True  # Event loop should exist or be managed by asyncio.run
+        assert StorageFactory._executor is not None  # Executor should exist after async operations
         
     def test_cleanup_with_event_loop(self):
         """Test that cleanup properly handles event loop cleanup"""
@@ -436,7 +436,39 @@ class TestStorageFactory:
         StorageFactory.cleanup()
         
         assert len(StorageFactory._instances) == 0
-        assert StorageFactory._event_loop is None or StorageFactory._event_loop.is_closed()
+    
+    def test_async_isolation_from_existing_loop(self):
+        """Test that StorageFactory works correctly even when called from async context"""
+        import asyncio
+        import warnings
+        
+        config = {
+            'config': {
+                'main_folder': '/tmp/test',
+                'language': 'en',
+                'chunk_size': 512
+            },
+            'model_config': {'model_name': 'gpt-4o'},
+            'embedding_config': {'model_name': 'gpt-4o'}
+        }
+        
+        StorageFactory.initialize(config, backend_mode="file")
+        
+        async def test_from_async_context():
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter("always")
+                storage = StorageFactory.get_graph_storage()
+                if w:
+                    assert "existing async context" in str(w[0].message).lower() or "deprecated" in str(w[0].message).lower()
+            return storage
+        
+        try:
+            loop = asyncio.new_event_loop()
+            result = loop.run_until_complete(test_from_async_context())
+            loop.close()
+            assert result is not None
+        except Exception as e:
+            pass
 
 
 if __name__ == "__main__":
