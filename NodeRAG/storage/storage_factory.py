@@ -4,16 +4,21 @@ Storage Factory for NodeRAG - Manages storage backend selection
 import os
 import warnings
 import logging
-from typing import Optional, Dict, Any, Union
+import threading
+from contextlib import asynccontextmanager
+from typing import Optional, Dict, Any, Union, TypeVar, Callable
 from enum import Enum
 import asyncio
 import time
+import nest_asyncio
 
 from .storage import storage
 from .neo4j_adapter import Neo4jAdapter
 from .pinecone_adapter import PineconeAdapter
 from ..config.eq_config import EQConfig
 from ..standards.eq_metadata import EQMetadata
+
+nest_asyncio.apply()
 
 logger = logging.getLogger(__name__)
 
@@ -29,11 +34,42 @@ class StorageFactory:
     """
     Factory for creating and managing storage adapters.
     Provides migration path from file to cloud storage.
+    Thread-safe singleton implementation.
     """
     
     _instances: Dict[str, Any] = {}
     _config: Optional[EQConfig] = None
     _backend_mode: StorageBackend = StorageBackend.FILE
+    _lock = threading.Lock()  # Add thread lock
+    _async_lock = asyncio.Lock()  # Add async lock for async operations
+    _event_loop: Optional[asyncio.AbstractEventLoop] = None  # Reusable event loop
+    
+    @classmethod
+    def _get_or_create_event_loop(cls) -> asyncio.AbstractEventLoop:
+        """Get or create a reusable event loop for async operations"""
+        if cls._event_loop is None or cls._event_loop.is_closed():
+            try:
+                cls._event_loop = asyncio.get_running_loop()
+            except RuntimeError:
+                cls._event_loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(cls._event_loop)
+        return cls._event_loop
+    
+    @classmethod
+    def _run_async(cls, coro):
+        """
+        Run an async coroutine in a sync context efficiently.
+        Reuses event loop when possible.
+        """
+        try:
+            loop = asyncio.get_running_loop()
+            return loop.run_until_complete(coro)
+        except RuntimeError:
+            loop = cls._get_or_create_event_loop()
+            try:
+                return asyncio.run(coro)
+            except RuntimeError:
+                return loop.run_until_complete(coro)
     
     @classmethod
     def initialize(cls, config: Union[EQConfig, Dict[str, Any]], 
@@ -95,8 +131,14 @@ class StorageFactory:
     
     @classmethod
     def _get_neo4j_adapter(cls) -> Neo4jAdapter:
-        """Get or create singleton Neo4j adapter with retry logic"""
-        if 'neo4j' not in cls._instances:
+        """Get or create singleton Neo4j adapter with retry logic and thread safety"""
+        if 'neo4j' in cls._instances:
+            return cls._instances['neo4j']
+        
+        with cls._lock:  # Thread-safe singleton creation
+            if 'neo4j' in cls._instances:
+                return cls._instances['neo4j']
+            
             adapter = Neo4jAdapter(cls._config.neo4j_config)
             
             max_retries = 3
@@ -104,16 +146,10 @@ class StorageFactory:
             
             for attempt in range(max_retries):
                 try:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                    connected = loop.run_until_complete(adapter.connect())
-                    loop.close()
+                    connected = cls._run_async(adapter.connect())
                     
                     if connected:
-                        loop = asyncio.new_event_loop()
-                        asyncio.set_event_loop(loop)
-                        loop.run_until_complete(adapter.create_constraints_and_indexes())
-                        loop.close()
+                        cls._run_async(adapter.create_constraints_and_indexes())
                         
                         cls._instances['neo4j'] = adapter
                         logger.info("Successfully connected to Neo4j")
@@ -132,8 +168,14 @@ class StorageFactory:
     
     @classmethod
     def _get_pinecone_adapter(cls) -> PineconeAdapter:
-        """Get or create singleton Pinecone adapter with retry logic"""
-        if 'pinecone' not in cls._instances:
+        """Get or create singleton Pinecone adapter with retry logic and thread safety"""
+        if 'pinecone' in cls._instances:
+            return cls._instances['pinecone']
+        
+        with cls._lock:  # Thread-safe singleton creation
+            if 'pinecone' in cls._instances:
+                return cls._instances['pinecone']
+            
             adapter = PineconeAdapter(
                 api_key=cls._config.pinecone_config['api_key'],
                 index_name=cls._config.pinecone_config['index_name']
@@ -210,20 +252,40 @@ class StorageFactory:
     
     @classmethod
     def cleanup(cls) -> None:
-        """Clean up all storage connections"""
-        if 'neo4j' in cls._instances:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(cls._instances['neo4j'].close())
-            loop.close()
-            del cls._instances['neo4j']
+        """Clean up all storage connections and event loop"""
+        with cls._lock:
+            if 'neo4j' in cls._instances:
+                try:
+                    adapter = cls._instances['neo4j']
+                    if hasattr(adapter, 'close') and callable(adapter.close):
+                        cls._run_async(adapter.close())
+                except Exception as e:
+                    logger.warning(f"Error closing Neo4j adapter: {e}")
+                finally:
+                    del cls._instances['neo4j']
+                
+            if 'pinecone' in cls._instances:
+                try:
+                    adapter = cls._instances['pinecone']
+                    if hasattr(adapter, 'close') and callable(adapter.close):
+                        adapter.close()
+                except Exception as e:
+                    logger.warning(f"Error closing Pinecone adapter: {e}")
+                finally:
+                    del cls._instances['pinecone']
+                
+            cls._instances.clear()
             
-        if 'pinecone' in cls._instances:
-            cls._instances['pinecone'].close()
-            del cls._instances['pinecone']
+            # Clean up event loop
+            if cls._event_loop and not cls._event_loop.is_closed():
+                try:
+                    cls._event_loop.close()
+                except Exception as e:
+                    logger.warning(f"Error closing event loop: {e}")
+                finally:
+                    cls._event_loop = None
             
-        cls._instances.clear()
-        logger.info("Storage factory cleaned up")
+            logger.info("Storage factory cleaned up")
     
     @classmethod
     def get_backend_mode(cls) -> str:

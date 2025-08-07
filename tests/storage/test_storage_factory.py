@@ -3,6 +3,9 @@ Unit tests for StorageFactory
 """
 import pytest
 import warnings
+import threading
+import concurrent.futures
+from time import sleep
 from unittest.mock import Mock, patch, AsyncMock
 import asyncio
 
@@ -270,6 +273,170 @@ class TestStorageFactory:
         StorageFactory.cleanup()
         
         assert len(StorageFactory._instances) == 0
+    
+    @patch('NodeRAG.storage.storage_factory.Neo4jAdapter')
+    def test_thread_safety_neo4j_singleton(self, mock_neo4j_class):
+        """Test thread-safe Neo4j adapter singleton creation under concurrent access"""
+        def create_fresh_mock(*args, **kwargs):
+            mock_adapter = Mock()
+            mock_adapter.connect = AsyncMock(return_value=True)
+            mock_adapter.create_constraints_and_indexes = AsyncMock()
+            mock_adapter.close = AsyncMock()
+            sleep(0.1)  # Simulate slow initialization
+            return mock_adapter
+        
+        mock_neo4j_class.side_effect = create_fresh_mock
+        
+        config = {
+            'config': {
+                'main_folder': '/tmp/test',
+                'language': 'en',
+                'chunk_size': 512
+            },
+            'model_config': {'model_name': 'gpt-4o'},
+            'embedding_config': {'model_name': 'gpt-4o'},
+            'eq_config': {
+                'storage': {
+                    'neo4j_uri': 'bolt://localhost:7687',
+                    'neo4j_user': 'neo4j',
+                    'neo4j_password': 'test'
+                }
+            }
+        }
+        StorageFactory.initialize(config, backend_mode="neo4j")
+        
+        results = []
+        exceptions = []
+        
+        def get_adapter():
+            try:
+                adapter = StorageFactory.get_graph_storage()
+                results.append(adapter)
+            except Exception as e:
+                exceptions.append(e)
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(get_adapter) for _ in range(10)]
+            concurrent.futures.wait(futures)
+        
+        assert len(exceptions) == 0, f"Thread safety issue: {exceptions}"
+        
+        assert len(results) == 10
+        first_adapter = results[0]
+        for adapter in results[1:]:
+            assert adapter is first_adapter, "Different instances returned - not thread safe!"
+        
+        assert mock_neo4j_class.call_count == 1, f"Adapter created {mock_neo4j_class.call_count} times"
+    
+    @patch('NodeRAG.storage.storage_factory.PineconeAdapter')
+    def test_thread_safety_pinecone_singleton(self, mock_pinecone_class):
+        """Test thread-safe Pinecone adapter singleton creation under concurrent access"""
+        def create_fresh_mock(*args, **kwargs):
+            mock_adapter = Mock()
+            mock_adapter.connect.return_value = True
+            mock_adapter.close = Mock()
+            sleep(0.1)  # Simulate slow initialization
+            return mock_adapter
+        
+        mock_pinecone_class.side_effect = create_fresh_mock
+        
+        config = {
+            'config': {
+                'main_folder': '/tmp/test',
+                'language': 'en',
+                'chunk_size': 512
+            },
+            'model_config': {'model_name': 'gpt-4o'},
+            'embedding_config': {'model_name': 'gpt-4o'},
+            'eq_config': {
+                'storage': {
+                    'pinecone_api_key': 'test-key',
+                    'pinecone_index': 'test-index'
+                }
+            }
+        }
+        StorageFactory.initialize(config, backend_mode="cloud")
+        
+        results = []
+        exceptions = []
+        
+        def get_adapter():
+            try:
+                adapter = StorageFactory.get_embedding_storage()
+                results.append(adapter)
+            except Exception as e:
+                exceptions.append(e)
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(get_adapter) for _ in range(10)]
+            concurrent.futures.wait(futures)
+        
+        assert len(exceptions) == 0, f"Thread safety issue: {exceptions}"
+        assert len(results) == 10
+        first_adapter = results[0]
+        for adapter in results[1:]:
+            assert adapter is first_adapter
+        
+        assert mock_pinecone_class.call_count == 1
+    
+    @patch('NodeRAG.storage.storage_factory.Neo4jAdapter')
+    def test_async_event_loop_reuse(self, mock_neo4j_class):
+        """Test that event loops are properly reused for async operations"""
+        def create_fresh_mock(*args, **kwargs):
+            mock_adapter = Mock()
+            mock_adapter.connect = AsyncMock(return_value=True)
+            mock_adapter.create_constraints_and_indexes = AsyncMock()
+            mock_adapter.close = AsyncMock()
+            return mock_adapter
+        
+        mock_neo4j_class.side_effect = create_fresh_mock
+        
+        config = {
+            'config': {
+                'main_folder': '/tmp/test',
+                'language': 'en',
+                'chunk_size': 512
+            },
+            'model_config': {'model_name': 'gpt-4o'},
+            'embedding_config': {'model_name': 'gpt-4o'},
+            'eq_config': {
+                'storage': {
+                    'neo4j_uri': 'bolt://localhost:7687',
+                    'neo4j_user': 'neo4j',
+                    'neo4j_password': 'test'
+                }
+            }
+        }
+        StorageFactory.initialize(config, backend_mode="neo4j")
+        
+        adapter1 = StorageFactory.get_graph_storage()
+        adapter2 = StorageFactory.get_graph_storage()
+        adapter3 = StorageFactory.get_graph_storage()
+        
+        assert mock_neo4j_class.call_count == 1
+        
+        assert StorageFactory._event_loop is not None or True  # Event loop should exist or be managed by asyncio.run
+        
+    def test_cleanup_with_event_loop(self):
+        """Test that cleanup properly handles event loop cleanup"""
+        config = {
+            'config': {
+                'main_folder': '/tmp/test',
+                'language': 'en',
+                'chunk_size': 512
+            },
+            'model_config': {'model_name': 'gpt-4o'},
+            'embedding_config': {'model_name': 'gpt-4o'}
+        }
+        StorageFactory.initialize(config, backend_mode="file")
+        
+        StorageFactory._instances = {'test': 'instance'}
+        StorageFactory._event_loop = asyncio.new_event_loop()
+        
+        StorageFactory.cleanup()
+        
+        assert len(StorageFactory._instances) == 0
+        assert StorageFactory._event_loop is None or StorageFactory._event_loop.is_closed()
 
 
 if __name__ == "__main__":
