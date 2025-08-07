@@ -95,7 +95,8 @@ class Embedding_pipeline():
                 self.mapper.add_attribute(line['hash_id'],'embedding','done')
                 lines.append(line)
         
-        storage(lines).save_parquet(self.config.embedding,append=os.path.exists(self.config.embedding))
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(lines).save_parquet(self.config.embedding,append=os.path.exists(self.config.embedding), component_type='embeddings')
         self.mapper.update_save()
         
     def check_error_cache(self) -> None:

@@ -60,12 +60,14 @@ class Insert_text:
                 self.semantic_units.at[id,'insert'] = True
             self.config.tracker.update()
         self.config.tracker.close()
-        storage(self.semantic_units).save_parquet(self.config.semantic_units_path)
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(self.semantic_units).save_parquet(self.config.semantic_units_path, component_type='data')
     
     def concatenate_graph(self):
         
         self.base_G = MultigraphConcat(self.base_G).concat(self.G)
-        storage(self.base_G).save_pickle(self.config.base_graph_path)
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(self.base_G).save_pickle(self.config.base_graph_path, component_type='graph')
         os.remove(self.config.graph_path)
         self.config.console.print('[bold green]Graph has been concatenated, stored in base graph[/bold green]')
     

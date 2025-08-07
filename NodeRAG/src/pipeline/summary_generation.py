@@ -270,7 +270,8 @@ class SummaryGeneration:
                 
    
     def store_graph(self):
-        storage(self.G).save_pickle(self.config.graph_path)
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
         self.config.console.print('[bold green]Graph stored[/bold green]')
         
     def delete_community_cache(self):
@@ -300,9 +301,10 @@ class SummaryGeneration:
         G_high_level_elements = [node for node in self.G.nodes if self.G.nodes[node].get('type') == 'high_level_element']
         assert len(high_level_elements) == len(G_high_level_elements), f"The number of high level elements is not equal to the number of nodes in the graph. {len(high_level_elements)} != {len(G_high_level_elements)}"
         
-        storage(high_level_elements).save_parquet(self.config.high_level_elements_path,append = os.path.exists(self.config.high_level_elements_path))
-        storage(titles).save_parquet(self.config.high_level_elements_titles_path,append = os.path.exists(self.config.high_level_elements_titles_path))
-        storage(embedding_list).save_parquet(self.config.embedding,append = os.path.exists(self.config.embedding))
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(high_level_elements).save_parquet(self.config.high_level_elements_path,append = os.path.exists(self.config.high_level_elements_path), component_type='data')
+        storage_factory_wrapper(titles).save_parquet(self.config.high_level_elements_titles_path,append = os.path.exists(self.config.high_level_elements_titles_path), component_type='data')
+        storage_factory_wrapper(embedding_list).save_parquet(self.config.embedding,append = os.path.exists(self.config.embedding), component_type='embeddings')
         self.config.console.print('[bold green]High level elements stored[/bold green]')
             
     @info_timer(message='Summary Generation Pipeline')        
