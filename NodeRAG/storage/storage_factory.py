@@ -153,10 +153,10 @@ class StorageFactory:
             
             for attempt in range(max_retries):
                 try:
-                    connected = cls._run_async(adapter.connect())
+                    connected = adapter.connect()  # CHANGED: Synchronous call (was cls._run_async(adapter.connect()))
                     
                     if connected:
-                        cls._run_async(adapter.create_constraints_and_indexes())
+                        adapter.create_constraints_and_indexes()  # CHANGED: Synchronous call (was cls._run_async(...))
                         
                         cls._instances['neo4j'] = adapter
                         logger.info("Successfully connected to Neo4j")
@@ -259,13 +259,13 @@ class StorageFactory:
     
     @classmethod
     def cleanup(cls) -> None:
-        """Clean up all storage connections and event loop"""
+        """Clean up all storage connections and executor thread"""
         with cls._lock:
             if 'neo4j' in cls._instances:
                 try:
                     adapter = cls._instances['neo4j']
                     if hasattr(adapter, 'close') and callable(adapter.close):
-                        cls._run_async(adapter.close())
+                        adapter.close()  # CHANGED: Synchronous call (was cls._run_async(adapter.close()))
                 except Exception as e:
                     logger.warning(f"Error closing Neo4j adapter: {e}")
                 finally:
