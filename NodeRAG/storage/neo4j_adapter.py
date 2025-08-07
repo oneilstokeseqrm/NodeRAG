@@ -1,29 +1,28 @@
 """
 Neo4j Storage Adapter for NodeRAG with EQ Metadata Support
+UPDATED: Using synchronous driver to avoid event loop conflicts
 """
-import asyncio
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timezone
 import os
 
-from neo4j import AsyncGraphDatabase, AsyncDriver, AsyncSession
+from neo4j import GraphDatabase, Driver, Session  # Changed from AsyncGraphDatabase
 from neo4j.exceptions import ServiceUnavailable, TransientError
 
 from ..standards.eq_metadata import EQMetadata
 from ..utils.id_generation import NodeIDGenerator
 
-
 logger = logging.getLogger(__name__)
 
 
 class Neo4jAdapter:
-    """Async Neo4j storage adapter for NodeRAG with EQ metadata support"""
+    """Neo4j storage adapter for NodeRAG with EQ metadata support - Synchronous version"""
     
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize Neo4j adapter with configuration"""
         self.config = config or {}
-        self.driver: Optional[AsyncDriver] = None
+        self.driver: Optional[Driver] = None
         self.database = self.config.get('database', 'neo4j')
         
         self.uri = self.config.get('uri', os.getenv('NEO4J_URI', 'bolt://localhost:7687'))
@@ -32,11 +31,11 @@ class Neo4jAdapter:
         
         self.batch_size = self.config.get('batch_size', 1000)
         self.max_connection_pool_size = self.config.get('max_connection_pool_size', 50)
-        
-    async def connect(self) -> bool:
+    
+    def connect(self) -> bool:  # No longer async
         """Establish connection to Neo4j database"""
         try:
-            self.driver = AsyncGraphDatabase.driver(
+            self.driver = GraphDatabase.driver(
                 self.uri,
                 auth=(self.user, self.password),
                 max_connection_pool_size=self.max_connection_pool_size,
@@ -44,10 +43,10 @@ class Neo4jAdapter:
                 max_transaction_retry_time=15
             )
             
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run("RETURN 1 as test")
-                await result.consume()
-                
+            with self.driver.session(database=self.database) as session:
+                result = session.run("RETURN 1 as test")
+                result.consume()
+            
             logger.info(f"Successfully connected to Neo4j at {self.uri}")
             return True
             
@@ -55,13 +54,13 @@ class Neo4jAdapter:
             logger.error(f"Failed to connect to Neo4j: {e}")
             return False
     
-    async def close(self):
+    def close(self):  # No longer async
         """Close Neo4j connection"""
         if self.driver:
-            await self.driver.close()
+            self.driver.close()
             self.driver = None
     
-    async def create_constraints_and_indexes(self):
+    def create_constraints_and_indexes(self):  # No longer async
         """Create constraints and indexes for EQ metadata fields"""
         constraints_and_indexes = [
             "CREATE CONSTRAINT node_id_unique IF NOT EXISTS FOR (n:Node) REQUIRE n.node_id IS UNIQUE",
@@ -79,16 +78,16 @@ class Neo4jAdapter:
             "CREATE INDEX rel_interaction_id_index IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() ON (r.interaction_id)",
         ]
         
-        async with self.driver.session(database=self.database) as session:
+        with self.driver.session(database=self.database) as session:
             for query in constraints_and_indexes:
                 try:
-                    await session.run(query)
+                    session.run(query)
                     logger.debug(f"Executed: {query}")
                 except Exception as e:
                     logger.warning(f"Failed to execute {query}: {e}")
     
-    async def add_node(self, node_id: str, node_type: str, metadata: EQMetadata, 
-                      properties: Optional[Dict[str, Any]] = None) -> bool:
+    def add_node(self, node_id: str, node_type: str, metadata: EQMetadata, 
+                 properties: Optional[Dict[str, Any]] = None) -> bool:  # No longer async
         """Add a single node with EQ metadata"""
         errors = metadata.validate()
         if errors:
@@ -109,15 +108,15 @@ class Neo4jAdapter:
         """
         
         try:
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run(query, node_id=node_id, properties=node_data)
-                record = await result.single()
+            with self.driver.session(database=self.database) as session:
+                result = session.run(query, node_id=node_id, properties=node_data)
+                record = result.single()
                 return record is not None
         except Exception as e:
             logger.error(f"Failed to add node {node_id}: {e}")
             return False
     
-    async def add_nodes_batch(self, nodes: List[Dict[str, Any]]) -> Tuple[int, List[str]]:
+    def add_nodes_batch(self, nodes: List[Dict[str, Any]]) -> Tuple[int, List[str]]:  # No longer async
         """Add multiple nodes in batch with EQ metadata"""
         successful_count = 0
         errors = []
@@ -147,17 +146,17 @@ class Neo4jAdapter:
             """
             
             try:
-                async with self.driver.session(database=self.database) as session:
-                    result = await session.run(query, nodes=batch)
-                    record = await result.single()
+                with self.driver.session(database=self.database) as session:
+                    result = session.run(query, nodes=batch)
+                    record = result.single()
                     successful_count += record['created'] if record else 0
             except Exception as e:
                 errors.append(f"Batch {i//self.batch_size + 1}: {str(e)}")
         
         return successful_count, errors
     
-    async def add_relationship(self, source_id: str, target_id: str, relationship_type: str,
-                             metadata: EQMetadata, properties: Optional[Dict[str, Any]] = None) -> bool:
+    def add_relationship(self, source_id: str, target_id: str, relationship_type: str,
+                         metadata: EQMetadata, properties: Optional[Dict[str, Any]] = None) -> bool:  # No longer async
         """Add a relationship between two nodes"""
         errors = metadata.validate()
         if errors:
@@ -184,21 +183,21 @@ class Neo4jAdapter:
         """
         
         try:
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run(
+            with self.driver.session(database=self.database) as session:
+                result = session.run(
                     query, 
                     source_id=source_id, 
                     target_id=target_id,
                     relationship_id=relationship_id,
                     properties=rel_data
                 )
-                record = await result.single()
+                record = result.single()
                 return record is not None
         except Exception as e:
             logger.error(f"Failed to add relationship {source_id}->{target_id}: {e}")
             return False
     
-    async def add_relationships_batch(self, relationships: List[Dict[str, Any]]) -> Tuple[int, List[str]]:
+    def add_relationships_batch(self, relationships: List[Dict[str, Any]]) -> Tuple[int, List[str]]:  # No longer async
         """Add multiple relationships in batch"""
         successful_count = 0
         errors = []
@@ -235,16 +234,16 @@ class Neo4jAdapter:
             """
             
             try:
-                async with self.driver.session(database=self.database) as session:
-                    result = await session.run(query, relationships=batch)
-                    record = await result.single()
+                with self.driver.session(database=self.database) as session:
+                    result = session.run(query, relationships=batch)
+                    record = result.single()
                     successful_count += record['created'] if record else 0
             except Exception as e:
                 errors.append(f"Relationship batch {i//self.batch_size + 1}: {str(e)}")
         
         return successful_count, errors
     
-    async def get_nodes_by_tenant(self, tenant_id: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_nodes_by_tenant(self, tenant_id: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:  # No longer async
         """Get all nodes for a specific tenant"""
         query = """
         MATCH (n:Node {tenant_id: $tenant_id})
@@ -254,14 +253,14 @@ class Neo4jAdapter:
             query += f" LIMIT {limit}"
         
         try:
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run(query, tenant_id=tenant_id)
-                return [dict(record['n']) async for record in result]
+            with self.driver.session(database=self.database) as session:
+                result = session.run(query, tenant_id=tenant_id)
+                return [dict(record['n']) for record in result]
         except Exception as e:
             logger.error(f"Failed to get nodes for tenant {tenant_id}: {e}")
             return []
     
-    async def get_nodes_by_metadata(self, filters: Dict[str, Any], limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_nodes_by_metadata(self, filters: Dict[str, Any], limit: Optional[int] = None) -> List[Dict[str, Any]]:  # No longer async
         """Get nodes filtered by metadata fields"""
         where_clauses = []
         params = {}
@@ -284,15 +283,15 @@ class Neo4jAdapter:
             query += f" LIMIT {limit}"
         
         try:
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run(query, **params)
-                return [dict(record['n']) async for record in result]
+            with self.driver.session(database=self.database) as session:
+                result = session.run(query, **params)
+                return [dict(record['n']) for record in result]
         except Exception as e:
             logger.error(f"Failed to get nodes by metadata {filters}: {e}")
             return []
     
-    async def get_subgraph(self, tenant_id: str, account_id: Optional[str] = None, 
-                          interaction_id: Optional[str] = None) -> Dict[str, Any]:
+    def get_subgraph(self, tenant_id: str, account_id: Optional[str] = None, 
+                    interaction_id: Optional[str] = None) -> Dict[str, Any]:  # No longer async
         """Get subgraph for tenant/account/interaction filtering"""
         where_clauses = [f"n.tenant_id = $tenant_id"]
         params = {'tenant_id': tenant_id}
@@ -314,14 +313,14 @@ class Neo4jAdapter:
         """
         
         try:
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run(query, **params)
+            with self.driver.session(database=self.database) as session:
+                result = session.run(query, **params)
                 
                 nodes = {}
                 relationships = []
                 seen_relationships = set()
                 
-                async for record in result:
+                for record in result:
                     node = dict(record['n'])
                     nodes[node['node_id']] = node
                     
@@ -346,37 +345,29 @@ class Neo4jAdapter:
             logger.error(f"Failed to get subgraph for tenant {tenant_id}: {e}")
             return {'nodes': [], 'relationships': [], 'node_count': 0, 'relationship_count': 0}
     
-    async def delete_node_by_id(self, node_id: str) -> bool:
+    def delete_node_by_id(self, node_id: str) -> bool:  # No longer async
         """Delete a single node by its ID"""
-        async with self.driver.session(database=self.database) as session:
+        with self.driver.session(database=self.database) as session:
             query = """
             MATCH (n {node_id: $node_id})
             DETACH DELETE n
             RETURN count(n) as deleted_count
             """
-            result = await session.run(query, node_id=node_id)
-            record = await result.single()
+            result = session.run(query, node_id=node_id)
+            record = result.single()
             deleted_count = record["deleted_count"] if record else 0
             
             logger.info(f"Deleted {deleted_count} nodes with ID {node_id}")
             return deleted_count > 0
-
-    async def delete_node(self, node_id: str) -> bool:
+    
+    def delete_node(self, node_id: str) -> bool:  # No longer async
         """Delete a node by ID (alias for delete_node_by_id)"""
-        return await self.delete_node_by_id(node_id)
-
-
-    async def clear_tenant_data(self, tenant_id: str) -> bool:
-        """Delete all nodes and relationships for a tenant
-        
-        Args:
-            tenant_id: The tenant whose data to clear
-            
-        Returns:
-            bool: True if successful, False if error occurred
-        """
+        return self.delete_node_by_id(node_id)
+    
+    def clear_tenant_data(self, tenant_id: str) -> bool:  # No longer async
+        """Delete all nodes and relationships for a tenant"""
         try:
-            async with self.driver.session(database=self.database) as session:
+            with self.driver.session(database=self.database) as session:
                 count_query = """
                 MATCH (n {tenant_id: $tenant_id})
                 WITH count(n) as node_count
@@ -384,8 +375,8 @@ class Neo4jAdapter:
                 RETURN node_count, count(r) as rel_count
                 """
                 
-                result = await session.run(count_query, tenant_id=tenant_id)
-                record = await result.single()
+                result = session.run(count_query, tenant_id=tenant_id)
+                record = result.single()
                 
                 if record:
                     node_count = record["node_count"]
@@ -399,35 +390,35 @@ class Neo4jAdapter:
                 DETACH DELETE n
                 """
                 
-                await session.run(delete_query, tenant_id=tenant_id)
+                session.run(delete_query, tenant_id=tenant_id)
                 
                 logger.info(f"Cleared tenant {tenant_id}: {node_count} nodes, {rel_count} relationships")
-                return True  # Return boolean success indicator
+                return True
         except Exception as e:
             logger.error(f"Failed to clear data for tenant {tenant_id}: {e}")
             return False
     
-    async def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> Dict[str, Any]:  # No longer async
         """Get database statistics"""
         try:
-            async with self.driver.session(database=self.database) as session:
-                result = await session.run("MATCH (n) RETURN count(n) as count")
-                record = await result.single()
+            with self.driver.session(database=self.database) as session:
+                result = session.run("MATCH (n) RETURN count(n) as count")
+                record = result.single()
                 total_nodes = record['count'] if record else 0
                 
-                result = await session.run("MATCH ()-[r]->() RETURN count(r) as count")
-                record = await result.single()
+                result = session.run("MATCH ()-[r]->() RETURN count(r) as count")
+                record = result.single()
                 total_relationships = record['count'] if record else 0
                 
                 nodes_by_type = {}
-                result = await session.run("MATCH (n) WHERE n.node_type IS NOT NULL RETURN n.node_type as type, count(n) as count")
-                async for record in result:
+                result = session.run("MATCH (n) WHERE n.node_type IS NOT NULL RETURN n.node_type as type, count(n) as count")
+                for record in result:
                     if record['type']:
                         nodes_by_type[record['type']] = record['count']
                 
                 nodes_by_tenant = {}
-                result = await session.run("MATCH (n) WHERE n.tenant_id IS NOT NULL RETURN n.tenant_id as tenant, count(n) as count")
-                async for record in result:
+                result = session.run("MATCH (n) WHERE n.tenant_id IS NOT NULL RETURN n.tenant_id as tenant, count(n) as count")
+                for record in result:
                     if record['tenant']:
                         nodes_by_tenant[record['tenant']] = record['count']
                 
@@ -442,13 +433,13 @@ class Neo4jAdapter:
             logger.error(f"Failed to get statistics: {e}")
             return {'error': str(e)}
     
-    async def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> Dict[str, Any]:  # No longer async
         """Perform health check on Neo4j connection"""
         try:
-            async with self.driver.session(database=self.database) as session:
+            with self.driver.session(database=self.database) as session:
                 start_time = datetime.now()
-                result = await session.run("RETURN 1 as test")
-                await result.consume()
+                result = session.run("RETURN 1 as test")
+                result.consume()
                 response_time = (datetime.now() - start_time).total_seconds()
                 
                 return {
