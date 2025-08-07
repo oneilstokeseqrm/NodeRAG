@@ -218,13 +218,15 @@ class Attribution_generation_pipeline:
                                  'weight':self.G.nodes[attribute.node]['weight'],
                                  'embedding':None})
         
-        storage(attributes).save_parquet(self.config.attributes_path,append= os.path.exists(self.config.attributes_path))
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(attributes).save_parquet(self.config.attributes_path,append= os.path.exists(self.config.attributes_path), component_type='data')
         self.config.console.print('[bold green]Attributes stored[/bold green]')
         
         
     def save_graph(self):
         
-        storage(self.G).save_pickle(self.config.graph_path)
+        from .storage_adapter import storage_factory_wrapper
+        storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
         self.config.console.print('Graph stored')
         
     @info_timer(message='Attribute Generation')

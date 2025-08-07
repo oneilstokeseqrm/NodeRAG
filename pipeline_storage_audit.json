@@ -1,0 +1,362 @@
+{
+  "total_storage_operations": 55,
+  "breakdown": {
+    "storage_wrapper_calls": 16,
+    "direct_file_operations": 22,
+    "json_operations": 17
+  },
+  "operations": {
+    "file_reads": [],
+    "file_writes": [],
+    "pickle_operations": [],
+    "parquet_operations": [],
+    "json_operations": [
+      {
+        "file": "document_pipeline.py",
+        "line": 36,
+        "method": "load",
+        "context": "json.load(f)"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 44,
+        "method": "loads",
+        "context": "json.loads(line)"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 55,
+        "method": "loads",
+        "context": "json.loads(line)"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 83,
+        "method": "dumps",
+        "context": "json.dumps(response)"
+      },
+      {
+        "file": "Insert_text.py",
+        "line": 24,
+        "method": "loads",
+        "context": "json.loads(line)"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 64,
+        "method": "loads",
+        "context": "json.loads(line)"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 148,
+        "method": "dumps",
+        "context": "json.dumps(data, ensure_ascii=False)"
+      },
+      {
+        "file": "storage_adapter.py",
+        "line": 120,
+        "method": "dump",
+        "context": "json.dump(data, f, indent=2)"
+      },
+      {
+        "file": "storage_adapter.py",
+        "line": 131,
+        "method": "load",
+        "context": "json.load(f)"
+      },
+      {
+        "file": "INIT_pipeline.py",
+        "line": 62,
+        "method": "dump",
+        "context": "json.dump({'document_path_hash': self.document_path_hash, 'document_path': self.documents_path}, f)"
+      },
+      {
+        "file": "INIT_pipeline.py",
+        "line": 53,
+        "method": "load",
+        "context": "json.load(f)"
+      },
+      {
+        "file": "summary_generation.py",
+        "line": 159,
+        "method": "loads",
+        "context": "json.loads(line)"
+      },
+      {
+        "file": "summary_generation.py",
+        "line": 113,
+        "method": "dumps",
+        "context": "json.dumps(community_dict, ensure_ascii=False)"
+      },
+      {
+        "file": "embedding.py",
+        "line": 92,
+        "method": "loads",
+        "context": "json.loads(line.strip())"
+      },
+      {
+        "file": "embedding.py",
+        "line": 124,
+        "method": "loads",
+        "context": "json.loads(line)"
+      },
+      {
+        "file": "embedding.py",
+        "line": 61,
+        "method": "dumps",
+        "context": "json.dumps(line)"
+      },
+      {
+        "file": "embedding.py",
+        "line": 159,
+        "method": "dumps",
+        "context": "json.dumps(line)"
+      }
+    ],
+    "storage_wrapper_calls": [
+      {
+        "file": "document_pipeline.py",
+        "line": 69,
+        "method": "save_parquet",
+        "context": "storage(doc_list).save_parquet(self.config.documents_path, append=os.path.exists(self.config.documents_path))"
+      },
+      {
+        "file": "document_pipeline.py",
+        "line": 88,
+        "method": "save_parquet",
+        "context": "storage(text_list).save_parquet(self.config.text_path, append=os.path.exists(self.config.text_path))"
+      },
+      {
+        "file": "document_pipeline.py",
+        "line": 107,
+        "method": "load_parquet",
+        "context": "storage.load_parquet(self.config.documents_path)"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 24,
+        "method": "load_parquet",
+        "context": "storage.load_parquet(self.config.text_path)"
+      },
+      {
+        "file": "Insert_text.py",
+        "line": 14,
+        "method": "load",
+        "context": "storage.load(self.config.graph_path)"
+      },
+      {
+        "file": "Insert_text.py",
+        "line": 16,
+        "method": "load",
+        "context": "storage.load(self.config.semantic_units_path)"
+      },
+      {
+        "file": "Insert_text.py",
+        "line": 76,
+        "method": "load",
+        "context": "storage.load(base_graph_path)"
+      },
+      {
+        "file": "attribute_generation.py",
+        "line": 83,
+        "method": "load",
+        "context": "storage.load(self.config.graph_path)"
+      },
+      {
+        "file": "attribute_generation.py",
+        "line": 91,
+        "method": "load",
+        "context": "storage.load(self.config.attributes_path)"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 402,
+        "method": "save_parquet",
+        "context": "storage(semantic_units).save_parquet(self.config.semantic_units_path, append=os.path.exists(self.config.semantic_units_path))"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 403,
+        "method": "save_parquet",
+        "context": "storage(entities).save_parquet(self.config.entities_path, append=os.path.exists(self.config.entities_path))"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 404,
+        "method": "save_parquet",
+        "context": "storage(relationships).save_parquet(self.config.relationship_path, append=os.path.exists(self.config.relationship_path))"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 410,
+        "method": "save_pickle",
+        "context": "storage(self.G).save_pickle(self.config.graph_path)"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 56,
+        "method": "load_pickle",
+        "context": "storage.load_pickle(self.config.graph_path)"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 76,
+        "method": "load",
+        "context": "storage.load(self.config.relationship_path)"
+      },
+      {
+        "file": "summary_generation.py",
+        "line": 42,
+        "method": "load_pickle",
+        "context": "storage.load_pickle(self.config.graph_path)"
+      }
+    ],
+    "direct_file_operations": [
+      {
+        "file": "document_pipeline.py",
+        "line": 35,
+        "type": "open",
+        "context": "open(self.config.document_hash_path, 'r')"
+      },
+      {
+        "file": "document_pipeline.py",
+        "line": 43,
+        "type": "open",
+        "context": "open(path, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 42,
+        "type": "open",
+        "context": "open(self.config.text_decomposition_path, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 52,
+        "type": "open",
+        "context": "open(self.config.LLM_error_cache, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 82,
+        "type": "open",
+        "context": "open(self.config.text_decomposition_path, 'a', encoding='utf-8')"
+      },
+      {
+        "file": "text_pipeline.py",
+        "line": 92,
+        "type": "open",
+        "context": "open(self.config.LLM_error_cache, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "Insert_text.py",
+        "line": 21,
+        "type": "open",
+        "context": "open(self.config.text_decomposition_path, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 62,
+        "type": "open",
+        "context": "open(self.config.text_decomposition_path, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "graph_pipeline.py",
+        "line": 145,
+        "type": "open",
+        "context": "open(self.config.text_decomposition_path, 'w', encoding='utf-8')"
+      },
+      {
+        "file": "storage_adapter.py",
+        "line": 51,
+        "type": "open",
+        "context": "open(filepath, 'wb')"
+      },
+      {
+        "file": "storage_adapter.py",
+        "line": 119,
+        "type": "open",
+        "context": "open(filepath, 'w')"
+      },
+      {
+        "file": "storage_adapter.py",
+        "line": 70,
+        "type": "open",
+        "context": "open(filepath, 'rb')"
+      },
+      {
+        "file": "storage_adapter.py",
+        "line": 130,
+        "type": "open",
+        "context": "open(filepath, 'r')"
+      },
+      {
+        "file": "INIT_pipeline.py",
+        "line": 61,
+        "type": "open",
+        "context": "open(self.config.document_hash_path, 'w')"
+      },
+      {
+        "file": "INIT_pipeline.py",
+        "line": 52,
+        "type": "open",
+        "context": "open(self.config.document_hash_path, 'r')"
+      },
+      {
+        "file": "summary_generation.py",
+        "line": 112,
+        "type": "open",
+        "context": "open(self.config.summary_path, 'a', encoding='utf-8')"
+      },
+      {
+        "file": "summary_generation.py",
+        "line": 157,
+        "type": "open",
+        "context": "open(self.config.summary_path, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "embedding.py",
+        "line": 57,
+        "type": "open",
+        "context": "open(self.config.embedding_cache, 'a', encoding='utf-8')"
+      },
+      {
+        "file": "embedding.py",
+        "line": 89,
+        "type": "open",
+        "context": "open(self.config.embedding_cache, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "embedding.py",
+        "line": 120,
+        "type": "open",
+        "context": "open(self.config.LLM_error_cache, 'r', encoding='utf-8')"
+      },
+      {
+        "file": "embedding.py",
+        "line": 156,
+        "type": "open",
+        "context": "open(self.config.embedding_cache, 'a', encoding='utf-8')"
+      },
+      {
+        "file": "embedding.py",
+        "line": 107,
+        "type": "open",
+        "context": "open(self.config.LLM_error_cache, 'r', encoding='utf-8')"
+      }
+    ]
+  },
+  "migration_required": true,
+  "files_to_migrate": [
+    "document_pipeline.py",
+    "graph_pipeline.py",
+    "text_pipeline.py",
+    "embedding.py",
+    "INIT_pipeline.py",
+    "Insert_text.py",
+    "attribute_generation.py",
+    "summary_generation.py",
+    "storage_adapter.py"
+  ]
+}
