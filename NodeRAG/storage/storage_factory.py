@@ -10,6 +10,9 @@ from typing import Optional, Dict, Any, Union
 from enum import Enum
 import asyncio
 import time
+import json
+from pathlib import Path
+from datetime import datetime, timedelta
 
 from .storage import storage
 from .neo4j_adapter import Neo4jAdapter
@@ -40,6 +43,12 @@ class StorageFactory:
     _backend_mode: StorageBackend = StorageBackend.FILE
     _lock = threading.Lock()  # Thread lock for singleton safety
     _executor: Optional[concurrent.futures.ThreadPoolExecutor] = None  # Lazy-initialized executor
+    
+    _lazy_init: bool = False
+    _adapters_initialized: Dict[str, bool] = {}
+    _cache: Dict[str, Any] = {}
+    _cache_ttl: Dict[str, datetime] = {}
+    _warmup_complete: bool = False
     
     @classmethod
     def _get_executor(cls):
@@ -80,18 +89,23 @@ class StorageFactory:
     
     @classmethod
     def initialize(cls, config: Union[EQConfig, Dict[str, Any]], 
-                  backend_mode: str = "file") -> None:
+                  backend_mode: str = "file",
+                  lazy_init: bool = False,
+                  warmup_connections: bool = False) -> None:
         """
         Initialize the storage factory with configuration
         
         Args:
             config: EQConfig instance or config dict
             backend_mode: "file", "neo4j", or "cloud" (neo4j+pinecone)
+            lazy_init: If True, defer adapter initialization until first use
+            warmup_connections: If True, pre-warm connection pools after init
         """
         if isinstance(config, dict):
             config = EQConfig(config)
         
         cls._config = config
+        cls._lazy_init = lazy_init
         
         if backend_mode == "cloud":
             cls._backend_mode = StorageBackend.NEO4J  # Cloud means both Neo4j + Pinecone
@@ -100,7 +114,15 @@ class StorageFactory:
         else:
             cls._backend_mode = StorageBackend.FILE
         
-        logger.info(f"Storage factory initialized with backend: {cls._backend_mode.value}")
+        cls._adapters_initialized = {'neo4j': False, 'pinecone': False}
+        cls._warmup_complete = False
+        
+        cls._ensure_directories(config)
+        
+        logger.info(f"Storage factory initialized with backend: {cls._backend_mode.value}, lazy_init: {lazy_init}")
+        
+        if warmup_connections and not lazy_init:
+            cls._warmup_connections()
     
     @classmethod
     def get_graph_storage(cls) -> Union[Neo4jAdapter, storage]:
@@ -138,13 +160,16 @@ class StorageFactory:
     
     @classmethod
     def _get_neo4j_adapter(cls) -> Neo4jAdapter:
-        """Get or create singleton Neo4j adapter with retry logic and thread safety"""
+        """Get or create singleton Neo4j adapter with lazy initialization support"""
         if 'neo4j' in cls._instances:
             return cls._instances['neo4j']
         
         with cls._lock:  # Thread-safe singleton creation
             if 'neo4j' in cls._instances:
                 return cls._instances['neo4j']
+            
+            if cls._lazy_init and not cls._adapters_initialized.get('neo4j', False):
+                logger.info("Lazy initializing Neo4j adapter...")
             
             adapter = Neo4jAdapter(cls._config.neo4j_config)
             
@@ -159,6 +184,7 @@ class StorageFactory:
                         adapter.create_constraints_and_indexes()  # CHANGED: Synchronous call (was cls._run_async(...))
                         
                         cls._instances['neo4j'] = adapter
+                        cls._adapters_initialized['neo4j'] = True
                         logger.info("Successfully connected to Neo4j")
                         break
                     else:
@@ -175,13 +201,16 @@ class StorageFactory:
     
     @classmethod
     def _get_pinecone_adapter(cls) -> PineconeAdapter:
-        """Get or create singleton Pinecone adapter with retry logic and thread safety"""
+        """Get or create singleton Pinecone adapter with lazy initialization support"""
         if 'pinecone' in cls._instances:
             return cls._instances['pinecone']
         
         with cls._lock:  # Thread-safe singleton creation
             if 'pinecone' in cls._instances:
                 return cls._instances['pinecone']
+            
+            if cls._lazy_init and not cls._adapters_initialized.get('pinecone', False):
+                logger.info("Lazy initializing Pinecone adapter...")
             
             adapter = PineconeAdapter(
                 api_key=cls._config.pinecone_config['api_key'],
@@ -196,6 +225,7 @@ class StorageFactory:
                     connected = adapter.connect()
                     if connected:
                         cls._instances['pinecone'] = adapter
+                        cls._adapters_initialized['pinecone'] = True
                         logger.info("Successfully connected to Pinecone")
                         break
                     else:
@@ -257,6 +287,196 @@ class StorageFactory:
             cls._warn_deprecated_storage(component_type)
             return storage(content)
     
+    @classmethod
+    def _ensure_directories(cls, config: Union[EQConfig, Dict[str, Any]]) -> None:
+        """Ensure all required directories and files exist"""
+        main_folder = None
+        if hasattr(config, 'config'):
+            main_folder = config.config.get('main_folder')
+        elif isinstance(config, dict) and 'config' in config:
+            main_folder = config['config'].get('main_folder')
+        
+        if main_folder:
+            directories = [
+                main_folder,
+                f"{main_folder}/cache",
+                f"{main_folder}/input",
+                f"{main_folder}/output",
+                f"{main_folder}/logs"
+            ]
+            
+            for directory in directories:
+                Path(directory).mkdir(parents=True, exist_ok=True)
+                logger.debug(f"Ensured directory exists: {directory}")
+            
+            cache_files = [
+                f"{main_folder}/cache/text_decomposition.jsonl",
+                f"{main_folder}/cache/entities.json",
+                f"{main_folder}/cache/relationships.json"
+            ]
+            
+            for cache_file in cache_files:
+                cache_path = Path(cache_file)
+                if not cache_path.exists():
+                    if cache_file.endswith('.jsonl'):
+                        cache_path.write_text('')
+                    elif cache_file.endswith('.json'):
+                        cache_path.write_text('{}')
+                    logger.debug(f"Created empty cache file: {cache_file}")
+    
+    @classmethod
+    def _warmup_connections(cls) -> None:
+        """Pre-warm connection pools for better performance"""
+        if cls._warmup_complete:
+            return
+        
+        logger.info("Warming up connection pools...")
+        start_time = time.time()
+        
+        if cls._backend_mode == StorageBackend.NEO4J:
+            try:
+                neo4j = cls.get_graph_storage()
+                for _ in range(3):
+                    neo4j.health_check()
+                logger.info("Neo4j connection pool warmed up")
+            except Exception as e:
+                logger.warning(f"Failed to warm up Neo4j: {e}")
+            
+            try:
+                pinecone = cls.get_embedding_storage()
+                if hasattr(pinecone, 'index'):
+                    pinecone.index.describe_index_stats()
+                logger.info("Pinecone connection warmed up")
+            except Exception as e:
+                logger.warning(f"Failed to warm up Pinecone: {e}")
+        
+        elapsed = time.time() - start_time
+        logger.info(f"Connection warmup completed in {elapsed:.2f}s")
+        cls._warmup_complete = True
+    
+    @classmethod
+    def get_pipeline_config(cls) -> Dict[str, Any]:
+        """
+        Get configuration in format expected by Graph_pipeline/NodeConfig
+        
+        Returns:
+            Dict with proper structure for NodeConfig initialization
+        """
+        if not cls._config:
+            raise RuntimeError("StorageFactory not initialized. Call initialize() first.")
+        
+        pipeline_config = {}
+        
+        if hasattr(cls._config, 'config'):
+            pipeline_config['config'] = cls._config.config
+        elif hasattr(cls._config, '__dict__'):
+            pipeline_config['config'] = {
+                'main_folder': getattr(cls._config, 'main_folder', '/tmp/noderag'),
+                'language': getattr(cls._config, 'language', 'en'),
+                'chunk_size': getattr(cls._config, 'chunk_size', 512),
+                'chunk_overlap': getattr(cls._config, 'chunk_overlap', 50),
+                'batch_size': getattr(cls._config, 'batch_size', 100)
+            }
+        
+        if hasattr(cls._config, 'model_config'):
+            pipeline_config['model_config'] = cls._config.model_config
+        elif hasattr(cls._config, '_model_config'):
+            pipeline_config['model_config'] = cls._config._model_config
+        else:
+            pipeline_config['model_config'] = {'model_name': 'gpt-4o'}
+        
+        if hasattr(cls._config, 'embedding_config'):
+            pipeline_config['embedding_config'] = cls._config.embedding_config
+        elif hasattr(cls._config, '_embedding_config'):
+            pipeline_config['embedding_config'] = cls._config._embedding_config
+        else:
+            pipeline_config['embedding_config'] = {'model_name': 'gpt-4o'}
+        
+        if hasattr(cls._config, 'eq_config'):
+            pipeline_config['eq_config'] = cls._config.eq_config
+        elif hasattr(cls._config, '_eq_config'):
+            pipeline_config['eq_config'] = cls._config._eq_config
+        
+        main_folder = pipeline_config['config'].get('main_folder')
+        if main_folder:
+            cls._ensure_directories({'config': pipeline_config['config']})
+        
+        logger.debug(f"Generated pipeline config: {json.dumps(pipeline_config, indent=2)}")
+        
+        return pipeline_config
+    
+    @classmethod
+    def get_cached_health_check(cls, cache_ttl: int = 30) -> Dict[str, Any]:
+        """
+        Get cached health check result to avoid repeated calls
+        
+        Args:
+            cache_ttl: Cache time-to-live in seconds
+            
+        Returns:
+            Cached or fresh health check result
+        """
+        cache_key = 'neo4j_health_check'
+        now = datetime.now()
+        
+        if (cache_key in cls._cache and 
+            cache_key in cls._cache_ttl and
+            (now - cls._cache_ttl[cache_key]).total_seconds() < cache_ttl):
+            logger.debug("Returning cached health check")
+            return cls._cache[cache_key]
+        
+        if cls._backend_mode == StorageBackend.NEO4J:
+            neo4j = cls.get_graph_storage()
+            health = neo4j.health_check()
+            
+            cls._cache[cache_key] = health
+            cls._cache_ttl[cache_key] = now
+            
+            return health
+        else:
+            return {'status': 'not_applicable', 'backend': 'file'}
+    
+    @classmethod
+    def preload_adapters(cls) -> None:
+        """
+        Explicitly initialize all adapters (useful for pre-warming)
+        Call this during application startup to avoid initialization delay on first request
+        """
+        if cls._backend_mode == StorageBackend.NEO4J:
+            logger.info("Preloading adapters...")
+            start_time = time.time()
+            
+            # Initialize Neo4j
+            neo4j = cls.get_graph_storage()
+            neo4j_time = time.time() - start_time
+            logger.info(f"Neo4j adapter loaded in {neo4j_time:.2f}s")
+            
+            # Initialize Pinecone
+            pinecone_start = time.time()
+            pinecone = cls.get_embedding_storage()
+            pinecone_time = time.time() - pinecone_start
+            logger.info(f"Pinecone adapter loaded in {pinecone_time:.2f}s")
+            
+            total_time = time.time() - start_time
+            logger.info(f"All adapters preloaded in {total_time:.2f}s")
+    
+    @classmethod
+    def get_initialization_status(cls) -> Dict[str, Any]:
+        """
+        Get current initialization status of adapters
+        
+        Returns:
+            Dict with initialization status for each adapter
+        """
+        return {
+            'backend_mode': cls._backend_mode.value if cls._backend_mode else None,
+            'lazy_init_enabled': cls._lazy_init,
+            'adapters_initialized': cls._adapters_initialized.copy(),
+            'warmup_complete': cls._warmup_complete,
+            'cached_items': list(cls._cache.keys()),
+            'instances': list(cls._instances.keys())
+        }
+
     @classmethod
     def cleanup(cls) -> None:
         """Clean up all storage connections and executor thread"""
