@@ -7,13 +7,42 @@ import os
 import sys
 import json
 import csv
+import argparse
 from datetime import datetime
 from typing import Dict, List, Any
 
 from neo4j import GraphDatabase
 
 
-def generate_html_report(constraints: List[Dict], indexes: List[Dict], output_path: str):
+def classify_state(state: str) -> str:
+    """
+    Map Neo4j schema item state to a CSS class.
+    - pass: ONLINE / CREATED / EXISTS / OK
+    - neutral: N/A / None / UNKNOWN
+    - fail: everything else
+    """
+    normalized = (state or "").strip().upper()
+    if normalized in {"ONLINE", "CREATED", "EXISTS", "OK"}:
+        return "pass"
+    if normalized in {"N/A", "", "UNKNOWN", "NONE"}:
+        return "neutral"
+    return "fail"
+
+
+def fetch_legacy_indexes(session):
+    """Fetch legacy indexes that use old label patterns"""
+    LEGACY_LABELS = ["Node"]
+    query = """
+    SHOW INDEXES
+    YIELD name, entityType, labelsOrTypes, properties, state, type
+    WHERE any(l IN labelsOrTypes WHERE l IN $legacy_labels)
+    RETURN name, entityType, labelsOrTypes, properties, state, type
+    ORDER BY name
+    """
+    return session.run(query, legacy_labels=LEGACY_LABELS).data()
+
+
+def generate_html_report(constraints: List[Dict], indexes: List[Dict], legacy_indexes: List[Dict], output_path: str):
     """Generate HTML report of schema validation"""
     html_content = f"""
 <!DOCTYPE html>
@@ -27,6 +56,7 @@ def generate_html_report(constraints: List[Dict], indexes: List[Dict], output_pa
         th {{ background-color: #f2f2f2; }}
         .pass {{ color: green; }}
         .fail {{ color: red; }}
+        .neutral {{ color: #666; }}
         .summary {{ background-color: #f9f9f9; padding: 15px; margin: 20px 0; }}
     </style>
 </head>
@@ -38,6 +68,7 @@ def generate_html_report(constraints: List[Dict], indexes: List[Dict], output_pa
         <h2>Summary</h2>
         <p>Total Constraints: {len(constraints)}</p>
         <p>Total Indexes: {len(indexes)}</p>
+        <p>Legacy Indexes: {len(legacy_indexes)}</p>
     </div>
     
     <h2>Constraints</h2>
@@ -52,7 +83,7 @@ def generate_html_report(constraints: List[Dict], indexes: List[Dict], output_pa
             <td>{constraint.get('type', 'N/A')}</td>
             <td>{constraint.get('labelsOrTypes', 'N/A')}</td>
             <td>{constraint.get('properties', 'N/A')}</td>
-            <td class="{'pass' if constraint.get('state') == 'ONLINE' else 'fail'}">{constraint.get('state', 'N/A')}</td>
+            <td class="{classify_state(constraint.get('state', 'N/A'))}">{constraint.get('state', 'N/A')}</td>
         </tr>
         """
     
@@ -71,7 +102,33 @@ def generate_html_report(constraints: List[Dict], indexes: List[Dict], output_pa
             <td>{index.get('type', 'N/A')}</td>
             <td>{index.get('labelsOrTypes', 'N/A')}</td>
             <td>{index.get('properties', 'N/A')}</td>
-            <td class="{'pass' if index.get('state') == 'ONLINE' else 'fail'}">{index.get('state', 'N/A')}</td>
+            <td class="{classify_state(index.get('state', 'N/A'))}">{index.get('state', 'N/A')}</td>
+        </tr>
+        """
+    
+    html_content += """
+    </table>
+    
+    <h2>Legacy Indexes</h2>
+    <table>
+        <tr><th>Name</th><th>Type</th><th>Labels/Types</th><th>Properties</th><th>State</th></tr>
+    """
+    
+    if legacy_indexes:
+        for legacy_index in legacy_indexes:
+            html_content += f"""
+            <tr>
+                <td>{legacy_index.get('name', 'N/A')}</td>
+                <td>{legacy_index.get('type', 'N/A')}</td>
+                <td>{legacy_index.get('labelsOrTypes', 'N/A')}</td>
+                <td>{legacy_index.get('properties', 'N/A')}</td>
+                <td class="{classify_state(legacy_index.get('state', 'N/A'))}">{legacy_index.get('state', 'N/A')}</td>
+            </tr>
+            """
+    else:
+        html_content += """
+        <tr>
+            <td colspan="5" style="text-align: center; font-style: italic;">None found</td>
         </tr>
         """
     
@@ -85,7 +142,7 @@ def generate_html_report(constraints: List[Dict], indexes: List[Dict], output_pa
         f.write(html_content)
 
 
-def generate_csv_report(constraints: List[Dict], indexes: List[Dict], output_path: str):
+def generate_csv_report(constraints: List[Dict], indexes: List[Dict], legacy_indexes: List[Dict], output_path: str):
     """Generate CSV report of schema validation"""
     with open(output_path, 'w', newline='') as f:
         writer = csv.writer(f)
@@ -109,6 +166,16 @@ def generate_csv_report(constraints: List[Dict], indexes: List[Dict], output_pat
                 str(index.get('labelsOrTypes', '')),
                 str(index.get('properties', '')),
                 index.get('state', '')
+            ])
+        
+        for legacy_index in legacy_indexes:
+            writer.writerow([
+                'LEGACY_INDEX',
+                legacy_index.get('name', ''),
+                legacy_index.get('entityType', ''),
+                str(legacy_index.get('labelsOrTypes', '')),
+                str(legacy_index.get('properties', '')),
+                legacy_index.get('state', '')
             ])
 
 
@@ -157,10 +224,22 @@ def create_constraints_and_indexes(driver, database="neo4j"):
 
 def main():
     """Main validation function"""
+    parser = argparse.ArgumentParser(description="Neo4j Schema Validation Script")
+    parser.add_argument("--out-html", default="neo4j_schema_alignment_report.html", 
+                       help="Output path for HTML report")
+    parser.add_argument("--out-csv", default="neo4j_schema_alignment_report.csv",
+                       help="Output path for CSV report")
+    args = parser.parse_args()
+    
     print("🔍 Starting Neo4j Schema Validation...")
     
     neo4j_uri = os.getenv("Neo4j_Credentials_NEO4J_URI", os.getenv("NEO4J_URI", "bolt://localhost:7687"))
-    neo4j_user = os.getenv("Neo4j_Credentials_NEO4J_USERNAME", os.getenv("NEO4J_USERNAME", "neo4j"))
+    neo4j_user = (
+        os.getenv("Neo4j_Credentials_NEO4J_USERNAME")
+        or os.getenv("NEO4J_USER")
+        or os.getenv("NEO4J_USERNAME")
+        or "neo4j"
+    )
     neo4j_password = os.getenv("Neo4j_Credentials_NEO4J_PASSWORD", os.getenv("NEO4J_PASSWORD", "password"))
     neo4j_database = os.getenv("Neo4j_Credentials_NEO4J_DATABASE", os.getenv("NEO4J_DATABASE", "neo4j"))
     
@@ -181,16 +260,19 @@ def main():
             
             indexes_result = session.run("SHOW INDEXES")
             indexes = [dict(record) for record in indexes_result]
+            
+            legacy_indexes = fetch_legacy_indexes(session)
         
         print("📊 Generating reports...")
-        generate_html_report(constraints, indexes, "neo4j_schema_alignment_report.html")
-        generate_csv_report(constraints, indexes, "neo4j_schema_alignment_report.csv")
+        generate_html_report(constraints, indexes, legacy_indexes, args.out_html)
+        generate_csv_report(constraints, indexes, legacy_indexes, args.out_csv)
         
         expected_labels = ["Entity", "SemanticUnit", "TextChunk", "Attribute", "Community", "Summary", "HighLevelElement"]
         
         print("\n✅ Validation Results:")
         print(f"   Total constraints: {len(constraints)}")
         print(f"   Total indexes: {len(indexes)}")
+        print(f"   Legacy indexes: {len(legacy_indexes)}")
         
         composite_constraints = [c for c in constraints if 
                                c.get('type') == 'UNIQUENESS' and 
@@ -199,9 +281,12 @@ def main():
         
         print(f"   Composite (tenant_id, node_id) constraints: {len(composite_constraints)}")
         
+        if legacy_indexes:
+            print(f"   ⚠️  Found {len(legacy_indexes)} legacy indexes that may need cleanup")
+        
         print(f"\n📄 Reports generated:")
-        print(f"   - neo4j_schema_alignment_report.html")
-        print(f"   - neo4j_schema_alignment_report.csv")
+        print(f"   - {args.out_html}")
+        print(f"   - {args.out_csv}")
         
         return True
         

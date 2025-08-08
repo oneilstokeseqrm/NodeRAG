@@ -55,7 +55,12 @@ def test_composite_constraints():
     print("🧪 Testing composite constraint behavior...")
     
     neo4j_uri = os.getenv("Neo4j_Credentials_NEO4J_URI", os.getenv("NEO4J_URI", "bolt://localhost:7687"))
-    neo4j_user = os.getenv("Neo4j_Credentials_NEO4J_USERNAME", os.getenv("NEO4J_USERNAME", "neo4j"))
+    neo4j_user = (
+        os.getenv("Neo4j_Credentials_NEO4J_USERNAME")
+        or os.getenv("NEO4J_USER")
+        or os.getenv("NEO4J_USERNAME")
+        or "neo4j"
+    )
     neo4j_password = os.getenv("Neo4j_Credentials_NEO4J_PASSWORD", os.getenv("NEO4J_PASSWORD", "password"))
     neo4j_database = os.getenv("Neo4j_Credentials_NEO4J_DATABASE", os.getenv("NEO4J_DATABASE", "neo4j"))
     
