@@ -3,6 +3,8 @@ __pycache__/
 *$py.class
 *.log
 .venv/
+.venv-wp0/
 *.egg-info/
 dist/
 lib/
+test-reports/
