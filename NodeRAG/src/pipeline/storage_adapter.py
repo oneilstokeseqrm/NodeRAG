@@ -44,6 +44,15 @@ class PipelineStorageAdapter:
         
         return 'file'
     
+    def _get_tenant_filepath(self, filepath: str, tenant_id: str) -> str:
+        """Create tenant-specific filepath for data isolation"""
+        if tenant_id == "default":
+            return filepath
+        
+        path = Path(filepath)
+        tenant_filename = f"{tenant_id}_{path.name}"
+        return str(path.parent / tenant_filename)
+    
     def save_pickle(self, data: Any, filepath: str, component_type: str = 'graph', 
                     tenant_id: str = "default") -> bool:
         """Save data as pickle through StorageFactory"""
@@ -53,8 +62,10 @@ class PipelineStorageAdapter:
                 if hasattr(graph_storage, 'add_node'):
                     return self._store_graph_in_neo4j(data, graph_storage, tenant_id)
             
-            Path(filepath).parent.mkdir(parents=True, exist_ok=True)
-            with open(filepath, 'wb') as f:
+            # Create tenant-specific filepath for isolation
+            tenant_filepath = self._get_tenant_filepath(filepath, tenant_id)
+            Path(tenant_filepath).parent.mkdir(parents=True, exist_ok=True)
+            with open(tenant_filepath, 'wb') as f:
                 pickle.dump(data, f)
             return True
                 
@@ -73,8 +84,10 @@ class PipelineStorageAdapter:
                     if data is not None:
                         return data
             
-            if Path(filepath).exists():
-                with open(filepath, 'rb') as f:
+            # Use tenant-specific filepath for isolation
+            tenant_filepath = self._get_tenant_filepath(filepath, tenant_id)
+            if Path(tenant_filepath).exists():
+                with open(tenant_filepath, 'rb') as f:
                     return pickle.load(f)
             return None
                 
