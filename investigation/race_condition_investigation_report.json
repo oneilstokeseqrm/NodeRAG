@@ -1,0 +1,88 @@
+{
+  "investigation_timestamp": "2025-08-08T13:11:33.000000",
+  "investigation_status": "RACE_CONDITION_CONFIRMED",
+  "summary": "Race condition confirmed with irrefutable evidence across multiple test scenarios",
+  "evidence": {
+    "race_conditions_detected": 5,
+    "test_results": {
+      "investigation_test": {
+        "total_operations": 200,
+        "race_conditions": 2,
+        "success_rate": "96%",
+        "status": "FAILED",
+        "specific_examples": [
+          {
+            "tenant_id": "tenant_5",
+            "expected": "tenant_5_node_15",
+            "actual": ["tenant_5_node_25"],
+            "thread_id": 140163612448320,
+            "timestamp": "2025-08-08T13:08:35.635663"
+          },
+          {
+            "tenant_id": "tenant_0", 
+            "expected": "tenant_0_node_30",
+            "actual": ["tenant_0_node_40"],
+            "thread_id": 140163372021312,
+            "timestamp": "2025-08-08T13:08:35.648776"
+          }
+        ]
+      },
+      "multi_tenant_isolation_pytest": {
+        "total_tests": 7,
+        "passed": 6,
+        "failed": 1,
+        "status": "FAILED",
+        "failure_details": {
+          "test_name": "test_concurrent_tenant_operations",
+          "error": "Node not found for tenant_41f5302b-3210-469d-ae85-df37441e3b8d. Original: [('node1', {'tenant': 'tenant_41f5302b-3210-469d-ae85-df37441e3b8d'})], Loaded: [('node3', {'tenant': 'tenant_41f5302b-3210-469d-ae85-df37441e3b8d'})]"
+        }
+      },
+      "resource_limits_pytest": {
+        "total_tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "status": "PASSED"
+      },
+      "final_load_test": {
+        "total_operations": 100,
+        "successes": 90,
+        "failures": 10,
+        "success_rate": "90%",
+        "status": "FAILED",
+        "failed_tenants": ["tenant_0", "tenant_4", "tenant_6", "tenant_5", "tenant_8"]
+      },
+      "validation_test": {
+        "total_tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "status": "PASSED",
+        "note": "Does not test real file I/O operations - only context switching"
+      }
+    }
+  },
+  "root_cause_analysis": {
+    "primary_cause": "File path collisions during concurrent operations",
+    "technical_details": {
+      "issue": "Multiple concurrent operations for the same tenant write to the same tenant-specific file path",
+      "mechanism": "Even with atomic operations using tempfile.mkstemp(), the last write wins when multiple operations target the same final file path",
+      "affected_component": "NodeRAG/src/pipeline/storage_adapter.py",
+      "affected_methods": ["save_pickle", "load_pickle", "_get_tenant_filepath"]
+    },
+    "why_atomic_operations_insufficient": "Atomic operations prevent file corruption but do not prevent overwrites when multiple operations legitimately target the same file path"
+  },
+  "discrepancy_explanation": {
+    "validation_vs_pytest": {
+      "validation_test_result": "PASSED - All concurrent operations maintained isolation",
+      "pytest_test_result": "FAILED - Race conditions detected",
+      "explanation": "Validation test only tests tenant context switching without actual file I/O operations, while pytest tests actual concurrent file save/load operations"
+    }
+  },
+  "production_impact": {
+    "severity": "CRITICAL",
+    "risk_level": "HIGH",
+    "data_integrity_risk": "Confirmed - tenant data can be mixed/overwritten",
+    "deployment_recommendation": "DO NOT DEPLOY - Race condition confirmed with concrete evidence"
+  },
+  "fix_required": true,
+  "fix_approach": "Implement proper file locking with unique temporary files and atomic rename operations using tempfile.mkstemp() with UUIDs only in temporary filenames"
+}

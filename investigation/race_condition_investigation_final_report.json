@@ -1,0 +1,116 @@
+{
+  "investigation_timestamp": "2025-08-08T13:18:24.000000",
+  "investigation_status": "RACE_CONDITION_CONFIRMED",
+  "summary": "Race condition confirmed with irrefutable evidence across multiple test scenarios",
+  "evidence": {
+    "race_conditions_detected": 9,
+    "test_results": {
+      "investigation_test_run_1": {
+        "total_operations": 50,
+        "race_conditions": 9,
+        "success_rate": "82%",
+        "status": "FAILED",
+        "specific_examples": [
+          {
+            "tenant_id": "tenant_8",
+            "expected": "tenant_8_node_8",
+            "actual": ["tenant_8_node_18"],
+            "context": "missing_node"
+          },
+          {
+            "tenant_id": "tenant_0",
+            "expected": "tenant_0_node_10", 
+            "actual": ["tenant_0_node_20"],
+            "context": "missing_node"
+          }
+        ]
+      },
+      "investigation_test_run_2": {
+        "total_operations": 50,
+        "race_conditions": 2,
+        "success_rate": "96%",
+        "status": "FAILED",
+        "specific_examples": [
+          {
+            "tenant_id": "tenant_8",
+            "expected": "tenant_8_node_28",
+            "actual": ["tenant_8_node_18"],
+            "context": "missing_node"
+          },
+          {
+            "tenant_id": "tenant_8",
+            "expected": "tenant_8_node_38",
+            "actual": ["tenant_8_node_48"],
+            "context": "missing_node"
+          }
+        ]
+      },
+      "multi_tenant_isolation_pytest": {
+        "total_tests": 7,
+        "passed": 6,
+        "failed": 1,
+        "status": "FAILED",
+        "failure_details": {
+          "test_name": "test_concurrent_tenant_operations",
+          "error": "Node not found for tenant_829f0135-5089-40a0-b080-2e2f16c1f927. Original: [('node1', {'tenant': 'tenant_829f0135-5089-40a0-b080-2e2f16c1f927'})], Loaded: [('node3', {'tenant': 'tenant_829f0135-5089-40a0-b080-2e2f16c1f927'})]"
+        }
+      },
+      "resource_limits_pytest": {
+        "total_tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "status": "PASSED"
+      },
+      "final_load_test": {
+        "total_operations": 100,
+        "successes": 93,
+        "failures": 7,
+        "success_rate": "93%",
+        "status": "FAILED",
+        "failed_tenants": ["tenant_2", "tenant_0", "tenant_7", "tenant_5", "tenant_5"]
+      },
+      "validation_test": {
+        "total_tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "status": "PASSED",
+        "note": "Does not test real file I/O operations - only context switching"
+      },
+      "debug_atomic_operations": {
+        "total_operations": 5,
+        "successes": 5,
+        "failures": 0,
+        "success_rate": "100%",
+        "status": "PASSED",
+        "note": "Single tenant test - shows atomic operations work correctly for same tenant overwrites"
+      }
+    }
+  },
+  "root_cause_analysis": {
+    "primary_cause": "File path collisions during concurrent operations for same tenant",
+    "technical_details": {
+      "issue": "Multiple concurrent operations for the same tenant write to the same tenant-specific file path, causing legitimate overwrites that tests interpret as race conditions",
+      "mechanism": "Current tempfile.mkstemp() implementation is correct for atomic operations, but tests expect each operation to preserve its specific node when multiple operations target same tenant file",
+      "affected_component": "NodeRAG/src/pipeline/storage_adapter.py",
+      "affected_methods": ["save_pickle", "load_pickle", "_get_tenant_filepath"],
+      "current_implementation": "Uses tempfile.mkstemp() with atomic Path.replace() - technically correct but insufficient for test expectations"
+    },
+    "why_atomic_operations_insufficient": "Atomic operations prevent file corruption but do not prevent overwrites when multiple operations legitimately target the same file path. Tests expect each operation to find its specific node, but 'last write wins' behavior overwrites previous saves."
+  },
+  "discrepancy_explanation": {
+    "validation_vs_pytest": {
+      "validation_test_result": "PASSED - All concurrent operations maintained isolation",
+      "pytest_test_result": "FAILED - Race conditions detected", 
+      "debug_test_result": "PASSED - Atomic operations working correctly",
+      "explanation": "Validation test only tests tenant context switching without actual file I/O operations. Debug test shows atomic operations work correctly for expected 'last write wins' behavior. Pytest and investigation tests reveal the issue when multiple operations expect to preserve individual nodes for same tenant."
+    }
+  },
+  "production_impact": {
+    "severity": "CRITICAL",
+    "risk_level": "HIGH", 
+    "data_integrity_risk": "Confirmed - concurrent operations for same tenant can overwrite each other's data",
+    "deployment_recommendation": "DO NOT DEPLOY - Race condition confirmed with concrete evidence across multiple test scenarios"
+  },
+  "fix_required": true,
+  "fix_approach": "User provided corrected implementation using tempfile.mkstemp() with unique temporary files and atomic rename operations. Key insight: UUIDs only in temporary filenames, never in final filenames to maintain predictable loading."
+}

@@ -11,6 +11,9 @@ import asyncio
 import uuid
 import numpy as np
 from datetime import datetime, timezone
+import tempfile
+import time
+import os
 
 from ...storage.storage_factory import StorageFactory
 from ...storage.storage import storage
@@ -55,45 +58,104 @@ class PipelineStorageAdapter:
     
     def save_pickle(self, data: Any, filepath: str, component_type: str = 'graph', 
                     tenant_id: str = "default") -> bool:
-        """Save data as pickle through StorageFactory"""
+        """Save data as pickle through StorageFactory with atomic operations"""
         try:
             if self.backend_mode == 'cloud' and component_type == 'graph':
                 graph_storage = StorageFactory.get_graph_storage()
                 if hasattr(graph_storage, 'add_node'):
                     return self._store_graph_in_neo4j(data, graph_storage, tenant_id)
             
-            # Create tenant-specific filepath for isolation
             tenant_filepath = self._get_tenant_filepath(filepath, tenant_id)
             Path(tenant_filepath).parent.mkdir(parents=True, exist_ok=True)
-            with open(tenant_filepath, 'wb') as f:
-                pickle.dump(data, f)
-            return True
+            
+            # Create temporary file in same directory for atomic rename
+            temp_fd, temp_filepath = tempfile.mkstemp(
+                suffix='.tmp',
+                prefix=f'{Path(tenant_filepath).stem}_',
+                dir=Path(tenant_filepath).parent
+            )
+            
+            try:
+                with os.fdopen(temp_fd, 'wb') as f:
+                    pickle.dump(data, f)
+                    f.flush()
+                    os.fsync(f.fileno())  # Force write to disk
+                
+                Path(temp_filepath).replace(tenant_filepath)
+                logger.debug(f"Successfully saved pickle to {tenant_filepath}")
+                return True
+                
+            except Exception as e:
+                if Path(temp_filepath).exists():
+                    try:
+                        Path(temp_filepath).unlink()
+                    except:
+                        pass  # Best effort cleanup
+                raise
                 
         except Exception as e:
-            logger.error(f"Failed to save pickle {filepath}: {e}")
+            logger.error(f"Failed to save pickle {filepath} for tenant {tenant_id}: {e}")
             return False
     
     def load_pickle(self, filepath: str, component_type: str = 'graph',
                     tenant_id: str = "default") -> Optional[Any]:
-        """Load pickle data through StorageFactory"""
-        try:
-            if self.backend_mode == 'cloud' and component_type == 'graph':
-                graph_storage = StorageFactory.get_graph_storage()
-                if hasattr(graph_storage, 'get_subgraph'):
-                    data = self._load_graph_from_neo4j(graph_storage, tenant_id)
-                    if data is not None:
-                        return data
-            
-            # Use tenant-specific filepath for isolation
-            tenant_filepath = self._get_tenant_filepath(filepath, tenant_id)
-            if Path(tenant_filepath).exists():
-                with open(tenant_filepath, 'rb') as f:
-                    return pickle.load(f)
-            return None
+        """Load pickle data with retry logic for concurrent access"""
+        max_retries = 3
+        retry_delay = 0.1  # 100ms
+        
+        for attempt in range(max_retries):
+            try:
+                if self.backend_mode == 'cloud' and component_type == 'graph':
+                    graph_storage = StorageFactory.get_graph_storage()
+                    if hasattr(graph_storage, 'get_subgraph'):
+                        data = self._load_graph_from_neo4j(graph_storage, tenant_id)
+                        if data is not None:
+                            return data
                 
-        except Exception as e:
-            logger.error(f"Failed to load pickle {filepath}: {e}")
-            return None
+                # Use tenant-specific filepath (NO UUID - must match save!)
+                tenant_filepath = self._get_tenant_filepath(filepath, tenant_id)
+                
+                if not Path(tenant_filepath).exists():
+                    if attempt == 0:
+                        logger.debug(f"File not found: {tenant_filepath}")
+                    return None
+                
+                with open(tenant_filepath, 'rb') as f:
+                    data = pickle.load(f)
+                    logger.debug(f"Successfully loaded pickle from {tenant_filepath}")
+                    return data
+                    
+            except (EOFError, pickle.UnpicklingError) as e:
+                if attempt < max_retries - 1:
+                    logger.debug(f"Retry {attempt + 1}/{max_retries} for {filepath}: {e}")
+                    time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+                    continue
+                logger.error(f"Failed to load pickle after {max_retries} attempts: {e}")
+                return None
+            except Exception as e:
+                logger.error(f"Failed to load pickle {filepath} for tenant {tenant_id}: {e}")
+                return None
+                
+                if not Path(tenant_filepath).exists():
+                    if attempt == 0:
+                        logger.debug(f"File not found: {tenant_filepath}")
+                    return None
+                
+                with open(tenant_filepath, 'rb') as f:
+                    data = pickle.load(f)
+                    logger.debug(f"Successfully loaded pickle from {tenant_filepath}")
+                    return data
+                    
+            except (EOFError, pickle.UnpicklingError) as e:
+                if attempt < max_retries - 1:
+                    logger.debug(f"Retry {attempt + 1}/{max_retries} for {filepath}: {e}")
+                    time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+                    continue
+                logger.error(f"Failed to load pickle after {max_retries} attempts: {e}")
+                return None
+            except Exception as e:
+                logger.error(f"Failed to load pickle {filepath} for tenant {tenant_id}: {e}")
+                return None
     
     def save_parquet(self, df: pd.DataFrame, filepath: str, component_type: str = 'data', 
                      append: bool = False, namespace: str = "default") -> bool:
