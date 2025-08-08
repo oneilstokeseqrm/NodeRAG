@@ -1,0 +1,67 @@
+Type,Name,Entity Type,Labels/Types,Properties,State
+CONSTRAINT,constraint_198eb663,NODE,['SemanticUnit'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_1b532d47,NODE,['Summary'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_2472c9c2,NODE,['TextChunk'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_939f7be3,NODE,['Entity'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_a7ae7f1e,NODE,['HighLevelElement'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_bfb09103,NODE,['Community'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_c6a60ad4,NODE,['Attribute'],"['tenant_id', 'node_id']",
+CONSTRAINT,constraint_d849b7f8,RELATIONSHIP,['RELATIONSHIP'],['relationship_id'],
+CONSTRAINT,conversation_thread_unique,NODE,['ConversationThread'],"['tenant_id', 'thread_id']",
+CONSTRAINT,entity_created_at_exists,NODE,['ResolvedEntity'],['created_at'],
+CONSTRAINT,entity_tenant_id_exists,NODE,['ResolvedEntity'],['tenant_id'],
+CONSTRAINT,episode_created_at_exists,NODE,['Episode'],['created_at'],
+CONSTRAINT,episode_tenant_id_exists,NODE,['Episode'],['tenant_id'],
+CONSTRAINT,relationship_created_at_exists,NODE,['Relationship'],['created_at'],
+CONSTRAINT,relationship_tenant_id_exists,NODE,['Relationship'],['tenant_id'],
+CONSTRAINT,thread_version_uniq,NODE,['SummaryVersion'],"['thread_id', 'version']",
+CONSTRAINT,topic_chunk_unique,NODE,['TopicChunk'],"['tenant_id', 'chunk_id']",
+INDEX,account_id_index,NODE,['Node'],['account_id'],ONLINE
+INDEX,constraint_198eb663,NODE,['SemanticUnit'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_1b532d47,NODE,['Summary'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_2472c9c2,NODE,['TextChunk'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_939f7be3,NODE,['Entity'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_a7ae7f1e,NODE,['HighLevelElement'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_bfb09103,NODE,['Community'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_c6a60ad4,NODE,['Attribute'],"['tenant_id', 'node_id']",ONLINE
+INDEX,constraint_d849b7f8,RELATIONSHIP,['RELATIONSHIP'],['relationship_id'],ONLINE
+INDEX,conversation_thread_account,NODE,['ConversationThread'],"['tenant_id', 'account_id']",ONLINE
+INDEX,conversation_thread_unique,NODE,['ConversationThread'],"['tenant_id', 'thread_id']",ONLINE
+INDEX,entity_tenant_created_idx,NODE,['ResolvedEntity'],"['tenant_id', 'created_at']",ONLINE
+INDEX,episode_tenant_created_idx,NODE,['Episode'],"['tenant_id', 'created_at']",ONLINE
+INDEX,index_13dd5db1,NODE,['TextChunk'],['tenant_id'],ONLINE
+INDEX,index_343aff4e,NODE,None,None,ONLINE
+INDEX,index_445f0d33,NODE,['Attribute'],['tenant_id'],ONLINE
+INDEX,index_619c8d31,NODE,['Entity'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_7145427c,NODE,['Summary'],['tenant_id'],ONLINE
+INDEX,index_7e3ced1d,NODE,['TextChunk'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_96401d9c,NODE,['SemanticUnit'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_a12c2df4,NODE,['Community'],['tenant_id'],ONLINE
+INDEX,index_a309c34,NODE,['Attribute'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_b45ac474,NODE,['Community'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_c50f2eab,NODE,['HighLevelElement'],['tenant_id'],ONLINE
+INDEX,index_d7481cf3,NODE,['Summary'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_e2c86671,NODE,['SemanticUnit'],['tenant_id'],ONLINE
+INDEX,index_f7700477,RELATIONSHIP,None,None,ONLINE
+INDEX,index_f8eb7d77,NODE,['HighLevelElement'],"['tenant_id', 'account_id']",ONLINE
+INDEX,index_fc829f6a,NODE,['Entity'],['tenant_id'],ONLINE
+INDEX,interaction_id_index,NODE,['Node'],['interaction_id'],ONLINE
+INDEX,interaction_type_index,NODE,['Node'],['interaction_type'],ONLINE
+INDEX,node_type_index,NODE,['Node'],['node_type'],ONLINE
+INDEX,rel_interaction_id_index,RELATIONSHIP,['RELATIONSHIP'],['interaction_id'],ONLINE
+INDEX,rel_tenant_id_index,RELATIONSHIP,['RELATIONSHIP'],['tenant_id'],ONLINE
+INDEX,relationship_tenant_created_idx,NODE,['Relationship'],"['tenant_id', 'created_at']",ONLINE
+INDEX,source_system_index,NODE,['Node'],['source_system'],ONLINE
+INDEX,summary_version_thread_idx,NODE,['SummaryVersion'],"['thread_id', 'created_at']",ONLINE
+INDEX,tenant_id_index,NODE,['Node'],['tenant_id'],ONLINE
+INDEX,thread_version_uniq,NODE,['SummaryVersion'],"['thread_id', 'version']",ONLINE
+INDEX,timestamp_index,NODE,['Node'],['timestamp'],ONLINE
+INDEX,topic_chunk_parent,NODE,['TopicChunk'],"['tenant_id', 'parent_episode_id']",ONLINE
+INDEX,topic_chunk_unique,NODE,['TopicChunk'],"['tenant_id', 'chunk_id']",ONLINE
+LEGACY_INDEX,account_id_index,NODE,['Node'],['account_id'],ONLINE
+LEGACY_INDEX,interaction_id_index,NODE,['Node'],['interaction_id'],ONLINE
+LEGACY_INDEX,interaction_type_index,NODE,['Node'],['interaction_type'],ONLINE
+LEGACY_INDEX,node_type_index,NODE,['Node'],['node_type'],ONLINE
+LEGACY_INDEX,source_system_index,NODE,['Node'],['source_system'],ONLINE
+LEGACY_INDEX,tenant_id_index,NODE,['Node'],['tenant_id'],ONLINE
+LEGACY_INDEX,timestamp_index,NODE,['Node'],['timestamp'],ONLINE

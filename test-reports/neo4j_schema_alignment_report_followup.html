@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neo4j Schema Alignment Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .neutral { color: #666; }
+        .summary { background-color: #f9f9f9; padding: 15px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Neo4j Schema Alignment Report</h1>
+    <p>Generated: 2025-08-08 19:01:40</p>
+    
+    <div class="summary">
+        <h2>Summary</h2>
+        <p>Total Constraints: 17</p>
+        <p>Total Indexes: 42</p>
+        <p>Legacy Indexes: 7</p>
+    </div>
+    
+    <h2>Constraints</h2>
+    <table>
+        <tr><th>Name</th><th>Type</th><th>Labels/Types</th><th>Properties</th><th>State</th></tr>
+
+        <tr>
+            <td>constraint_198eb663</td>
+            <td>UNIQUENESS</td>
+            <td>['SemanticUnit']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_1b532d47</td>
+            <td>UNIQUENESS</td>
+            <td>['Summary']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_2472c9c2</td>
+            <td>UNIQUENESS</td>
+            <td>['TextChunk']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_939f7be3</td>
+            <td>UNIQUENESS</td>
+            <td>['Entity']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_a7ae7f1e</td>
+            <td>UNIQUENESS</td>
+            <td>['HighLevelElement']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_bfb09103</td>
+            <td>UNIQUENESS</td>
+            <td>['Community']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_c6a60ad4</td>
+            <td>UNIQUENESS</td>
+            <td>['Attribute']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_d849b7f8</td>
+            <td>RELATIONSHIP_UNIQUENESS</td>
+            <td>['RELATIONSHIP']</td>
+            <td>['relationship_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>conversation_thread_unique</td>
+            <td>UNIQUENESS</td>
+            <td>['ConversationThread']</td>
+            <td>['tenant_id', 'thread_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>entity_created_at_exists</td>
+            <td>NODE_PROPERTY_EXISTENCE</td>
+            <td>['ResolvedEntity']</td>
+            <td>['created_at']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>entity_tenant_id_exists</td>
+            <td>NODE_PROPERTY_EXISTENCE</td>
+            <td>['ResolvedEntity']</td>
+            <td>['tenant_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>episode_created_at_exists</td>
+            <td>NODE_PROPERTY_EXISTENCE</td>
+            <td>['Episode']</td>
+            <td>['created_at']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>episode_tenant_id_exists</td>
+            <td>NODE_PROPERTY_EXISTENCE</td>
+            <td>['Episode']</td>
+            <td>['tenant_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>relationship_created_at_exists</td>
+            <td>NODE_PROPERTY_EXISTENCE</td>
+            <td>['Relationship']</td>
+            <td>['created_at']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>relationship_tenant_id_exists</td>
+            <td>NODE_PROPERTY_EXISTENCE</td>
+            <td>['Relationship']</td>
+            <td>['tenant_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>thread_version_uniq</td>
+            <td>UNIQUENESS</td>
+            <td>['SummaryVersion']</td>
+            <td>['thread_id', 'version']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+        <tr>
+            <td>topic_chunk_unique</td>
+            <td>UNIQUENESS</td>
+            <td>['TopicChunk']</td>
+            <td>['tenant_id', 'chunk_id']</td>
+            <td class="neutral">N/A</td>
+        </tr>
+        
+    </table>
+    
+    <h2>Indexes</h2>
+    <table>
+        <tr><th>Name</th><th>Type</th><th>Labels/Types</th><th>Properties</th><th>State</th></tr>
+    
+        <tr>
+            <td>account_id_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_198eb663</td>
+            <td>RANGE</td>
+            <td>['SemanticUnit']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_1b532d47</td>
+            <td>RANGE</td>
+            <td>['Summary']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_2472c9c2</td>
+            <td>RANGE</td>
+            <td>['TextChunk']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_939f7be3</td>
+            <td>RANGE</td>
+            <td>['Entity']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_a7ae7f1e</td>
+            <td>RANGE</td>
+            <td>['HighLevelElement']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_bfb09103</td>
+            <td>RANGE</td>
+            <td>['Community']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_c6a60ad4</td>
+            <td>RANGE</td>
+            <td>['Attribute']</td>
+            <td>['tenant_id', 'node_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>constraint_d849b7f8</td>
+            <td>RANGE</td>
+            <td>['RELATIONSHIP']</td>
+            <td>['relationship_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>conversation_thread_account</td>
+            <td>RANGE</td>
+            <td>['ConversationThread']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>conversation_thread_unique</td>
+            <td>RANGE</td>
+            <td>['ConversationThread']</td>
+            <td>['tenant_id', 'thread_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>entity_tenant_created_idx</td>
+            <td>RANGE</td>
+            <td>['ResolvedEntity']</td>
+            <td>['tenant_id', 'created_at']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>episode_tenant_created_idx</td>
+            <td>RANGE</td>
+            <td>['Episode']</td>
+            <td>['tenant_id', 'created_at']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_13dd5db1</td>
+            <td>RANGE</td>
+            <td>['TextChunk']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_343aff4e</td>
+            <td>LOOKUP</td>
+            <td>None</td>
+            <td>None</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_445f0d33</td>
+            <td>RANGE</td>
+            <td>['Attribute']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_619c8d31</td>
+            <td>RANGE</td>
+            <td>['Entity']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_7145427c</td>
+            <td>RANGE</td>
+            <td>['Summary']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_7e3ced1d</td>
+            <td>RANGE</td>
+            <td>['TextChunk']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_96401d9c</td>
+            <td>RANGE</td>
+            <td>['SemanticUnit']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_a12c2df4</td>
+            <td>RANGE</td>
+            <td>['Community']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_a309c34</td>
+            <td>RANGE</td>
+            <td>['Attribute']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_b45ac474</td>
+            <td>RANGE</td>
+            <td>['Community']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_c50f2eab</td>
+            <td>RANGE</td>
+            <td>['HighLevelElement']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_d7481cf3</td>
+            <td>RANGE</td>
+            <td>['Summary']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_e2c86671</td>
+            <td>RANGE</td>
+            <td>['SemanticUnit']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_f7700477</td>
+            <td>LOOKUP</td>
+            <td>None</td>
+            <td>None</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_f8eb7d77</td>
+            <td>RANGE</td>
+            <td>['HighLevelElement']</td>
+            <td>['tenant_id', 'account_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>index_fc829f6a</td>
+            <td>RANGE</td>
+            <td>['Entity']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>interaction_id_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['interaction_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>interaction_type_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['interaction_type']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>node_type_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['node_type']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>rel_interaction_id_index</td>
+            <td>RANGE</td>
+            <td>['RELATIONSHIP']</td>
+            <td>['interaction_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>rel_tenant_id_index</td>
+            <td>RANGE</td>
+            <td>['RELATIONSHIP']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>relationship_tenant_created_idx</td>
+            <td>RANGE</td>
+            <td>['Relationship']</td>
+            <td>['tenant_id', 'created_at']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>source_system_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['source_system']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>summary_version_thread_idx</td>
+            <td>RANGE</td>
+            <td>['SummaryVersion']</td>
+            <td>['thread_id', 'created_at']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>tenant_id_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['tenant_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>thread_version_uniq</td>
+            <td>RANGE</td>
+            <td>['SummaryVersion']</td>
+            <td>['thread_id', 'version']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>timestamp_index</td>
+            <td>RANGE</td>
+            <td>['Node']</td>
+            <td>['timestamp']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>topic_chunk_parent</td>
+            <td>RANGE</td>
+            <td>['TopicChunk']</td>
+            <td>['tenant_id', 'parent_episode_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+        <tr>
+            <td>topic_chunk_unique</td>
+            <td>RANGE</td>
+            <td>['TopicChunk']</td>
+            <td>['tenant_id', 'chunk_id']</td>
+            <td class="pass">ONLINE</td>
+        </tr>
+        
+    </table>
+    
+    <h2>Legacy Indexes</h2>
+    <table>
+        <tr><th>Name</th><th>Type</th><th>Labels/Types</th><th>Properties</th><th>State</th></tr>
+    
+            <tr>
+                <td>account_id_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['account_id']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+            <tr>
+                <td>interaction_id_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['interaction_id']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+            <tr>
+                <td>interaction_type_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['interaction_type']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+            <tr>
+                <td>node_type_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['node_type']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+            <tr>
+                <td>source_system_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['source_system']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+            <tr>
+                <td>tenant_id_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['tenant_id']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+            <tr>
+                <td>timestamp_index</td>
+                <td>RANGE</td>
+                <td>['Node']</td>
+                <td>['timestamp']</td>
+                <td class="pass">ONLINE</td>
+            </tr>
+            
+    </table>
+</body>
+</html>
+    
