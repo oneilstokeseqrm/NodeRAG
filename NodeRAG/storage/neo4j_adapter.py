@@ -61,22 +61,39 @@ class Neo4jAdapter:
             self.driver = None
     
     def create_constraints_and_indexes(self):  # No longer async
-        """Create constraints and indexes for EQ metadata fields"""
-        constraints_and_indexes = [
-            "CREATE CONSTRAINT node_id_unique IF NOT EXISTS FOR (n:Node) REQUIRE n.node_id IS UNIQUE",
-            "CREATE CONSTRAINT relationship_id_unique IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() REQUIRE r.relationship_id IS UNIQUE",
-            
-            "CREATE INDEX tenant_id_index IF NOT EXISTS FOR (n:Node) ON (n.tenant_id)",
-            "CREATE INDEX account_id_index IF NOT EXISTS FOR (n:Node) ON (n.account_id)",
-            "CREATE INDEX interaction_id_index IF NOT EXISTS FOR (n:Node) ON (n.interaction_id)",
-            "CREATE INDEX interaction_type_index IF NOT EXISTS FOR (n:Node) ON (n.interaction_type)",
-            "CREATE INDEX source_system_index IF NOT EXISTS FOR (n:Node) ON (n.source_system)",
-            "CREATE INDEX timestamp_index IF NOT EXISTS FOR (n:Node) ON (n.timestamp)",
-            "CREATE INDEX node_type_index IF NOT EXISTS FOR (n:Node) ON (n.node_type)",
-            
-            "CREATE INDEX rel_tenant_id_index IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() ON (r.tenant_id)",
-            "CREATE INDEX rel_interaction_id_index IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() ON (r.interaction_id)",
+        """Create constraints and indexes for EQ metadata fields with Locked In multi-tenant design"""
+        
+        labels = [
+            "Entity", "SemanticUnit", "TextChunk", "Attribute", 
+            "Community", "Summary", "HighLevelElement"
         ]
+        
+        constraints_and_indexes = []
+        
+        constraints_and_indexes.extend([
+            "DROP CONSTRAINT node_id_unique IF EXISTS",
+            "DROP CONSTRAINT relationship_id_unique IF EXISTS"
+        ])
+        
+        for label in labels:
+            constraints_and_indexes.append(
+                f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:{label}) REQUIRE (n.tenant_id, n.node_id) IS UNIQUE"
+            )
+        
+        for label in labels:
+            constraints_and_indexes.extend([
+                f"CREATE INDEX IF NOT EXISTS FOR (n:{label}) ON (n.tenant_id)",
+                f"CREATE INDEX IF NOT EXISTS FOR (n:{label}) ON (n.tenant_id, n.account_id)"
+            ])
+        
+        constraints_and_indexes.append(
+            "CREATE CONSTRAINT IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() REQUIRE r.relationship_id IS UNIQUE"
+        )
+        
+        constraints_and_indexes.extend([
+            "CREATE INDEX IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() ON (r.tenant_id)",
+            "CREATE INDEX IF NOT EXISTS FOR ()-[r:RELATIONSHIP]-() ON (r.interaction_id)"
+        ])
         
         with self.driver.session(database=self.database) as session:
             for query in constraints_and_indexes:
