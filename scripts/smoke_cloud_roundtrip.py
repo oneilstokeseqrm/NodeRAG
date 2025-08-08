@@ -11,7 +11,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 from neo4j import GraphDatabase
-import pinecone
+from pinecone import Pinecone
 
 def env_or(secret_name: str, default: str = "") -> str:
     return os.getenv(secret_name, default)
@@ -38,15 +38,14 @@ def pinecone_connect():
     api_key = env_or("PINECONE_API_KEY") or env_or("pinecone_API_key")
     if not api_key:
         raise RuntimeError("Missing PINECONE_API_KEY")
-    environment = env_or("PINECONE_ENVIRONMENT", "us-east-1")
     index_name = env_or("PINECONE_INDEX") or env_or("Pinecone_Index_Name")
     if not index_name:
         raise RuntimeError("Missing PINECONE_INDEX")
-    pinecone.init(api_key=api_key, environment=environment)
-    existing = [getattr(i, "name", i.get("name", "")) if isinstance(i, dict) else str(i) for i in pinecone.list_indexes()]
+    pc = Pinecone(api_key=api_key)
+    existing = [i.name for i in pc.list_indexes()]
     if index_name not in existing:
         raise RuntimeError(f"Pinecone index {index_name} not found. Do not auto-create in WP-0.")
-    index = pinecone.Index(index_name)
+    index = pc.Index(index_name)
     return index
 
 def upsert_vectors(index, namespace: str, vectors: List[Tuple[str, List[float], Dict]]):
