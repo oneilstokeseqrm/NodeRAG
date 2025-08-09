@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import warnings
+import json
 from unittest import mock
 from datetime import datetime
 from pathlib import Path
@@ -28,6 +29,7 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="test-reports/phase_4/wp0/factory/storage_factory_verification.html")
+    parser.add_argument("--out-json", default=None)
     args = parser.parse_args()
     out_path = Path(args.out)
 
@@ -107,6 +109,32 @@ def main():
         log(f"[File] neo4j.GraphDatabase.driver calls: {neo_drv.call_count}")
         log(f"[File] pinecone.init calls: {pc_init.call_count}")
         log(f"[File] pinecone.Index calls: {pc_index.call_count}")
+        if args.out_json:
+            cloud_singleton_ids = {"neo4j": id(neo1) if "neo1" in locals() else None, "pinecone": id(pin1) if "pin1" in locals() else None}
+            file_singleton_ids = {"neo4j": id(_g) if "_g" in locals() else None, "pinecone": id(_e) if "_e" in locals() else None}
+            timings_ms = []
+            try:
+                timings_ms.append((hc1_end - hc1_start) * 1000.0)
+            except Exception:
+                pass
+            try:
+                timings_ms.append((hc2_end - hc2_start) * 1000.0)
+            except Exception:
+                pass
+            deprecation_warning_seen = (len(deprecations) > 0) if "deprecations" in locals() else False
+            cloud_calls_in_file = False
+            try:
+                cloud_calls_in_file = (neo_drv.call_count > 0) or (pc_init.call_count > 0) or (pc_index.call_count > 0)
+            except Exception:
+                cloud_calls_in_file = False
+            out_obj = {
+                "cloud_singleton_ids": cloud_singleton_ids,
+                "file_singleton_ids": file_singleton_ids,
+                "health_check_timings_ms": timings_ms,
+                "deprecation_warning_seen": deprecation_warning_seen,
+                "cloud_connections_attempted_in_file_mode": cloud_calls_in_file
+            }
+            (out_path.parent / "storage_factory_summary.json").write_text(json.dumps(out_obj), encoding="utf-8")
 
     except Exception as e:
         log(f"Error during verification: {e}")
