@@ -25,6 +25,12 @@ def build_html(out_path: Path, content: str):
     out_path.write_text("\n".join(html), encoding="utf-8")
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default="test-reports/phase_4/wp0/factory/storage_factory_verification.html")
+    args = parser.parse_args()
+    out_path = Path(args.out)
+
     log_lines = []
     log = lambda s: log_lines.append(s)
 
@@ -98,7 +104,6 @@ def main():
     except Exception as e:
         log(f"Error during verification: {e}")
 
-    out_path = Path("test-reports/phase_4/wp0/factory/storage_factory_verification.html")
     build_html(out_path, "\n".join(log_lines))
     print(str(out_path))
     return 0
