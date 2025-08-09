@@ -37,8 +37,14 @@ def main():
     try:
         from NodeRAG.storage.storage_factory import StorageFactory
     except Exception as e:
-        print(f"Import error: {e}", file=sys.stderr)
-        return 1
+        try:
+            repo_root = Path(__file__).resolve().parents[1]
+            if str(repo_root) not in sys.path:
+                sys.path.insert(0, str(repo_root))
+            from NodeRAG.storage.storage_factory import StorageFactory  # retry
+        except Exception as e2:
+            print(f"Import error: {e2}", file=sys.stderr)
+            return 1
 
     config = {
         "config": {"main_folder": "/tmp/noderag", "language": "en", "chunk_size": 256},
