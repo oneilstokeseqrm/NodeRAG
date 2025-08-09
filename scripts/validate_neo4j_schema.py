@@ -340,8 +340,7 @@ def main():
                                c.get('type') == 'UNIQUENESS' and
                                c.get('properties') and
                                len(c.get('properties', [])) == 2]
-        print(f"   Composite (tenant_id, node_id) constraints: {len(composite_constraints_calc)}")</old_str>
-        """
+        print(f"   Composite (tenant_id, node_id) constraints: {len(composite_constraints_calc)}")
 
 
 

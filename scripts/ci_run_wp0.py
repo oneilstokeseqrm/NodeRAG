@@ -48,24 +48,7 @@ def write_summary(out_dir: Path, status: dict):
             for label, p in paths.items():
                 md.append(f"  - {label}: {p}")
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "_ci_summary.md").write_text("\n".join(md), encoding="utf-8")</old_str>" in p.read_text(encoding="utf-8"):
-                bad.append(str(p))
-        except Exception:
-            continue
-    if bad:
-        print("Artifact marker '</old_str>' found in: " + ", ".join(bad), file=sys.stderr)
-        os.getenv("NEO4J_URI") or os.getenv("Neo4j_Credentials_NEO4J_URI"),
-        (os.getenv("NEO4J_USER") or os.getenv("NEO4J_USERNAME") or os.getenv("Neo4j_Credentials_NEO4J_USERNAME")),
-        os.getenv("NEO4J_PASSWORD") or os.getenv("Neo4j_Credentials_NEO4J_PASSWORD"),
-    ])
-    pc_ok = all([
-        os.getenv("PINECONE_API_KEY") or os.getenv("pinecone_API_key"),
-        os.getenv("PINECONE_INDEX") or os.getenv("Pinecone_Index_Name"),
-    ])
-
-
-
-
+    (out_dir / "_ci_summary.md").write_text("\n".join(md), encoding="utf-8")
 def main():
     import argparse
     ap = argparse.ArgumentParser()
