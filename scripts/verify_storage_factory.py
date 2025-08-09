@@ -48,6 +48,7 @@ def main():
 
     try:
         os.environ["NODERAG_STORAGE_BACKEND"] = "cloud"
+        os.makedirs("/tmp/noderag", exist_ok=True)
         t0 = time.perf_counter()
         StorageFactory.initialize(config, backend_mode="cloud")
         neo1 = StorageFactory.get_graph_storage()
