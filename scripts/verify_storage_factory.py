@@ -25,14 +25,26 @@ def build_html(out_path: Path, content: str):
     out_path.write_text("\n".join(html), encoding="utf-8")
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default="test-reports/phase_4/wp0/factory/storage_factory_verification.html")
+    args = parser.parse_args()
+    out_path = Path(args.out)
+
     log_lines = []
     log = lambda s: log_lines.append(s)
 
     try:
         from NodeRAG.storage.storage_factory import StorageFactory
     except Exception as e:
-        print(f"Import error: {e}", file=sys.stderr)
-        return 1
+        try:
+            repo_root = Path(__file__).resolve().parents[1]
+            if str(repo_root) not in sys.path:
+                sys.path.insert(0, str(repo_root))
+            from NodeRAG.storage.storage_factory import StorageFactory  # retry
+        except Exception as e2:
+            print(f"Import error: {e2}", file=sys.stderr)
+            return 1
 
     config = {
         "config": {"main_folder": "/tmp/noderag", "language": "en", "chunk_size": 256},
@@ -42,6 +54,7 @@ def main():
 
     try:
         os.environ["NODERAG_STORAGE_BACKEND"] = "cloud"
+        os.makedirs("/tmp/noderag", exist_ok=True)
         t0 = time.perf_counter()
         StorageFactory.initialize(config, backend_mode="cloud")
         neo1 = StorageFactory.get_graph_storage()
@@ -98,7 +111,6 @@ def main():
     except Exception as e:
         log(f"Error during verification: {e}")
 
-    out_path = Path("test-reports/phase_4/wp0/factory/storage_factory_verification.html")
     build_html(out_path, "\n".join(log_lines))
     print(str(out_path))
     return 0
