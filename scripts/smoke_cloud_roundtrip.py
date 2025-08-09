@@ -263,8 +263,18 @@ def main():
     neo4j_counts_before = query_neo4j_counts(driver, db, tenants)
     isolation_ok = verify_no_cross_tenant_edges(driver, db, tenants[0], tenants[1])
 
-    all_namespaces = list(set(list_namespaces(index)))
-    relevant_ns = [ns for ns in all_namespaces if any(ns.startswith(f"{t}_") for t in tenants)]
+    max_wait_s = 30 if args.assert_namespaces else 0
+    start = time.time()
+    relevant_ns = []
+    last_seen = []
+    while True:
+        all_namespaces = list(set(list_namespaces(index)))
+        last_seen = all_namespaces
+        relevant_ns = [ns for ns in all_namespaces if any(ns.startswith(f"{t}_") for t in tenants)]
+        if relevant_ns or (time.time() - start) >= max_wait_s:
+            break
+        time.sleep(2)
+
     meta_samples = {}
     for ns in relevant_ns:
         meta_samples[ns] = get_sample_vectors(index, ns, top_k=3)
@@ -280,7 +290,7 @@ def main():
                     return 2
 
     if args.assert_namespaces and not relevant_ns:
-        print("ERROR: No relevant Pinecone namespaces created for tenants", file=sys.stderr)
+        print(f"ERROR: No relevant Pinecone namespaces created for tenants; last_seen={last_seen}", file=sys.stderr)
         return 2
 
     no_cache = check_no_local_embedding_cache()
