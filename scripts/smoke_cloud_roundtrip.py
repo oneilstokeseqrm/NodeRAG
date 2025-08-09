@@ -12,6 +12,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 from neo4j import GraphDatabase
 from pinecone import Pinecone
+import pinecone as pinecone_pkg
 
 def env_or(secret_name: str, default: str = "") -> str:
     return os.getenv(secret_name, default)
@@ -53,7 +54,32 @@ def upsert_vectors(index, namespace: str, vectors: List[Tuple[str, List[float], 
         index.upsert(vectors=vectors, namespace=namespace)
     except TypeError:
         to_send = [{"id": vid, "values": vals, "metadata": meta} for vid, vals, meta in vectors]
-        index.upsert(vectors=to_send, namespace=namespace)
+def fetch_with_retries(index, namespace: str, ids: List[str], max_attempts: int = 6) -> List[dict]:
+    attempts = 0
+    out: List[dict] = []
+    while attempts < max_attempts:
+        attempts += 1
+        try:
+            res = index.fetch(ids=ids, namespace=namespace)
+            vectors = getattr(res, "vectors", None)
+            if vectors is None and isinstance(res, dict):
+                vectors = res.get("vectors", {})
+            if isinstance(vectors, dict):
+                out = []
+                for vid, v in vectors.items():
+                    md = getattr(v, "metadata", None)
+                    if md is None and isinstance(v, dict):
+                        md = v.get("metadata", {})
+                    out.append({"id": vid, "metadata": md or {}})
+            else:
+                out = []
+            if out:
+                return out
+        except Exception:
+            pass
+        sleep_s = min(0.5 * (2 ** (attempts - 1)), 14.0) + random.uniform(0.0, 0.2)
+        time.sleep(sleep_s)
+    return out
 
 def list_namespaces(index) -> List[str]:
     try:
@@ -139,17 +165,21 @@ def pinecone_upserts_for_tenant(index, tenant_id: str):
     }
     components = ["entities", "semantic_units"]
     ns_created = []
+    ids_per_ns = {}
     for comp in components:
         ns = f"{tenant_id}_{comp}"
         vecs = []
+        ids = []
         for i in range(3):
             vid = f"{comp}_{uuid.uuid4()}"
             vals = np.random.rand(dim).astype(np.float32).tolist()
-            meta = dict(base_meta)  # exactly 7 fields
+            meta = dict(base_meta)
             vecs.append((vid, vals, meta))
+            ids.append(vid)
         upsert_vectors(index, ns, vecs)
         ns_created.append(ns)
-    return ns_created
+        ids_per_ns[ns] = ids
+    return ns_created, ids_per_ns
 
 def query_neo4j_counts(driver, db, tenants: List[str]):
     out = {}
@@ -174,12 +204,13 @@ def verify_no_cross_tenant_edges(driver, db, t1: str, t2: str) -> bool:
         ).single()
         return (rec["c"] if rec else 0) == 0
 
-def check_no_local_embedding_cache() -> bool:
+def check_no_local_embedding_cache() -> Tuple[bool, List[str]]:
     patterns = ["**/embedding_cache*.pkl", "**/*embeddings*.pkl"]
+    found = []
     for pat in patterns:
-        if any(Path(".").rglob(pat)):
-            return False
-    return True
+        for p in Path(".").rglob(pat):
+            found.append(str(p))
+    return (len(found) == 0, found)
 
 def write_csv(csv_path: Path, neo4j_counts: Dict[str, Dict[str,int]], namespaces: List[str]):
     lines = ["tenant,component_type,count"]
@@ -238,6 +269,8 @@ def main():
     parser.add_argument("--assert-namespaces", action="store_true")
     parser.add_argument("--no-cache-files", action="store_true")
     parser.add_argument("--cleanup", action="store_true")
+    parser.add_argument("--cleanup-only", action="store_true")
+    parser.add_argument("--out-json", default=None)
     args = parser.parse_args()
 
     os.environ["NODERAG_STORAGE_BACKEND"] = "cloud"
@@ -253,12 +286,18 @@ def main():
     driver, db = connect_neo4j()
     index = pinecone_connect()
 
-    for t in tenants:
-        create_neo4j_nodes_edges(driver, db, t)
+    ids_per_ns_all = {}
+    if not args.cleanup_only:
+        for t in tenants:
+            create_neo4j_nodes_edges(driver, db, t)
 
-    created_namespaces = []
-    for t in tenants:
-        created_namespaces.extend(pinecone_upserts_for_tenant(index, t))
+        created_namespaces = []
+        for t in tenants:
+            ns_list, ns_ids = pinecone_upserts_for_tenant(index, t)
+            created_namespaces.extend(ns_list)
+            ids_per_ns_all.update(ns_ids)
+    else:
+        created_namespaces = []
 
     neo4j_counts_before = query_neo4j_counts(driver, db, tenants)
     isolation_ok = verify_no_cross_tenant_edges(driver, db, tenants[0], tenants[1])
@@ -277,26 +316,70 @@ def main():
 
     meta_samples = {}
     for ns in relevant_ns:
-        meta_samples[ns] = get_sample_vectors(index, ns, top_k=3)
+        ids = ids_per_ns_all.get(ns, [])
+        fetched = fetch_with_retries(index, ns, ids) if ids else []
+        norm = []
+        for f in fetched:
+            if isinstance(f, dict):
+                fid = f.get("id")
+                md = f.get("metadata", {}) if isinstance(f.get("metadata", {}), dict) else {}
+                norm.append({"id": fid, "metadata": md})
+            else:
+                fid = getattr(f, "id", None)
+                md = getattr(f, "metadata", {}) if isinstance(getattr(f, "metadata", {}), dict) else {}
+                norm.append({"id": fid, "metadata": md})
+        meta_samples[ns] = norm
 
     required_fields = {"tenant_id","interaction_id","interaction_type","account_id","timestamp","user_id","source_system"}
-    if args.assert_metadata_7:
+    if args.assert_metadata_7 and not args.cleanup_only:
         for ns, matches in meta_samples.items():
             for m in matches:
-                md = getattr(m, "metadata", None) or m.get("metadata", {})
+                md = m.get("metadata", {}) if isinstance(m, dict) else {}
                 keys = set(md.keys()) if isinstance(md, dict) else set()
-                if keys != required_fields:
-                    print(f"ERROR: namespace {ns} sample metadata keys != required 7 fields: {keys}", file=sys.stderr)
+                if keys != required_fields or ("text" in keys):
+                    print(f"ERROR: namespace {ns} sample metadata keys != required 7 fields or contains forbidden key: {keys}", file=sys.stderr)
                     return 2
 
     if args.assert_namespaces and not relevant_ns:
         print(f"ERROR: No relevant Pinecone namespaces created for tenants; last_seen={last_seen}", file=sys.stderr)
-        return 2
 
-    no_cache = check_no_local_embedding_cache()
+    no_cache, cache_paths = check_no_local_embedding_cache()
     if args.no_cache_files and not no_cache:
         print("ERROR: Local embedding caches found", file=sys.stderr)
         return 2
+
+    if args.out_json:
+        ns_map = {}
+        for ns, matches in meta_samples.items():
+            keys_set = set()
+            for m in matches or []:
+                md = m.get("metadata", {}) if isinstance(m, dict) else {}
+                if isinstance(md, dict):
+                    keys_set |= set(md.keys())
+            ns_map[ns] = {
+                "vectors_count": int(len(matches or [])),
+                "metadata_keys": sorted(list(keys_set))
+            }
+        tenants_json = []
+        for t in tenants:
+            c = neo4j_counts_before.get(t, {})
+            total_nodes = sum(v for k, v in c.items() if k != "RELATIONSHIP")
+            tenants_json.append({
+                "tenant_id": t,
+                "neo4j_nodes": int(total_nodes),
+                "neo4j_edges": int(c.get("RELATIONSHIP", 0)),
+                "namespaces": [ns for ns in relevant_ns if ns.startswith(f"{t}_")]
+            })
+        pinecone_client_version = getattr(pinecone_pkg, "__version__", None)
+        out_json_obj = {
+            "pinecone_client_version": pinecone_client_version,
+            "index_name": env_or("PINECONE_INDEX") or env_or("Pinecone_Index_Name"),
+            "tenants": tenants_json,
+            "namespaces": ns_map,
+            "local_cache_detected": (not no_cache),
+            "paths_found": cache_paths
+        }
+        (out_dir / "smoke_summary.json").write_text(json.dumps(out_json_obj), encoding="utf-8")
 
     csv_path = out_dir / "embedding_storage_smoke.csv"
     html_path = out_dir / "embedding_storage_smoke_report.html"
@@ -304,11 +387,14 @@ def main():
     write_html(html_path, tenants, neo4j_counts_before, relevant_ns, meta_samples, no_cache)
 
     cleanup_csv = None
-    if args.cleanup:
+    if args.cleanup or args.cleanup_only:
         with driver.session(database=db) as s:
             for t in tenants:
                 s.run("MATCH (n {tenant_id:$t}) DETACH DELETE n", t=t)
                 s.run("MATCH ()-[r:RELATIONSHIP {tenant_id:$t}]-() DELETE r", t=t)
+        if not relevant_ns:
+            all_ns = list_namespaces(index)
+            relevant_ns = [ns for ns in all_ns if any(ns.startswith(f"{t}_") for t in tenants)]
         for ns in relevant_ns:
             try:
                 index.delete(delete_all=True, namespace=ns)

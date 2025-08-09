@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import Dict, List, Any
 
 from neo4j import GraphDatabase
+import neo4j as neo4j_pkg
 
 
 def classify_state(state: str) -> str:
@@ -230,6 +231,7 @@ def main():
                        help="Output path for CSV report")
     parser.add_argument("--out-json", default=None,
                        help="Optional output path for compact JSON summary")
+    parser.add_argument("--read-only", action="store_true", help="Do not create/drop constraints/indexes")
     args = parser.parse_args()
 
     print("🔍 Starting Neo4j Schema Validation...")
@@ -251,8 +253,11 @@ def main():
             session.run("RETURN 1")
         print("✅ Connected to Neo4j successfully")
 
-        print("📝 Creating/updating constraints and indexes...")
-        create_constraints_and_indexes(driver, neo4j_database)
+        if not args.read_only:
+            print("📝 Creating/updating constraints and indexes...")
+            create_constraints_and_indexes(driver, neo4j_database)
+        else:
+            print("📝 Read-only mode: skipping constraint/index creation")
 
         print("🔎 Querying current schema...")
         with driver.session(database=neo4j_database) as session:
@@ -284,10 +289,32 @@ def main():
             c.get("type") == "UNIQUENESS"
             and not c.get("labelsOrTypes")
             and ("relationship" in (c.get("name") or "").lower() or "RELATIONSHIP" in (c.get("name") or ""))
-        for c in constraints)
+            for c in constraints
+        )
 
         if args.out_json:
+            composite_constraints_detail = []
+            for c in constraints:
+                if c.get("type") == "UNIQUENESS":
+                    props = c.get("properties") or []
+                    if isinstance(props, list) and sorted(props) == ["node_id", "tenant_id"]:
+                        labels = c.get("labelsOrTypes") or []
+                        if isinstance(labels, list) and labels:
+                            for l in labels:
+                                composite_constraints_detail.append({"label": l, "properties": ["tenant_id", "node_id"]})
+            legacy_idx_names = []
+            for li in legacy_indexes:
+                nm = li.get("name")
+                if nm:
+                    legacy_idx_names.append(nm)
             summary = {
+                "constraints_total": len(constraints),
+                "indexes_total": len(indexes),
+                "legacy_node_indexes_total": len(legacy_indexes),
+                "composite_constraints": composite_constraints_detail,
+                "legacy_node_indexes": legacy_idx_names,
+                "driver_version": getattr(neo4j_pkg, "__version__", None),
+                "database": neo4j_database,
                 "constraints": {
                     "composite_labels_present": sorted(list(composite_labels_present)),
                     "relationship_uniqueness": bool(relationship_uniqueness),
@@ -299,7 +326,7 @@ def main():
                 "totals": {
                     "constraints": len(constraints),
                     "indexes": len(indexes),
-                },
+                }
             }
             with open(args.out_json, "w") as jf:
                 json.dump(summary, jf)
@@ -309,12 +336,16 @@ def main():
         print(f"   Total indexes: {len(indexes)}")
         print(f"   Legacy indexes: {len(legacy_indexes)}")
 
-        composite_constraints = [c for c in constraints if
+        composite_constraints_calc = [c for c in constraints if
                                c.get('type') == 'UNIQUENESS' and
                                c.get('properties') and
                                len(c.get('properties', [])) == 2]
+        print(f"   Composite (tenant_id, node_id) constraints: {len(composite_constraints_calc)}")</old_str>
+        """
 
-        print(f"   Composite (tenant_id, node_id) constraints: {len(composite_constraints)}")
+
+
+
 
         if legacy_indexes:
             print(f"   ⚠️  Found {len(legacy_indexes)} legacy indexes that may need cleanup")

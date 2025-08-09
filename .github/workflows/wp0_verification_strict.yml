@@ -1,0 +1,72 @@
+name: WP0 Strict
+
+on:
+  push:
+    branches:
+      - main
+      - release/**
+    paths:
+      - "scripts/**"
+      - ".github/workflows/**"
+      - "requirements/wp0.txt"
+      - "docs/**"
+      - "ci/**"
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 8 * * *"
+  merge_group:
+
+concurrency:
+  group: wp0-strict-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  wp0_strict:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install WP-0 requirements
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements/wp0.txt
+
+      - name: Run WP0 Strict
+        env:
+          NODERAG_STORAGE_BACKEND: cloud
+          NODERAG_ENFORCE_TENANT_LIMITS: "true"
+          NEO4J_URI: ${{ secrets.NEO4J_URI }}
+          NEO4J_USER: ${{ secrets.NEO4J_USER }}
+          NEO4J_USERNAME: ${{ secrets.NEO4J_USERNAME }}
+          NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
+          NEO4J_DATABASE: ${{ secrets.NEO4J_DATABASE }}
+          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+          PINECONE_INDEX: ${{ secrets.PINECONE_INDEX }}
+          PINECONE_ENVIRONMENT: us-east-1
+        run: |
+          python scripts/ci_run_wp0.py --mode strict --out-dir test-reports/phase_4/wp0_strict --cleanup
+
+      - name: Upload Strict artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp0-strict-reports
+          path: test-reports/phase_4/wp0_strict/**
+
+      - name: Job Summary
+        if: always()
+        run: |
+          if [ -f test-reports/phase_4/wp0_strict/_ci_summary.md ]; then
+            cat test-reports/phase_4/wp0_strict/_ci_summary.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No summary produced" >> $GITHUB_STEP_SUMMARY
+          fi

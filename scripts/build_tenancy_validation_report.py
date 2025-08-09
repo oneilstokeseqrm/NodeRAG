@@ -72,14 +72,49 @@ def build_html(report_path: Path, status_ok: bool, out: str, err: str, cfg: dict
 
 def main():
     import argparse
+    import re
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="test-reports/phase_4/wp0/tenancy/tenancy_validation_report.html")
+    parser.add_argument("--out-json", default=None)
     args = parser.parse_args()
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     code, out, err = run_pytest()
     cfg = get_tenant_config_snapshot()
     build_html(out_path, code == 0, out, err, cfg)
+    if args.out_json:
+        passed = code == 0
+        def _extract_int(patterns, text):
+            for pat in patterns:
+                m = re.search(pat, text)
+                if m:
+                    try:
+                        return int(m.group(1))
+                    except Exception:
+                        continue
+            return None
+        passed_n = _extract_int([r"(\d+)\s+passed"], out + "\n" + err) or 0
+        failed_n = _extract_int([r"(\d+)\s+failed"], out + "\n" + err) or 0
+        error_n = _extract_int([r"(\d+)\s+errors?"], out + "\n" + err) or 0
+        skipped_n = _extract_int([r"(\d+)\s+skipped"], out + "\n" + err) or 0
+        tests_run = None
+        if any([passed_n, failed_n, error_n, skipped_n]):
+            tests_run = passed_n + failed_n + error_n + skipped_n
+        enforce_limits = bool(cfg.get("ENFORCE_TENANT_LIMITS"))
+        cfg_map = {
+            "MAX_ACTIVE_TENANTS": int(cfg.get("MAX_ACTIVE_TENANTS") or 0),
+            "MAX_REGISTRY_SIZE": int(cfg.get("MAX_REGISTRY_SIZE") or 0),
+            "TENANT_TTL_HOURS": int(cfg.get("TENANT_TTL_HOURS") or 0),
+        }
+        summary = {
+            "pytest_passed": bool(passed),
+            "tests_run": tests_run if tests_run is not None else 0,
+            "enforce_limits_enabled": enforce_limits,
+            "config": cfg_map,
+            "summary": {"stdout": out, "stderr": err}
+        }
+        Path(args.out_json).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out_json).write_text(json.dumps(summary), encoding="utf-8")
     print(str(out_path))
 
 if __name__ == "__main__":

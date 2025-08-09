@@ -1,0 +1,29 @@
+{
+  "schema": {
+    "required_composite_constraints": [
+      {"label":"Entity","properties":["tenant_id","node_id"]},
+      {"label":"SemanticUnit","properties":["tenant_id","node_id"]},
+      {"label":"TextChunk","properties":["tenant_id","node_id"]},
+      {"label":"Attribute","properties":["tenant_id","node_id"]},
+      {"label":"Community","properties":["tenant_id","node_id"]},
+      {"label":"Summary","properties":["tenant_id","node_id"]},
+      {"label":"HighLevelElement","properties":["tenant_id","node_id"]}
+    ],
+    "min_constraints": 17,
+    "min_indexes": 42,
+    "max_legacy_node_indexes": 7
+  },
+  "tenancy": {
+    "require_enforce_limits": true
+  },
+  "smoke": {
+    "required_namespaces_suffixes": ["entities","semantic_units","attributes","summaries"],
+    "required_metadata_keys": ["tenant_id","account_id","interaction_id","interaction_type","timestamp","user_id","source_system"],
+    "forbid_text_metadata": true,
+    "min_nodes_per_tenant": 1,
+    "min_vectors_per_namespace": 1
+  },
+  "factory": {
+    "require_deprecation_warning_in_file_mode": true
+  }
+}
