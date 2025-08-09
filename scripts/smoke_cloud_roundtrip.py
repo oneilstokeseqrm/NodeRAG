@@ -229,9 +229,26 @@ def write_html(html_path: Path, tenants: List[str], neo4j_counts: Dict[str, Dict
     html_path.write_text("\n".join(html), encoding="utf-8")
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tenant-a", default=None)
+    parser.add_argument("--tenant-b", default=None)
+    parser.add_argument("--out-dir", default="test-reports/phase_4/wp0/smoke")
+    parser.add_argument("--assert-metadata-7", action="store_true")
+    parser.add_argument("--assert-namespaces", action="store_true")
+    parser.add_argument("--no-cache-files", action="store_true")
+    parser.add_argument("--cleanup", action="store_true")
+    args = parser.parse_args()
+
     os.environ["NODERAG_STORAGE_BACKEND"] = "cloud"
-    ensure_dirs()
-    tenants = ["tenant_alpha", "tenant_beta"]
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    run_id = os.getenv("GITHUB_SHA", "")[:7] or str(uuid.uuid4())[:8]
+    tenants = [
+        args.tenant_a or f"wp0b_{run_id}_a",
+        args.tenant_b or f"wp0b_{run_id}_b",
+    ]
 
     driver, db = connect_neo4j()
     index = pinecone_connect()
@@ -243,7 +260,7 @@ def main():
     for t in tenants:
         created_namespaces.extend(pinecone_upserts_for_tenant(index, t))
 
-    neo4j_counts = query_neo4j_counts(driver, db, tenants)
+    neo4j_counts_before = query_neo4j_counts(driver, db, tenants)
     isolation_ok = verify_no_cross_tenant_edges(driver, db, tenants[0], tenants[1])
 
     all_namespaces = list(set(list_namespaces(index)))
@@ -253,22 +270,55 @@ def main():
         meta_samples[ns] = get_sample_vectors(index, ns, top_k=3)
 
     required_fields = {"tenant_id","interaction_id","interaction_type","account_id","timestamp","user_id","source_system"}
-    for ns, matches in meta_samples.items():
-        for m in matches:
-            md = getattr(m, "metadata", None) or m.get("metadata", {})
-            keys = set(md.keys()) if isinstance(md, dict) else set()
-            if keys != required_fields:
-                print(f"WARNING: namespace {ns} sample metadata keys != required 7 fields: {keys}", file=sys.stderr)
+    if args.assert_metadata_7:
+        for ns, matches in meta_samples.items():
+            for m in matches:
+                md = getattr(m, "metadata", None) or m.get("metadata", {})
+                keys = set(md.keys()) if isinstance(md, dict) else set()
+                if keys != required_fields:
+                    print(f"ERROR: namespace {ns} sample metadata keys != required 7 fields: {keys}", file=sys.stderr)
+                    return 2
+
+    if args.assert_namespaces and not relevant_ns:
+        print("ERROR: No relevant Pinecone namespaces created for tenants", file=sys.stderr)
+        return 2
 
     no_cache = check_no_local_embedding_cache()
+    if args.no_cache_files and not no_cache:
+        print("ERROR: Local embedding caches found", file=sys.stderr)
+        return 2
 
-    csv_path = Path("test-reports/phase_4/wp0/smoke/embedding_storage_smoke.csv")
-    html_path = Path("test-reports/phase_4/wp0/smoke/embedding_storage_smoke_report.html")
-    write_csv(csv_path, neo4j_counts, relevant_ns)
-    write_html(html_path, tenants, neo4j_counts, relevant_ns, meta_samples, no_cache)
+    csv_path = out_dir / "embedding_storage_smoke.csv"
+    html_path = out_dir / "embedding_storage_smoke_report.html"
+    write_csv(csv_path, neo4j_counts_before, relevant_ns)
+    write_html(html_path, tenants, neo4j_counts_before, relevant_ns, meta_samples, no_cache)
+
+    cleanup_csv = None
+    if args.cleanup:
+        with driver.session(database=db) as s:
+            for t in tenants:
+                s.run("MATCH (n {tenant_id:$t}) DETACH DELETE n", t=t)
+                s.run("MATCH ()-[r:RELATIONSHIP {tenant_id:$t}]-() DELETE r", t=t)
+        for ns in relevant_ns:
+            try:
+                index.delete(delete_all=True, namespace=ns)
+            except Exception:
+                pass
+        neo4j_counts_after = query_neo4j_counts(driver, db, tenants)
+        cleanup_csv = out_dir / "embedding_storage_cleanup.csv"
+        lines = ["tenant,component_type,count_before,count_after"]
+        for tenant in tenants:
+            before = neo4j_counts_before.get(tenant, {})
+            after = neo4j_counts_after.get(tenant, {})
+            keys = sorted(set(before.keys()) | set(after.keys()))
+            for k in keys:
+                lines.append(f"{tenant},{k},{before.get(k,0)},{after.get(k,0)}")
+        cleanup_csv.write_text("\n".join(lines), encoding="utf-8")
 
     print(str(csv_path))
     print(str(html_path))
+    if cleanup_csv:
+        print(str(cleanup_csv))
     print(f"Isolation OK: {isolation_ok}")
     return 0
 

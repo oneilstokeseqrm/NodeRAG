@@ -12,6 +12,14 @@ def link_exists(label: str, rel_path: str) -> str:
     return f"<li class='{cls}'>{label}: <code>{rel_path}</code> [{status}]</li>"
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ci", action="store_true")
+    parser.add_argument("--in-dir", default=str(BASE))
+    parser.add_argument("--out", default=str(BASE / "wp0_foundation_verification.html"))
+    args = parser.parse_args()
+    global BASE
+    BASE = Path(args.in_dir)
     BASE.mkdir(parents=True, exist_ok=True)
     html = []
     html.append("<!DOCTYPE html><html><head><meta charset='utf-8'><title>WP-0 Foundation Verification</title>")
@@ -19,6 +27,13 @@ def main():
     html.append("</head><body>")
     html.append("<h1>WP‑0: Schema & Storage Foundation Verification</h1>")
     html.append(f"<p>Generated: {datetime.now().isoformat()}</p>")
+    if args.ci:
+        ci_sum = BASE / "_ci_summary.md"
+        if ci_sum.exists():
+            html.append("<h2>CI Summary</h2>")
+            html.append("<pre>")
+            html.append(ci_sum.read_text(encoding="utf-8"))
+            html.append("</pre>")
 
     html.append("<h2>1) Schema Status</h2>")
     html.append("<ul>")
@@ -63,7 +78,7 @@ def main():
     html.append("</ul>")
 
     html.append("</body></html>")
-    out = BASE / "wp0_foundation_verification.html"
+    out = Path(args.out)
     out.write_text("\n".join(html), encoding="utf-8")
     print(str(out))
 

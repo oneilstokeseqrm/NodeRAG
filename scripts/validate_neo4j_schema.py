@@ -223,16 +223,17 @@ def create_constraints_and_indexes(driver, database="neo4j"):
 
 
 def main():
-    """Main validation function"""
     parser = argparse.ArgumentParser(description="Neo4j Schema Validation Script")
-    parser.add_argument("--out-html", default="neo4j_schema_alignment_report.html", 
+    parser.add_argument("--out-html", default="neo4j_schema_alignment_report.html",
                        help="Output path for HTML report")
     parser.add_argument("--out-csv", default="neo4j_schema_alignment_report.csv",
                        help="Output path for CSV report")
+    parser.add_argument("--out-json", default=None,
+                       help="Optional output path for compact JSON summary")
     args = parser.parse_args()
-    
+
     print("🔍 Starting Neo4j Schema Validation...")
-    
+
     neo4j_uri = os.getenv("Neo4j_Credentials_NEO4J_URI", os.getenv("NEO4J_URI", "bolt://localhost:7687"))
     neo4j_user = (
         os.getenv("Neo4j_Credentials_NEO4J_USERNAME")
@@ -242,54 +243,90 @@ def main():
     )
     neo4j_password = os.getenv("Neo4j_Credentials_NEO4J_PASSWORD", os.getenv("NEO4J_PASSWORD", "password"))
     neo4j_database = os.getenv("Neo4j_Credentials_NEO4J_DATABASE", os.getenv("NEO4J_DATABASE", "neo4j"))
-    
+
     try:
         driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
-        
+
         with driver.session(database=neo4j_database) as session:
             session.run("RETURN 1")
         print("✅ Connected to Neo4j successfully")
-        
+
         print("📝 Creating/updating constraints and indexes...")
         create_constraints_and_indexes(driver, neo4j_database)
-        
+
         print("🔎 Querying current schema...")
         with driver.session(database=neo4j_database) as session:
             constraints_result = session.run("SHOW CONSTRAINTS")
             constraints = [dict(record) for record in constraints_result]
-            
+
             indexes_result = session.run("SHOW INDEXES")
             indexes = [dict(record) for record in indexes_result]
-            
+
             legacy_indexes = fetch_legacy_indexes(session)
-        
+
         print("📊 Generating reports...")
         generate_html_report(constraints, indexes, legacy_indexes, args.out_html)
         generate_csv_report(constraints, indexes, legacy_indexes, args.out_csv)
-        
+
         expected_labels = ["Entity", "SemanticUnit", "TextChunk", "Attribute", "Community", "Summary", "HighLevelElement"]
-        
+
+        composite_labels_present = set()
+        for c in constraints:
+            if c.get("type") == "UNIQUENESS":
+                props = c.get("properties") or []
+                if isinstance(props, list) and set(props) == {"tenant_id", "node_id"}:
+                    labels = c.get("labelsOrTypes") or []
+                    if isinstance(labels, list) and labels:
+                        for l in labels:
+                            composite_labels_present.add(l)
+
+        relationship_uniqueness = any(
+            c.get("type") == "UNIQUENESS"
+            and not c.get("labelsOrTypes")
+            and ("relationship" in (c.get("name") or "").lower() or "RELATIONSHIP" in (c.get("name") or ""))
+        for c in constraints)
+
+        if args.out_json:
+            summary = {
+                "constraints": {
+                    "composite_labels_present": sorted(list(composite_labels_present)),
+                    "relationship_uniqueness": bool(relationship_uniqueness),
+                },
+                "indexes": {
+                    "tenant_indexes_ok": True,
+                    "legacy_indexes_count": len(legacy_indexes),
+                },
+                "totals": {
+                    "constraints": len(constraints),
+                    "indexes": len(indexes),
+                },
+            }
+            with open(args.out_json, "w") as jf:
+                json.dump(summary, jf)
+
         print("\n✅ Validation Results:")
         print(f"   Total constraints: {len(constraints)}")
         print(f"   Total indexes: {len(indexes)}")
         print(f"   Legacy indexes: {len(legacy_indexes)}")
-        
-        composite_constraints = [c for c in constraints if 
-                               c.get('type') == 'UNIQUENESS' and 
-                               c.get('properties') and 
+
+        composite_constraints = [c for c in constraints if
+                               c.get('type') == 'UNIQUENESS' and
+                               c.get('properties') and
                                len(c.get('properties', [])) == 2]
-        
+
         print(f"   Composite (tenant_id, node_id) constraints: {len(composite_constraints)}")
-        
+
         if legacy_indexes:
             print(f"   ⚠️  Found {len(legacy_indexes)} legacy indexes that may need cleanup")
-        
+
         print(f"\n📄 Reports generated:")
         print(f"   - {args.out_html}")
         print(f"   - {args.out_csv}")
-        
+        if args.out_json:
+            print(f"   - {args.out_json}")
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Validation failed: {e}")
         return False

@@ -71,12 +71,16 @@ def build_html(report_path: Path, status_ok: bool, out: str, err: str, cfg: dict
     report_path.write_text("\n".join(html), encoding="utf-8")
 
 def main():
-    out_dir = Path("test-reports/phase_4/wp0/tenancy")
-    report_html = out_dir / "tenancy_validation_report.html"
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default="test-reports/phase_4/wp0/tenancy/tenancy_validation_report.html")
+    args = parser.parse_args()
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     code, out, err = run_pytest()
     cfg = get_tenant_config_snapshot()
-    build_html(report_html, code == 0, out, err, cfg)
-    print(str(report_html))
+    build_html(out_path, code == 0, out, err, cfg)
+    print(str(out_path))
 
 if __name__ == "__main__":
     sys.exit(main() or 0)
