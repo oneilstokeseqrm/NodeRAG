@@ -45,6 +45,8 @@ class TestEmbeddingPipelineStorage:
             config.account_id = 'test_account'
             config.interaction_id = 'test_interaction'
             config.user_id = 'test_user'
+            config.interaction_type = 'test_interaction_type'
+            config.source_system = 'test_source_system'
             
             cache_data = [
                 {'hash_id': 'test_1', 'embedding': np.random.rand(3072).tolist()},
@@ -60,7 +62,8 @@ class TestEmbeddingPipelineStorage:
                  patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_adapter = MagicMock()
-                mock_adapter.upsert_vectors_batch = AsyncMock(return_value=(2, []))
+                mock_adapter.index = MagicMock()
+                mock_adapter.index.upsert = MagicMock(return_value={'upserted_count': 2})
                 mock_pinecone.return_value = mock_adapter
                 
                 mock_mapper = MagicMock()
@@ -75,7 +78,7 @@ class TestEmbeddingPipelineStorage:
                 
                 assert not Path(config.embedding).exists()
                 
-                assert mock_adapter.upsert_vectors_batch.called
+                assert mock_adapter.index.upsert.called
     
     def test_fallback_to_file_storage(self):
         """Test fallback to file storage when not in cloud mode"""
@@ -123,6 +126,8 @@ class TestEmbeddingPipelineStorage:
             config.account_id = 'test_account'
             config.interaction_id = 'test_interaction'
             config.user_id = 'test_user'
+            config.interaction_type = 'test_interaction_type'
+            config.source_system = 'test_source_system'
             
             cache_data = [
                 {'hash_id': 'test_1', 'embedding': np.random.rand(3072).tolist()}
@@ -137,7 +142,8 @@ class TestEmbeddingPipelineStorage:
                  patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_adapter = MagicMock()
-                mock_adapter.upsert_vectors_batch = AsyncMock(return_value=(1, []))
+                mock_adapter.index = MagicMock()
+                mock_adapter.index.upsert = MagicMock(return_value={'upserted_count': 1})
                 mock_pinecone.return_value = mock_adapter
                 
                 mock_mapper = MagicMock()
@@ -150,18 +156,20 @@ class TestEmbeddingPipelineStorage:
                 
                 pipeline.insert_embeddings()
                 
-                assert mock_adapter.upsert_vectors_batch.called
-                call_args = mock_adapter.upsert_vectors_batch.call_args[0][0]
+                assert mock_adapter.index.upsert.called
+                call_args = mock_adapter.index.upsert.call_args
+                vectors = call_args[1]['vectors']
                 
-                vector_id, embedding, metadata, additional = call_args[0]
-                assert vector_id.startswith(f"{self.tenant_id}_embedding_")
-                assert len(embedding) == 3072
-                assert metadata.tenant_id == self.tenant_id
-                assert metadata.account_id == 'test_account'
-                assert metadata.interaction_id == 'test_interaction'
-                assert metadata.user_id == 'test_user'
-                assert metadata.source_system == 'internal'
-                assert metadata.interaction_type == 'custom_notes'
+                vector_data = vectors[0]
+                assert vector_data['id'].startswith(f"{self.tenant_id}_embedding_")
+                assert len(vector_data['values']) == 3072
+                metadata = vector_data['metadata']
+                assert metadata['tenant_id'] == self.tenant_id
+                assert metadata['account_id'] == 'test_account'
+                assert metadata['interaction_id'] == 'test_interaction'
+                assert metadata['user_id'] == 'test_user'
+                assert metadata['source_system'] == 'test_source_system'
+                assert metadata['interaction_type'] == 'test_interaction_type'
     
     def test_batch_size_limit(self):
         """Test that batches respect 100 vector limit"""
@@ -173,6 +181,8 @@ class TestEmbeddingPipelineStorage:
             config.account_id = 'test_account'
             config.interaction_id = 'test_interaction'
             config.user_id = 'test_user'
+            config.interaction_type = 'test_interaction_type'
+            config.source_system = 'test_source_system'
             
             cache_data = []
             for i in range(250):
@@ -190,7 +200,8 @@ class TestEmbeddingPipelineStorage:
                  patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_adapter = MagicMock()
-                mock_adapter.upsert_vectors_batch = AsyncMock(return_value=(100, []))
+                mock_adapter.index = MagicMock()
+                mock_adapter.index.upsert = MagicMock(return_value={'upserted_count': 100})
                 mock_pinecone.return_value = mock_adapter
                 
                 mock_mapper = MagicMock()
@@ -203,12 +214,23 @@ class TestEmbeddingPipelineStorage:
                 
                 pipeline.insert_embeddings()
                 
-                assert mock_adapter.upsert_vectors_batch.call_count == 3
+                assert mock_adapter.index.upsert.call_count == 3
                 
-                call_args_list = mock_adapter.upsert_vectors_batch.call_args_list
-                assert len(call_args_list[0][0][0]) == 100  # First batch
-                assert len(call_args_list[1][0][0]) == 100  # Second batch
-                assert len(call_args_list[2][0][0]) == 50   # Third batch
+                call_args_list = mock_adapter.index.upsert.call_args_list
+                assert len(call_args_list[0][1]['vectors']) == 100  # First batch
+                assert len(call_args_list[1][1]['vectors']) == 100  # Second batch
+                assert len(call_args_list[2][1]['vectors']) == 50   # Third batch
+
+    def test_no_asyncio_run(self):
+        """Verify that asyncio.run is NOT used (causes production crashes)"""
+        import inspect
+        from NodeRAG.src.pipeline.embedding import Embedding_pipeline
+        
+        source = inspect.getsource(Embedding_pipeline._store_embeddings_in_pinecone)
+        
+        assert 'asyncio.run' not in source, "asyncio.run causes event loop conflicts - use synchronous operations"
+        
+        assert 'index.upsert' in source, "Should use synchronous Pinecone operations"
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
