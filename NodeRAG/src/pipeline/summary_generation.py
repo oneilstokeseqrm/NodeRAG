@@ -34,12 +34,47 @@ class SummaryGeneration:
         self.communities = []
         self.high_level_elements = []
 
-        if os.path.exists(self.config.graph_path):
+        from ...storage.storage_factory import StorageFactory
+        from ...tenant.tenant_context import TenantContext
+        
+        factory = StorageFactory()
+        if factory.is_cloud_storage():
+            tenant_id = TenantContext.get_current_tenant_or_default()
+            neo4j_adapter = factory.get_graph_storage()
             
+            subgraph_data = neo4j_adapter.get_subgraph(tenant_id)
+            
+            if subgraph_data:
+                import networkx as nx
+                self.G = nx.Graph()
+                
+                for node in subgraph_data.get('nodes', []):
+                    node_id = node.get('node_id')
+                    if node_id:
+                        node_attrs = {k: v for k, v in node.items() if k != 'node_id'}
+                        self.G.add_node(node_id, **node_attrs)
+                
+                for rel in subgraph_data.get('relationships', []):
+                    source = rel.get('source_id')
+                    target = rel.get('target_id')
+                    if source and target:
+                        edge_attrs = {k: v for k, v in rel.items() 
+                                    if k not in ['source_id', 'target_id']}
+                        self.G.add_edge(source, target, **edge_attrs)
+            else:
+                import networkx as nx
+                self.G = nx.Graph()
+        else:
+            if os.path.exists(self.config.graph_path):
+                self.G = storage.load_pickle(self.config.graph_path)
+            else:
+                import networkx as nx
+                self.G = nx.Graph()
+
+        if os.path.exists(self.config.graph_path):
             self.mapper = Mapper([self.config.semantic_units_path,
                                   self.config.attributes_path])
             self.mapper.add_embedding(self.config.embedding)
-            self.G = storage.load_pickle(self.config.graph_path)
             
             import networkx as nx
             if not isinstance(self.G, nx.Graph):
@@ -63,27 +98,52 @@ class SummaryGeneration:
             self.communities.append(Community_summary(community_node,self.mapper,self.G,self.config))
     
     def _extract_metadata_from_community(self, node_names: list[str]) -> EQMetadata:
-        """Extract metadata from community member nodes for high_level_elements"""
+        """Extract metadata from community member nodes for high_level_elements
+        
+        Uses AGGREGATED tenant_id for cross-tenant summaries when nodes span multiple tenants
+        """
         print(f"Extracting metadata from community of {len(node_names)} nodes")
+        
+        tenant_ids = set()
+        valid_metadata_node = None
         
         for node_name in node_names:
             if self.G.has_node(node_name):
                 node_data = self.G.nodes[node_name]
+                if 'tenant_id' in node_data:
+                    tenant_ids.add(node_data['tenant_id'])
+                    
                 required_fields = ['tenant_id', 'account_id', 'interaction_id', 
                                  'interaction_type', 'timestamp', 'user_id', 'source_system']
                 
-                if all(field in node_data for field in required_fields):
-                    print(f"  Using metadata from node {node_name}: tenant_id={node_data['tenant_id']}")
-                    return EQMetadata(
-                        tenant_id=node_data['tenant_id'],
-                        account_id=node_data['account_id'],
-                        interaction_id=node_data['interaction_id'],
-                        interaction_type=node_data['interaction_type'],
-                        text='',
-                        timestamp=node_data['timestamp'],
-                        user_id=node_data['user_id'],
-                        source_system=node_data['source_system']
-                    )
+                if all(field in node_data for field in required_fields) and valid_metadata_node is None:
+                    valid_metadata_node = node_data
+        
+        if len(tenant_ids) > 1:
+            print(f"  Cross-tenant summary detected: {tenant_ids}")
+            from datetime import datetime, timezone
+            return EQMetadata(
+                tenant_id='AGGREGATED',
+                account_id='AGGREGATED',
+                interaction_id='AGGREGATED',
+                interaction_type='summary',
+                text='',
+                timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                user_id='system',
+                source_system='internal'
+            )
+        elif valid_metadata_node:
+            print(f"  Using single-tenant metadata: tenant_id={valid_metadata_node['tenant_id']}")
+            return EQMetadata(
+                tenant_id=valid_metadata_node['tenant_id'],
+                account_id=valid_metadata_node['account_id'],
+                interaction_id=valid_metadata_node['interaction_id'],
+                interaction_type=valid_metadata_node['interaction_type'],
+                text='',
+                timestamp=valid_metadata_node['timestamp'],
+                user_id=valid_metadata_node['user_id'],
+                source_system=valid_metadata_node['source_system']
+            )
         
         print(f"  No valid metadata found, using AGGREGATED fallback")
         return EQMetadata(
@@ -270,42 +330,221 @@ class SummaryGeneration:
                 
    
     def store_graph(self):
-        from .storage_adapter import storage_factory_wrapper
-        storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
-        self.config.console.print('[bold green]Graph stored[/bold green]')
+        """Store graph to Neo4j or file storage based on backend"""
+        from ...storage.storage_factory import StorageFactory
+        from ...tenant.tenant_context import TenantContext
+        from ...standards.eq_metadata import EQMetadata
+        from datetime import datetime, timezone
+        import uuid
+        
+        factory = StorageFactory()
+        if factory.is_cloud_storage():
+            neo4j_adapter = factory.get_graph_storage()
+            tenant_id = TenantContext.get_current_tenant_or_default()
+            
+            storage_metadata = EQMetadata(
+                tenant_id=tenant_id,
+                account_id=f"summary_pipeline_{tenant_id}",
+                interaction_id=f"summary_{uuid.uuid4().hex[:8]}",
+                interaction_type='summary_generation',
+                text='Graph storage from summary pipeline',
+                timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                user_id='system',
+                source_system='summary_pipeline'
+            )
+            
+            node_count = 0
+            for node_id, node_data in self.G.nodes(data=True):
+                if 'tenant_id' in node_data:
+                    node_metadata = EQMetadata(
+                        tenant_id=node_data.get('tenant_id', tenant_id),
+                        account_id=node_data.get('account_id', storage_metadata.account_id),
+                        interaction_id=node_data.get('interaction_id', storage_metadata.interaction_id),
+                        interaction_type=node_data.get('interaction_type', 'summary'),
+                        text='',
+                        timestamp=node_data.get('timestamp', storage_metadata.timestamp),
+                        user_id=node_data.get('user_id', storage_metadata.user_id),
+                        source_system=node_data.get('source_system', storage_metadata.source_system)
+                    )
+                else:
+                    node_metadata = storage_metadata
+                
+                success = neo4j_adapter.add_node(
+                    node_id=str(node_id),
+                    node_type=node_data.get('type', 'entity'),
+                    metadata=node_metadata,
+                    properties={k: v for k, v in node_data.items() 
+                              if k not in ['tenant_id', 'account_id', 'interaction_id', 
+                                          'interaction_type', 'timestamp', 'user_id', 'source_system']}
+                )
+                if success:
+                    node_count += 1
+            
+            edge_count = 0
+            for source, target, edge_data in self.G.edges(data=True):
+                source_data = self.G.nodes[source]
+                if 'tenant_id' in source_data:
+                    edge_metadata = EQMetadata(
+                        tenant_id=source_data.get('tenant_id', tenant_id),
+                        account_id=source_data.get('account_id', storage_metadata.account_id),
+                        interaction_id=source_data.get('interaction_id', storage_metadata.interaction_id),
+                        interaction_type=source_data.get('interaction_type', 'summary'),
+                        text='',
+                        timestamp=source_data.get('timestamp', storage_metadata.timestamp),
+                        user_id=source_data.get('user_id', storage_metadata.user_id),
+                        source_system=source_data.get('source_system', storage_metadata.source_system)
+                    )
+                else:
+                    edge_metadata = storage_metadata
+                
+                success = neo4j_adapter.add_relationship(
+                    source_id=str(source),
+                    target_id=str(target),
+                    relationship_type=edge_data.get('type', 'relates_to'),
+                    metadata=edge_metadata,
+                    properties={k: v for k, v in edge_data.items() if k != 'type'}
+                )
+                if success:
+                    edge_count += 1
+            
+            self.config.console.print(f'[bold green]Graph stored to Neo4j: {node_count} nodes, {edge_count} edges[/bold green]')
+        else:
+            from .storage_adapter import storage_factory_wrapper
+            storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
+            self.config.console.print('[bold green]Graph stored to file[/bold green]')
         
     def delete_community_cache(self):
         os.remove(self.config.summary_path)
         
     def store_high_level_elements(self):
+        """Store high-level elements to Neo4j or file storage"""
+        from ...storage.storage_factory import StorageFactory
+        from ...tenant.tenant_context import TenantContext
+        from ...standards.eq_metadata import EQMetadata
+        from datetime import datetime, timezone
         
         high_level_elements = []
         titles = []
         embedding_list = []
-        for high_level_element in self.high_level_elements:
-            high_level_elements.append({'type':'high_level_element',
-                                        'title_hash_id':high_level_element.title_hash_id,
-                                        'context':high_level_element.context,
-                                        'hash_id':high_level_element.hash_id,
-                                        'human_readable_id':high_level_element.human_readable_id,
-                                        'related_nodes':list(self.G.neighbors(high_level_element.hash_id)),
-                                        'embedding':'done'})
-            
-            titles.append({'type':'high_level_element_title',
-                           'hash_id':high_level_element.title_hash_id,
-                           'context':high_level_element.title,
-                           'human_readable_id':high_level_element.human_readable_id})
-            
-            embedding_list.append({'hash_id':high_level_element.hash_id,
-                                   'embedding':high_level_element.embedding})
-        G_high_level_elements = [node for node in self.G.nodes if self.G.nodes[node].get('type') == 'high_level_element']
-        assert len(high_level_elements) == len(G_high_level_elements), f"The number of high level elements is not equal to the number of nodes in the graph. {len(high_level_elements)} != {len(G_high_level_elements)}"
         
-        from .storage_adapter import storage_factory_wrapper
-        storage_factory_wrapper(high_level_elements).save_parquet(self.config.high_level_elements_path,append = os.path.exists(self.config.high_level_elements_path), component_type='data')
-        storage_factory_wrapper(titles).save_parquet(self.config.high_level_elements_titles_path,append = os.path.exists(self.config.high_level_elements_titles_path), component_type='data')
-        storage_factory_wrapper(embedding_list).save_parquet(self.config.embedding,append = os.path.exists(self.config.embedding), component_type='embeddings')
-        self.config.console.print('[bold green]High level elements stored[/bold green]')
+        for high_level_element in self.high_level_elements:
+            high_level_elements.append({
+                'type': 'high_level_element',
+                'title_hash_id': high_level_element.title_hash_id,
+                'context': high_level_element.context,
+                'hash_id': high_level_element.hash_id,
+                'human_readable_id': high_level_element.human_readable_id,
+                'related_nodes': list(self.G.neighbors(high_level_element.hash_id)),
+                'embedding': 'done'
+            })
+            
+            titles.append({
+                'type': 'high_level_element_title',
+                'hash_id': high_level_element.title_hash_id,
+                'context': high_level_element.title,
+                'human_readable_id': high_level_element.human_readable_id
+            })
+            
+            embedding_list.append({
+                'hash_id': high_level_element.hash_id,
+                'embedding': high_level_element.embedding
+            })
+        
+        G_high_level_elements = [node for node in self.G.nodes 
+                                if self.G.nodes[node].get('type') == 'high_level_element']
+        assert len(high_level_elements) == len(G_high_level_elements), \
+            f"Count mismatch: {len(high_level_elements)} != {len(G_high_level_elements)}"
+        
+        factory = StorageFactory()
+        if factory.is_cloud_storage():
+            neo4j_adapter = factory.get_graph_storage()
+            tenant_id = TenantContext.get_current_tenant_or_default()
+            
+            stored_count = 0
+            for he in high_level_elements:
+                if self.G.has_node(he['hash_id']):
+                    node_data = self.G.nodes[he['hash_id']]
+                    
+                    metadata = EQMetadata(
+                        tenant_id=node_data.get('tenant_id', 'AGGREGATED'),
+                        account_id=node_data.get('account_id', 'AGGREGATED'),
+                        interaction_id=node_data.get('interaction_id', 'AGGREGATED'),
+                        interaction_type=node_data.get('interaction_type', 'summary'),
+                        text='',
+                        timestamp=node_data.get('timestamp', datetime.now(timezone.utc).isoformat()),
+                        user_id=node_data.get('user_id', 'system'),
+                        source_system=node_data.get('source_system', 'internal')
+                    )
+                    
+                    success = neo4j_adapter.add_node(
+                        node_id=he['hash_id'],
+                        node_type='high_level_element',
+                        metadata=metadata,
+                        properties={
+                            'context': he['context'],
+                            'title_hash_id': he['title_hash_id'],
+                            'human_readable_id': he['human_readable_id'],
+                            'related_nodes': he['related_nodes']
+                        }
+                    )
+                    if success:
+                        stored_count += 1
+            
+            title_count = 0
+            for title in titles:
+                if self.G.has_node(title['hash_id']):
+                    node_data = self.G.nodes[title['hash_id']]
+                    
+                    metadata = EQMetadata(
+                        tenant_id=node_data.get('tenant_id', 'AGGREGATED'),
+                        account_id=node_data.get('account_id', 'AGGREGATED'),
+                        interaction_id=node_data.get('interaction_id', 'AGGREGATED'),
+                        interaction_type='summary',
+                        text='',
+                        timestamp=node_data.get('timestamp', datetime.now(timezone.utc).isoformat()),
+                        user_id=node_data.get('user_id', 'system'),
+                        source_system=node_data.get('source_system', 'internal')
+                    )
+                    
+                    success = neo4j_adapter.add_node(
+                        node_id=title['hash_id'],
+                        node_type='high_level_element_title',
+                        metadata=metadata,
+                        properties={
+                            'context': title['context'],
+                            'human_readable_id': title['human_readable_id']
+                        }
+                    )
+                    if success:
+                        title_count += 1
+            
+            if embedding_list:
+                from .storage_adapter import storage_factory_wrapper
+                storage_factory_wrapper(embedding_list).save_parquet(
+                    self.config.embedding, 
+                    append=os.path.exists(self.config.embedding), 
+                    component_type='embeddings'
+                )
+            
+            self.config.console.print(f'[bold green]High level elements stored to Neo4j: {stored_count} elements, {title_count} titles[/bold green]')
+        else:
+            from .storage_adapter import storage_factory_wrapper
+            storage_factory_wrapper(high_level_elements).save_parquet(
+                self.config.high_level_elements_path,
+                append=os.path.exists(self.config.high_level_elements_path), 
+                component_type='data'
+            )
+            storage_factory_wrapper(titles).save_parquet(
+                self.config.high_level_elements_titles_path,
+                append=os.path.exists(self.config.high_level_elements_titles_path), 
+                component_type='data'
+            )
+            storage_factory_wrapper(embedding_list).save_parquet(
+                self.config.embedding,
+                append=os.path.exists(self.config.embedding), 
+                component_type='embeddings'
+            )
+            self.config.console.print('[bold green]High level elements stored to files[/bold green]')
             
     @info_timer(message='Summary Generation Pipeline')        
     async def main(self):
