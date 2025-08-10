@@ -56,11 +56,15 @@ class TestEmbeddingPipelineStorage:
                     f.write(json.dumps(item) + '\n')
             
             with patch.object(StorageFactory, 'is_cloud_storage', return_value=True), \
-                 patch.object(StorageFactory, 'get_embedding_storage') as mock_pinecone:
+                 patch.object(StorageFactory, 'get_embedding_storage') as mock_pinecone, \
+                 patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_adapter = MagicMock()
                 mock_adapter.upsert_vectors_batch = AsyncMock(return_value=(2, []))
                 mock_pinecone.return_value = mock_adapter
+                
+                mock_mapper = MagicMock()
+                mock_load_mapper.return_value = mock_mapper
                 
                 pipeline = Embedding_pipeline(config)
                 pipeline.mapper = MagicMock()
@@ -90,10 +94,14 @@ class TestEmbeddingPipelineStorage:
                     f.write(json.dumps(item) + '\n')
             
             with patch.object(StorageFactory, 'is_cloud_storage', return_value=False), \
-                 patch('NodeRAG.src.pipeline.embedding.storage_factory_wrapper') as mock_wrapper:
+                 patch('NodeRAG.src.pipeline.storage_adapter.storage_factory_wrapper') as mock_wrapper, \
+                 patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_storage = MagicMock()
                 mock_wrapper.return_value = mock_storage
+                
+                mock_mapper = MagicMock()
+                mock_load_mapper.return_value = mock_mapper
                 
                 pipeline = Embedding_pipeline(config)
                 pipeline.mapper = MagicMock()
@@ -125,11 +133,15 @@ class TestEmbeddingPipelineStorage:
                     f.write(json.dumps(item) + '\n')
             
             with patch.object(StorageFactory, 'is_cloud_storage', return_value=True), \
-                 patch.object(StorageFactory, 'get_embedding_storage') as mock_pinecone:
+                 patch.object(StorageFactory, 'get_embedding_storage') as mock_pinecone, \
+                 patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_adapter = MagicMock()
                 mock_adapter.upsert_vectors_batch = AsyncMock(return_value=(1, []))
                 mock_pinecone.return_value = mock_adapter
+                
+                mock_mapper = MagicMock()
+                mock_load_mapper.return_value = mock_mapper
                 
                 pipeline = Embedding_pipeline(config)
                 pipeline.mapper = MagicMock()
@@ -174,11 +186,15 @@ class TestEmbeddingPipelineStorage:
                     f.write(json.dumps(item) + '\n')
             
             with patch.object(StorageFactory, 'is_cloud_storage', return_value=True), \
-                 patch.object(StorageFactory, 'get_embedding_storage') as mock_pinecone:
+                 patch.object(StorageFactory, 'get_embedding_storage') as mock_pinecone, \
+                 patch.object(Embedding_pipeline, 'load_mapper') as mock_load_mapper:
                 
                 mock_adapter = MagicMock()
                 mock_adapter.upsert_vectors_batch = AsyncMock(return_value=(100, []))
                 mock_pinecone.return_value = mock_adapter
+                
+                mock_mapper = MagicMock()
+                mock_load_mapper.return_value = mock_mapper
                 
                 pipeline = Embedding_pipeline(config)
                 pipeline.mapper = MagicMock()
