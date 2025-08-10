@@ -141,9 +141,9 @@ class SummaryGeneration:
                 interaction_type=valid_metadata_node['interaction_type'],
                 text='',
                 timestamp=valid_metadata_node['timestamp'],
-                        user_id=node_data['user_id'],
-                        source_system=node_data['source_system']
-                    )
+                user_id=valid_metadata_node['user_id'],
+                source_system=valid_metadata_node['source_system']
+            )
         
         print(f"  No valid metadata found, using AGGREGATED fallback")
         return EQMetadata(
