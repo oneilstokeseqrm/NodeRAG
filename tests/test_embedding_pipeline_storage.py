@@ -160,8 +160,8 @@ class TestEmbeddingPipelineStorage:
                 assert metadata.account_id == 'test_account'
                 assert metadata.interaction_id == 'test_interaction'
                 assert metadata.user_id == 'test_user'
-                assert metadata.source_system == 'embedding_pipeline'
-                assert metadata.interaction_type == 'embedding_generation'
+                assert metadata.source_system == 'internal'
+                assert metadata.interaction_type == 'custom_notes'
     
     def test_batch_size_limit(self):
         """Test that batches respect 100 vector limit"""

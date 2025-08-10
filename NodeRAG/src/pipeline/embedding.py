@@ -206,13 +206,13 @@ class Embedding_pipeline():
                 
                 metadata = EQMetadata(
                     tenant_id=tenant_id,
-                    account_id=getattr(self.config, 'account_id', 'pipeline'),
-                    interaction_id=getattr(self.config, 'interaction_id', f"embedding_{uuid.uuid4()}"),
-                    interaction_type='embedding_generation',
-                    text='',  # Will be excluded by PineconeAdapter
+                    account_id=getattr(self.config, 'account_id', f'acc_{uuid.uuid4()}'),
+                    interaction_id=getattr(self.config, 'interaction_id', f"int_{uuid.uuid4()}"),
+                    interaction_type='custom_notes',
+                    text='embedding_placeholder',
                     timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
-                    user_id=getattr(self.config, 'user_id', 'pipeline@system'),
-                    source_system='embedding_pipeline'
+                    user_id=getattr(self.config, 'user_id', f'usr_{uuid.uuid4()}'),
+                    source_system='internal'
                 )
                 
                 vectors.append((vector_id, embedding, metadata, None))
