@@ -3,17 +3,20 @@ import os
 import asyncio
 import json
 import math
-
+import time
+import uuid
+from datetime import datetime, timezone
 
 from ...config import NodeConfig
 from ...LLM import Embedding_message
-
 
 from ...storage import (
     Mapper,
     storage
 )
-
+from ...storage.storage_factory import StorageFactory
+from ...tenant.tenant_context import TenantContext
+from ...standards.eq_metadata import EQMetadata
 from ...logging import info_timer
 
 class Embedding_pipeline():
@@ -22,6 +25,7 @@ class Embedding_pipeline():
         self.config = config
         self.embedding_client = self.config.embedding_client
         self.mapper = self.load_mapper()
+        self.validate_config()
         
         
 
@@ -95,8 +99,7 @@ class Embedding_pipeline():
                 self.mapper.add_attribute(line['hash_id'],'embedding','done')
                 lines.append(line)
         
-        from .storage_adapter import storage_factory_wrapper
-        storage_factory_wrapper(lines).save_parquet(self.config.embedding,append=os.path.exists(self.config.embedding), component_type='embeddings')
+        self._store_embeddings_in_pinecone(lines)
         self.mapper.update_save()
         
     def check_error_cache(self) -> None:
@@ -165,6 +168,127 @@ class Embedding_pipeline():
             self.insert_embeddings()
             self.delete_embedding_cache()
             
+    def validate_config(self):
+        """Validate that required config fields are present"""
+        recommended_fields = ['interaction_type', 'source_system']
+        missing_fields = []
+        
+        for field in recommended_fields:
+            if not hasattr(self.config, field):
+                missing_fields.append(field)
+        
+        if missing_fields:
+            self.config.console.print(f"[yellow]Warning: Config missing fields: {missing_fields}")
+            self.config.console.print("[yellow]Using fallback values - this may affect data lineage tracking")
+        
+        self.config.console.print(f"[blue]Embedding pipeline using:")
+        self.config.console.print(f"  interaction_type: {getattr(self.config, 'interaction_type', 'embedding_generation')}")
+        self.config.console.print(f"  source_system: {getattr(self.config, 'source_system', 'embedding_pipeline')}")
+
+    def _store_embeddings_in_pinecone(self, lines):
+        """Store embeddings directly in Pinecone with tenant isolation"""
+        if not lines:
+            return
+        
+        tenant_id = TenantContext.get_current_tenant_or_default()
+        namespace = TenantContext.get_tenant_namespace('embeddings')
+        
+        factory = StorageFactory()
+        if not factory.is_cloud_storage():
+            from .storage_adapter import storage_factory_wrapper
+            storage_factory_wrapper(lines).save_parquet(
+                self.config.embedding, 
+                append=os.path.exists(self.config.embedding), 
+                component_type='embeddings'
+            )
+            return
+        
+        interaction_type = getattr(self.config, 'interaction_type', 'embedding_generation')
+        source_system = getattr(self.config, 'source_system', 'embedding_pipeline')
+        
+        account_id = getattr(self.config, 'account_id', None)
+        interaction_id = getattr(self.config, 'interaction_id', None)
+        user_id = getattr(self.config, 'user_id', None)
+        
+        if not interaction_id:
+            interaction_id = f"embedding_batch_{tenant_id}_{int(time.time())}"
+        
+        if not user_id:
+            user_id = 'system'  # Use a fixed system user, not random
+        
+        pinecone_adapter = factory.get_embedding_storage()
+        
+        batch_size = 100
+        successful_count = 0
+        failed_count = 0
+        
+        for i in range(0, len(lines), batch_size):
+            batch = lines[i:i+batch_size]
+            vectors = []
+            
+            for item in batch:
+                vector_id = f"{tenant_id}_embedding_{item['hash_id']}"
+                embedding = item['embedding']
+                
+                if hasattr(embedding, 'tolist'):
+                    embedding = embedding.tolist()
+                elif not isinstance(embedding, list):
+                    embedding = list(embedding)
+                
+                metadata = EQMetadata(
+                    tenant_id=tenant_id,
+                    account_id=account_id or f"pipeline_{tenant_id}",  # Deterministic fallback
+                    interaction_id=interaction_id,
+                    interaction_type=interaction_type,  # From actual config!
+                    text='',  # Embeddings don't need text
+                    timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                    user_id=user_id,
+                    source_system=source_system  # From actual config!
+                )
+                
+                vectors.append((vector_id, embedding, metadata, None))
+            
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    if hasattr(pinecone_adapter, 'index'):
+                        formatted_vectors = []
+                        for vector_id, embedding, metadata, _ in vectors:
+                            metadata_dict = {
+                                'tenant_id': metadata.tenant_id,
+                                'account_id': metadata.account_id,
+                                'interaction_id': metadata.interaction_id,
+                                'interaction_type': metadata.interaction_type,
+                                'timestamp': metadata.timestamp,
+                                'user_id': metadata.user_id,
+                                'source_system': metadata.source_system
+                            }
+                            formatted_vectors.append({
+                                'id': vector_id,
+                                'values': embedding,
+                                'metadata': metadata_dict
+                            })
+                        
+                        response = pinecone_adapter.index.upsert(
+                            vectors=formatted_vectors,
+                            namespace=namespace
+                        )
+                        successful_count += len(formatted_vectors)
+                        break
+                    else:
+                        raise NotImplementedError("PineconeAdapter must provide synchronous upsert")
+                        
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        time.sleep(2 ** attempt)  # Exponential backoff
+                    else:
+                        self.config.console.print(f"[red]Failed to store embedding batch after {max_retries} attempts: {e}")
+                        failed_count += len(vectors)
+        
+        self.config.console.print(f"[green]Stored {successful_count} embeddings in Pinecone namespace {namespace}")
+        if failed_count > 0:
+            self.config.console.print(f"[yellow]Failed to store {failed_count} embeddings")
+
     @info_timer(message='Embedding Pipeline')
     async def main(self):
         self.check_embedding_cache()

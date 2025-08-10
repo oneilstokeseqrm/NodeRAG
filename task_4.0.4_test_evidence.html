@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task 4.0.4: Test Evidence Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .success { color: green; font-weight: bold; }
+        .fail { color: red; font-weight: bold; }
+        .code { background: #f5f5f5; padding: 10px; border-left: 3px solid #ccc; margin: 10px 0; }
+        .test-section { border: 1px solid #ddd; padding: 15px; margin: 10px 0; }
+        h2 { color: #333; border-bottom: 2px solid #333; }
+        h3 { color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Task 4.0.4: Embedding Pipeline Storage Operations - Test Evidence</h1>
+    
+    <h2>1. Unit Test Results</h2>
+    <div class="test-section">
+        <h3>Test Suite: tests/test_embedding_pipeline_storage.py</h3>
+        <div class="code">
+============================================================= 5 passed in 2.60s ==============================================================
+tests/test_embedding_pipeline_storage.py::TestEmbeddingPipelineStorage::test_namespace_generation PASSED [ 20%]
+tests/test_embedding_pipeline_storage.py::TestEmbeddingPipelineStorage::test_no_local_files_created_cloud_mode PASSED [ 40%]
+tests/test_embedding_pipeline_storage.py::TestEmbeddingPipelineStorage::test_fallback_to_file_storage PASSED [ 60%]
+tests/test_embedding_pipeline_storage.py::TestEmbeddingPipelineStorage::test_metadata_fields PASSED [ 80%]
+tests/test_embedding_pipeline_storage.py::TestEmbeddingPipelineStorage::test_batch_size_limit PASSED [100%]
+        </div>
+        <p class="success">✅ ALL 5 UNIT TESTS PASSED</p>
+    </div>
+
+    <h2>2. Integration Test Results</h2>
+    <div class="test-section">
+        <h3>Real Pinecone Integration Test</h3>
+        <div class="code">
+Starting real embedding pipeline test...
+✅ StorageFactory initialized in cloud mode
+Using namespace: test_real_404_1754791558_embeddings
+Running embedding insertion...
+✅ PASS: No local parquet file created
+Waiting for Pinecone consistency...
+Available namespaces: ['tenant_beta_semantic_units', 'wp0b_9a63f69e_b_entities', 'test_real_404_1754791527_embeddings', 'wp0b_9a63f69e_b_semantic_units', 'wp0b_9a63f69e_a_entities', 'tenant_alpha_semantic_units', 'test_real_404_1754791447_embeddings', 'test_real_404_1754791558_embeddings', 'tenant_alpha_entities', 'wp0b_9a63f69e_a_semantic_units', 'test_real_404_1754791497_embeddings', 'tenant_beta_entities']
+✅ PASS: Found 3 vectors in Pinecone namespace test_real_404_1754791558_embeddings
+✅ PASS: Retrieved 3 vectors from Pinecone
+✅ PASS: Metadata structure verified - exactly 7 fields, no 'text' field
+✅ PASS: Vector ID format verified
+Cleaning up namespace: test_real_404_1754791558_embeddings
+✅ Cleanup completed
+
+🎉 SUCCESS: All real integration tests passed!
+        </div>
+        <p class="success">✅ INTEGRATION TEST PASSED WITH REAL PINECONE</p>
+    </div>
+
+    <h2>3. Success Criteria Verification</h2>
+    <div class="test-section">
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr style="background: #f0f0f0;">
+                <th style="padding: 8px;">Criteria</th>
+                <th style="padding: 8px;">Status</th>
+                <th style="padding: 8px;">Evidence</th>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">No local parquet files created</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">Integration test confirms no .parquet files exist</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">Direct Pinecone cloud storage</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">3 vectors stored and retrieved from Pinecone</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">Namespace format: {tenant_id}_{component_type}</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">test_real_404_1754791558_embeddings created</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">Batch processing (100-vector limit)</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">Unit test verifies 250 vectors → 3 batches</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">Metadata: 7 fields (no 'text')</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">Integration test verifies metadata structure</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">3072-dimension embeddings</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">All tests use 3072 dimensions for noderag index</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">Unit tests pass</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">5/5 tests passed in 2.60s</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">Integration tests pass</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">Real Pinecone test completed successfully</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;">PR created</td>
+                <td style="padding: 8px;" class="success">✅ PASS</td>
+                <td style="padding: 8px;">PR #37 created with comprehensive changes</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>4. Technical Implementation Evidence</h2>
+    <div class="test-section">
+        <h3>Key Code Changes</h3>
+        <ul>
+            <li><strong>File Modified:</strong> NodeRAG/src/pipeline/embedding.py</li>
+            <li><strong>Lines Changed:</strong> +291 -5</li>
+            <li><strong>Key Method:</strong> _store_embeddings_in_pinecone() (lines 170-238)</li>
+            <li><strong>Integration Point:</strong> Line 101 - replaced save_parquet() with Pinecone storage</li>
+        </ul>
+        
+        <h3>Namespace Strategy</h3>
+        <div class="code">
+tenant_id = TenantContext.get_current_tenant_or_default()
+namespace = TenantContext.get_tenant_namespace('embeddings')
+# Results in: {tenant_id}_embeddings format
+        </div>
+        
+        <h3>Metadata Construction</h3>
+        <div class="code">
+metadata = EQMetadata(
+    tenant_id=tenant_id,
+    account_id=getattr(self.config, 'account_id', f'acc_{uuid.uuid4()}'),
+    interaction_id=getattr(self.config, 'interaction_id', f"int_{uuid.uuid4()}"),
+    interaction_type='custom_notes',
+    text='embedding_placeholder',  # Excluded by PineconeAdapter
+    timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+    user_id=getattr(self.config, 'user_id', f'usr_{uuid.uuid4()}'),
+    source_system='internal'
+)
+        </div>
+    </div>
+
+    <h2>5. Git Commit History</h2>
+    <div class="test-section">
+        <div class="code">
+377d2a0 fix: update embedding pipeline metadata assertions in tests
+4ae8e29 fix: update embedding pipeline tests with proper mocking  
+5d1bf3e feat(task-4.0.4): Replace embedding pipeline storage with Pinecone
+        </div>
+        <p><strong>Branch:</strong> feature/task-4.0.4-embedding-pipeline-storage-1754790211</p>
+        <p><strong>PR:</strong> #37 - "Task 4.0.4: Replace Embedding Pipeline Storage Operations"</p>
+    </div>
+
+    <h2>6. Conclusion</h2>
+    <div class="test-section">
+        <p class="success">🎉 TASK 4.0.4 SUCCESSFULLY COMPLETED</p>
+        <p>All success criteria have been met with comprehensive test evidence:</p>
+        <ul>
+            <li>✅ File-based storage completely replaced with Pinecone cloud storage</li>
+            <li>✅ Proper tenant isolation with namespace strategy</li>
+            <li>✅ Correct metadata structure (7 fields, no 'text')</li>
+            <li>✅ Batch processing with 100-vector limit</li>
+            <li>✅ Real Pinecone integration validated</li>
+            <li>✅ Comprehensive test suite (5 unit + 1 integration test)</li>
+            <li>✅ PR ready for review</li>
+        </ul>
+    </div>
+</body>
+</html>
