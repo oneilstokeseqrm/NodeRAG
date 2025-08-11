@@ -262,13 +262,65 @@ class Attribution_generation_pipeline:
         factory = StorageFactory()
         if factory.is_cloud_storage():
             neo4j_adapter = factory.get_graph_storage()
+            tenant_id = TenantContext.get_current_tenant_or_default()
             stored_count = 0
+            failed_count = 0
+            
+            default_metadata = EQMetadata(
+                tenant_id=tenant_id,
+                account_id=f"attribute_pipeline_{tenant_id}",
+                interaction_id=f"attribute_{uuid.uuid4().hex[:8]}",
+                interaction_type='attribute',
+                text='',
+                timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                user_id='system',
+                source_system='attribute_pipeline'
+            )
             
             for attr in attributes:
                 if self.G.has_node(attr['hash_id']):
-                    stored_count += 1
+                    attr_node_data = self.G.nodes[attr['hash_id']]
+                    
+                    if all(field in attr_node_data for field in ['tenant_id', 'account_id', 'interaction_id']):
+                        attr_metadata = EQMetadata(
+                            tenant_id=attr_node_data.get('tenant_id', tenant_id),
+                            account_id=attr_node_data.get('account_id', default_metadata.account_id),
+                            interaction_id=attr_node_data.get('interaction_id', default_metadata.interaction_id),
+                            interaction_type=attr_node_data.get('interaction_type', 'attribute'),
+                            text=attr['context'][:500] if attr.get('context') else '',  # Include some context
+                            timestamp=attr_node_data.get('timestamp', default_metadata.timestamp),
+                            user_id=attr_node_data.get('user_id', default_metadata.user_id),
+                            source_system=attr_node_data.get('source_system', default_metadata.source_system)
+                        )
+                    else:
+                        attr_metadata = default_metadata
+                        self.config.console.print(f'[yellow]Warning: Attribute {attr["hash_id"]} missing metadata, using defaults[/yellow]')
+                    
+                    success = neo4j_adapter.add_node(
+                        node_id=attr['hash_id'],
+                        node_type='attribute',
+                        metadata=attr_metadata,
+                        properties={
+                            'context': attr['context'],
+                            'node': attr['node'],  # Reference to parent entity
+                            'human_readable_id': attr['human_readable_id'],
+                            'weight': attr['weight']
+                        }
+                    )
+                    
+                    if success:
+                        stored_count += 1
+                    else:
+                        failed_count += 1
+                        self.config.console.print(f'[red]Failed to store attribute {attr["hash_id"]} to Neo4j[/red]')
+                else:
+                    self.config.console.print(f'[red]Warning: Attribute {attr["hash_id"]} not found in graph[/red]')
+                    failed_count += 1
             
-            self.config.console.print(f'[bold green]Attributes verified in Neo4j: {stored_count} attributes ready for storage[/bold green]')
+            if failed_count > 0:
+                self.config.console.print(f'[bold yellow]⚠ Attributes storage partial: {stored_count} stored, {failed_count} failed[/bold yellow]')
+            else:
+                self.config.console.print(f'[bold green]✅ All {stored_count} attributes stored to Neo4j successfully[/bold green]')
             
             if attributes:
                 from .storage_adapter import storage_factory_wrapper
@@ -306,7 +358,9 @@ class Attribution_generation_pipeline:
                 source_system='attribute_pipeline'
             )
             
-            node_count = 0
+            nodes_to_store = []
+            edges_to_store = []
+            
             attr_count = 0
             for node_id, node_data in self.G.nodes(data=True):
                 if node_data.get('type') == 'attribute':
@@ -339,18 +393,28 @@ class Attribution_generation_pipeline:
                     else:
                         node_metadata = storage_metadata
                 
-                success = neo4j_adapter.add_node(
-                    node_id=str(node_id),
-                    node_type=node_data.get('type', 'entity'),
-                    metadata=node_metadata,
-                    properties={k: v for k, v in node_data.items() 
-                              if k not in ['tenant_id', 'account_id', 'interaction_id', 
-                                          'interaction_type', 'timestamp', 'user_id', 'source_system']}
-                )
-                if success:
-                    node_count += 1
+                nodes_to_store.append({
+                    'node_id': str(node_id),
+                    'node_type': node_data.get('type', 'entity'),
+                    'metadata': node_metadata,
+                    'properties': {k: v for k, v in node_data.items() 
+                                 if k not in ['tenant_id', 'account_id', 'interaction_id', 
+                                             'interaction_type', 'timestamp', 'user_id', 'source_system']}
+                })
             
-            edge_count = 0
+            node_count = 0
+            node_failures = []
+            for node_spec in nodes_to_store:
+                try:
+                    success = neo4j_adapter.add_node(**node_spec)
+                    if success:
+                        node_count += 1
+                    else:
+                        node_failures.append(node_spec['node_id'])
+                except Exception as e:
+                    self.config.console.print(f'[red]Error storing node {node_spec["node_id"]}: {e}[/red]')
+                    node_failures.append(node_spec['node_id'])
+            
             for source, target, edge_data in self.G.edges(data=True):
                 source_data = self.G.nodes[source]
                 if 'tenant_id' in source_data:
@@ -367,23 +431,54 @@ class Attribution_generation_pipeline:
                 else:
                     edge_metadata = storage_metadata
                 
-                rel_type = edge_data.get('type', 'relates_to')
-                if source_data.get('type') == 'entity' and self.G.nodes[target].get('type') == 'attribute':
-                    rel_type = 'has_attribute'
-                elif source_data.get('type') == 'attribute' and self.G.nodes[target].get('type') == 'entity':
-                    rel_type = 'attribute_of'
+                source_type = source_data.get('type', 'unknown')
+                target_type = self.G.nodes[target].get('type', 'unknown') if self.G.has_node(target) else 'unknown'
                 
-                success = neo4j_adapter.add_relationship(
-                    source_id=str(source),
-                    target_id=str(target),
-                    relationship_type=rel_type,
-                    metadata=edge_metadata,
-                    properties={k: v for k, v in edge_data.items() if k != 'type'}
-                )
-                if success:
-                    edge_count += 1
+                if 'type' in edge_data:
+                    rel_type = edge_data['type']
+                elif source_type == 'entity' and target_type == 'attribute':
+                    rel_type = 'has_attribute'
+                elif source_type == 'attribute' and target_type == 'entity':
+                    rel_type = 'attribute_of'
+                elif source_type == 'entity' and target_type == 'entity':
+                    rel_type = 'relates_to'
+                elif source_type == 'semantic_unit':
+                    rel_type = 'contains'
+                else:
+                    rel_type = 'connected_to'  # Generic fallback
+                
+                if source_type == 'attribute' or target_type == 'attribute':
+                    self.config.console.print(f'[dim]Edge: {source}({source_type}) -> {target}({target_type}) = {rel_type}[/dim]')
+                
+                edges_to_store.append({
+                    'source_id': str(source),
+                    'target_id': str(target),
+                    'relationship_type': rel_type,
+                    'metadata': edge_metadata,
+                    'properties': {k: v for k, v in edge_data.items() if k != 'type'}
+                })
             
-            self.config.console.print(f'[bold green]Graph stored to Neo4j: {node_count} nodes ({attr_count} attributes), {edge_count} edges[/bold green]')
+            edge_count = 0
+            edge_failures = []
+            for edge_spec in edges_to_store:
+                try:
+                    success = neo4j_adapter.add_relationship(**edge_spec)
+                    if success:
+                        edge_count += 1
+                    else:
+                        edge_failures.append(f"{edge_spec['source_id']}->{edge_spec['target_id']}")
+                except Exception as e:
+                    self.config.console.print(f'[red]Error storing edge: {e}[/red]')
+                    edge_failures.append(f"{edge_spec['source_id']}->{edge_spec['target_id']}")
+            
+            if node_failures or edge_failures:
+                self.config.console.print(f'[bold yellow]⚠ Graph storage partial: {node_count} nodes, {edge_count} edges stored[/bold yellow]')
+                if node_failures:
+                    self.config.console.print(f'[yellow]Failed nodes: {node_failures[:5]}{"..." if len(node_failures) > 5 else ""}[/yellow]')
+                if edge_failures:
+                    self.config.console.print(f'[yellow]Failed edges: {edge_failures[:5]}{"..." if len(edge_failures) > 5 else ""}[/yellow]')
+            else:
+                self.config.console.print(f'[bold green]✅ Graph stored to Neo4j: {node_count} nodes ({attr_count} attributes), {edge_count} edges[/bold green]')
         else:
             from .storage_adapter import storage_factory_wrapper
             storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
