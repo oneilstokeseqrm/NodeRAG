@@ -14,6 +14,11 @@ from ...storage import (
 from ..component import Attribute
 from ...config import NodeConfig
 from ...logging import info_timer
+from ...storage.storage_factory import StorageFactory
+from ...tenant.tenant_context import TenantContext
+from ...standards.eq_metadata import EQMetadata
+from datetime import datetime, timezone
+import uuid
 
 
 
@@ -80,7 +85,42 @@ class Attribution_generation_pipeline:
         
         
         self.mapper = Mapper([self.config.entities_path,self.config.relationship_path,self.config.semantic_units_path])
-        self.G = storage.load(self.config.graph_path)
+        
+        factory = StorageFactory()
+        if factory.is_cloud_storage():
+            tenant_id = TenantContext.get_current_tenant_or_default()
+            neo4j_adapter = factory.get_graph_storage()
+            
+            subgraph_data = neo4j_adapter.get_subgraph(tenant_id)
+            
+            if subgraph_data:
+                self.G = nx.Graph()
+                
+                for node in subgraph_data.get('nodes', []):
+                    node_id = node.get('node_id')
+                    if node_id:
+                        node_attrs = {k: v for k, v in node.items() if k != 'node_id'}
+                        self.G.add_node(node_id, **node_attrs)
+                
+                for rel in subgraph_data.get('relationships', []):
+                    source = rel.get('source_id')
+                    target = rel.get('target_id')
+                    if source and target:
+                        edge_attrs = {k: v for k, v in rel.items() 
+                                    if k not in ['source_id', 'target_id']}
+                        self.G.add_edge(source, target, **edge_attrs)
+                
+                self.console.print(f'[bold green]Loaded graph from Neo4j: {self.G.number_of_nodes()} nodes, {self.G.number_of_edges()} edges[/bold green]')
+            else:
+                self.G = nx.Graph()
+                self.console.print('[bold yellow]No graph data found in Neo4j, starting with empty graph[/bold yellow]')
+        else:
+            if os.path.exists(self.config.graph_path):
+                self.G = storage.load(self.config.graph_path)
+                self.console.print(f'[bold green]Loaded graph from file: {self.G.number_of_nodes()} nodes[/bold green]')
+            else:
+                self.G = nx.Graph()
+                self.console.print('[bold yellow]No graph file found, starting with empty graph[/bold yellow]')
         
     def get_important_nodes(self):
         
@@ -206,6 +246,7 @@ class Attribution_generation_pipeline:
         self.config.tracker.update()
 
     def save_attributes(self):
+        """Store attributes to Neo4j or file storage based on backend"""
         
         attributes = []
         
@@ -215,19 +256,138 @@ class Attribution_generation_pipeline:
                                  'context':attribute.raw_context,
                                  'hash_id':attribute.hash_id,
                                  'human_readable_id':attribute.human_readable_id,
-                                 'weight':self.G.nodes[attribute.node]['weight'],
+                                 'weight':self.G.nodes[attribute.node]['weight'] if self.G.has_node(attribute.node) else 1,
                                  'embedding':None})
         
-        from .storage_adapter import storage_factory_wrapper
-        storage_factory_wrapper(attributes).save_parquet(self.config.attributes_path,append= os.path.exists(self.config.attributes_path), component_type='data')
-        self.config.console.print('[bold green]Attributes stored[/bold green]')
+        factory = StorageFactory()
+        if factory.is_cloud_storage():
+            neo4j_adapter = factory.get_graph_storage()
+            stored_count = 0
+            
+            for attr in attributes:
+                if self.G.has_node(attr['hash_id']):
+                    stored_count += 1
+            
+            self.config.console.print(f'[bold green]Attributes verified in Neo4j: {stored_count} attributes ready for storage[/bold green]')
+            
+            if attributes:
+                from .storage_adapter import storage_factory_wrapper
+                storage_factory_wrapper(attributes).save_parquet(
+                    self.config.attributes_path,
+                    append=os.path.exists(self.config.attributes_path), 
+                    component_type='data'
+                )
+        else:
+            from .storage_adapter import storage_factory_wrapper
+            storage_factory_wrapper(attributes).save_parquet(
+                self.config.attributes_path,
+                append=os.path.exists(self.config.attributes_path), 
+                component_type='data'
+            )
+            self.config.console.print('[bold green]Attributes stored to file[/bold green]')
         
         
     def save_graph(self):
+        """Store graph to Neo4j or file storage based on backend"""
         
-        from .storage_adapter import storage_factory_wrapper
-        storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
-        self.config.console.print('Graph stored')
+        factory = StorageFactory()
+        if factory.is_cloud_storage():
+            neo4j_adapter = factory.get_graph_storage()
+            tenant_id = TenantContext.get_current_tenant_or_default()
+            
+            storage_metadata = EQMetadata(
+                tenant_id=tenant_id,
+                account_id=f"attribute_pipeline_{tenant_id}",
+                interaction_id=f"attribute_{uuid.uuid4().hex[:8]}",
+                interaction_type='attribute_generation',
+                text='Graph storage from attribute pipeline',
+                timestamp=datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                user_id='system',
+                source_system='attribute_pipeline'
+            )
+            
+            node_count = 0
+            attr_count = 0
+            for node_id, node_data in self.G.nodes(data=True):
+                if node_data.get('type') == 'attribute':
+                    attr_count += 1
+                    if all(field in node_data for field in ['tenant_id', 'account_id', 'interaction_id']):
+                        node_metadata = EQMetadata(
+                            tenant_id=node_data['tenant_id'],
+                            account_id=node_data['account_id'],
+                            interaction_id=node_data['interaction_id'],
+                            interaction_type=node_data.get('interaction_type', 'attribute'),
+                            text=f'Attribute for entity {node_data.get("entity", "")}',
+                            timestamp=node_data.get('timestamp', storage_metadata.timestamp),
+                            user_id=node_data.get('user_id', 'system'),
+                            source_system=node_data.get('source_system', 'internal')
+                        )
+                    else:
+                        node_metadata = storage_metadata
+                else:
+                    if 'tenant_id' in node_data:
+                        node_metadata = EQMetadata(
+                            tenant_id=node_data.get('tenant_id', tenant_id),
+                            account_id=node_data.get('account_id', storage_metadata.account_id),
+                            interaction_id=node_data.get('interaction_id', storage_metadata.interaction_id),
+                            interaction_type=node_data.get('interaction_type', 'entity'),
+                            text='',
+                            timestamp=node_data.get('timestamp', storage_metadata.timestamp),
+                            user_id=node_data.get('user_id', storage_metadata.user_id),
+                            source_system=node_data.get('source_system', storage_metadata.source_system)
+                        )
+                    else:
+                        node_metadata = storage_metadata
+                
+                success = neo4j_adapter.add_node(
+                    node_id=str(node_id),
+                    node_type=node_data.get('type', 'entity'),
+                    metadata=node_metadata,
+                    properties={k: v for k, v in node_data.items() 
+                              if k not in ['tenant_id', 'account_id', 'interaction_id', 
+                                          'interaction_type', 'timestamp', 'user_id', 'source_system']}
+                )
+                if success:
+                    node_count += 1
+            
+            edge_count = 0
+            for source, target, edge_data in self.G.edges(data=True):
+                source_data = self.G.nodes[source]
+                if 'tenant_id' in source_data:
+                    edge_metadata = EQMetadata(
+                        tenant_id=source_data.get('tenant_id', tenant_id),
+                        account_id=source_data.get('account_id', storage_metadata.account_id),
+                        interaction_id=source_data.get('interaction_id', storage_metadata.interaction_id),
+                        interaction_type=source_data.get('interaction_type', 'attribute'),
+                        text='',
+                        timestamp=source_data.get('timestamp', storage_metadata.timestamp),
+                        user_id=source_data.get('user_id', storage_metadata.user_id),
+                        source_system=source_data.get('source_system', storage_metadata.source_system)
+                    )
+                else:
+                    edge_metadata = storage_metadata
+                
+                rel_type = edge_data.get('type', 'relates_to')
+                if source_data.get('type') == 'entity' and self.G.nodes[target].get('type') == 'attribute':
+                    rel_type = 'has_attribute'
+                elif source_data.get('type') == 'attribute' and self.G.nodes[target].get('type') == 'entity':
+                    rel_type = 'attribute_of'
+                
+                success = neo4j_adapter.add_relationship(
+                    source_id=str(source),
+                    target_id=str(target),
+                    relationship_type=rel_type,
+                    metadata=edge_metadata,
+                    properties={k: v for k, v in edge_data.items() if k != 'type'}
+                )
+                if success:
+                    edge_count += 1
+            
+            self.config.console.print(f'[bold green]Graph stored to Neo4j: {node_count} nodes ({attr_count} attributes), {edge_count} edges[/bold green]')
+        else:
+            from .storage_adapter import storage_factory_wrapper
+            storage_factory_wrapper(self.G).save_pickle(self.config.graph_path, component_type='graph')
+            self.config.console.print('[bold green]Graph stored to file[/bold green]')
         
     @info_timer(message='Attribute Generation')
     async def main(self):
